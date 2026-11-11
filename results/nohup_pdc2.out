@@ -1,0 +1,6 @@
+16:03:20 === phase pdc rep 0
+16:33:20 [pdc] rc=timeout 1800.1s killed after 1800 s
+16:40:22 [pdc] rc=0  421.9s pdc/async/sleep[pdc1smt] P=47 alone=31.490 comp=31.490 (x1.00) io/step=1.104 final=14.484 total=340.427
+16:47:37 [pdc] rc=0  434.9s pdc/async/spin[pdc1smt] P=47 alone=31.477 comp=32.132 (x1.02) io/step=1.721 final=14.125 total=347.890
+16:56:32 [pdc] rc=0  535.3s pdc/async/dgemm[pdc1smt] P=47 alone=31.356 comp=40.651 (x1.30) io/step=6.680 final=10.673 total=447.669
+16:56:32 === all requested phases done

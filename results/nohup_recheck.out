@@ -1,0 +1,10 @@
+15:52:49 === phase recheck rep 0
+15:57:30 [recheck] rc=0  281.0s posix/sync/spin[full] P=48 alone=15.389 comp=15.561 (x1.01) io/step=8.629 final=0.000 total=240.107
+16:02:17 [recheck] rc=0  287.7s posix/sync/sleep[full] P=48 alone=15.390 comp=15.390 (x1.00) io/step=9.854 final=0.000 total=252.441
+16:05:20 [recheck] rc=0  182.1s mpiio/sync/spin[full] P=48 alone=8.881 comp=8.943 (x1.01) io/step=6.593 final=0.000 total=154.680
+16:08:49 [recheck] rc=0  209.3s mpiio/sync/sleep[full] P=48 alone=8.890 comp=8.890 (x1.00) io/step=9.765 final=0.000 total=186.550
+16:12:44 [recheck] rc=0  235.0s hdf5/sync/spin[full] P=48 alone=11.168 comp=11.291 (x1.01) io/step=9.231 final=0.026 total=203.727
+16:16:53 [recheck] rc=0  249.6s hdf5/sync/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.019 final=0.003 total=222.189
+16:17:41 [recheck] rc=0   47.7s adios2/sync/spin[full] P=48 alone=1.968 comp=1.986 (x1.01) io/step=1.499 final=0.000 total=34.649
+16:18:38 [recheck] rc=0   57.3s adios2/sync/sleep[full] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.934 final=0.000 total=49.035
+16:18:38 === all requested phases done

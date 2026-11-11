@@ -1,0 +1,35 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\begin{abstract}
+Asynchronous I/O is widely used to hide the cost of writing checkpoints and
+analysis output in high-performance computing (HPC) applications. The
+application issues its I/O early, and a background engine completes it while
+the application continues computing. However, much of the evidence for this
+benefit comes from I/O kernels and benchmarks that emulate the computation
+phase with a call to \texttt{sleep()}. A sleeping thread does not use its
+core, its memory bandwidth, or the network, so it removes the resource
+contention that determines whether the I/O can actually be hidden. In this
+paper, we survey 17 evaluations and benchmarks spanning HDF5, ADIOS, PDC,
+POSIX-level checkpointing, and deep-learning I/O, and find that
+\texttt{sleep}, an unspecified compute phase, or no compute phase at all is
+the norm. We then present an open benchmark that drives POSIX, MPI-IO, HDF5,
+ADIOS2, and PDC with interchangeable compute surrogates calibrated to the same
+standalone duration, including CPU-bound, memory-bound, and
+communication-bound kernels, a stencil mini-app, and GPU kernels. We find
+that the contention does not always appear in the same place. Depending on
+the I/O library, either the computation slows down while the background
+engine runs, or the background engine makes little progress and the
+application later waits for the remaining I/O. In both cases, the run time
+the application observes is longer than a \texttt{sleep}-based evaluation
+predicts. On a 48-core node writing 120\,GiB per run, \ExcLongerFive of \ExcN
+configurations take at least 5\% longer than \texttt{sleep} predicts, and up
+to \ExcMaxPct\% longer. In addition, the speedup of the HDF5 asynchronous VOL
+connector drops from \SpHdfSleep$\times$ with \texttt{sleep} to
+\SpHdfHalo$\times$ with a halo exchange, and non-blocking MPI-IO is slower
+than blocking MPI-IO in every configuration we measured. Even PDC, whose
+server runs on a reserved core, runs up to \ExcmaxpctPdc\% longer than
+\texttt{sleep} predicts, because a polling progress thread in each client
+shares the core of the rank. Lastly, we provide
+recommendations for evaluating asynchronous I/O and for interpreting
+existing results that rely on \texttt{sleep}.
+\end{abstract}

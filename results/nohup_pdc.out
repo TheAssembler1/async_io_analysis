@@ -1,0 +1,16 @@
+15:21:17 === phase pdc rep 0
+15:25:47 [pdc] rc=0  269.9s pdc/sync/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=25.187 final=0.034 total=251.903
+15:30:18 [pdc] rc=0  271.5s pdc/async/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=21.608 final=25.505 total=241.529
+15:39:19 [pdc] rc=0  540.7s pdc/sync/sleep[pdc1] P=47 alone=31.490 comp=31.490 (x1.00) io/step=14.495 final=0.037 total=459.888
+15:46:21 [pdc] rc=0  422.0s pdc/async/sleep[pdc1] P=47 alone=31.490 comp=31.491 (x1.00) io/step=1.169 final=12.501 total=339.045
+15:55:18 [pdc] rc=0  537.4s pdc/sync/spin[pdc1] P=47 alone=31.268 comp=31.268 (x1.00) io/step=14.009 final=0.035 total=452.158
+16:06:57 [pdc] rc=0  698.4s pdc/async/spin[pdc1] P=47 alone=31.479 comp=59.339 (x1.89) io/step=0.703 final=13.632 total=613.152
+16:15:46 [pdc] rc=0  529.4s pdc/sync/dgemm[pdc1] P=47 alone=31.771 comp=32.146 (x1.01) io/step=14.500 final=0.034 total=443.780
+16:27:20 [pdc] rc=0  693.8s pdc/async/dgemm[pdc1] P=47 alone=31.825 comp=58.936 (x1.85) io/step=1.317 final=13.565 total=607.726
+16:36:20 [pdc] rc=0  539.8s pdc/sync/stream[pdc1] P=47 alone=31.195 comp=31.261 (x1.00) io/step=15.384 final=0.035 total=455.187
+16:45:18 [pdc] rc=0  538.1s pdc/async/stream[pdc1] P=47 alone=31.092 comp=42.969 (x1.38) io/step=8.671 final=8.461 total=453.511
+16:54:18 [pdc] rc=0  540.0s pdc/sync/halo[pdc1] P=47 alone=31.227 comp=31.187 (x1.00) io/step=14.386 final=0.036 total=455.760
+17:24:18 [pdc] rc=timeout 1800.2s killed after 1800 s
+17:33:19 [pdc] rc=0  541.0s pdc/sync/heat[pdc1] P=47 alone=31.285 comp=31.413 (x1.00) io/step=14.238 final=0.034 total=456.235
+17:41:47 [pdc] rc=0  507.5s pdc/async/heat[pdc1] P=47 alone=31.302 comp=40.381 (x1.29) io/step=0.690 final=13.597 total=423.774
+17:41:47 === all requested phases done

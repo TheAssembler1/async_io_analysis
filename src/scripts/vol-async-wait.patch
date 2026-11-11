@@ -1,0 +1,22 @@
+diff --git a/src/h5_async_vol.c b/src/h5_async_vol.c
+index 938b00a..dcab80a 100644
+--- a/src/h5_async_vol.c
++++ b/src/h5_async_vol.c
+@@ -22800,7 +22800,7 @@ H5VL_async_request_wait(void *obj, uint64_t timeout, H5VL_request_status_t *stat
+         }
+ 
+         if (timeout > 0)
+-            usleep(100000);
++            usleep(1000); /* aio_bench patch: was 100 ms */
+         now_time = clock();
+         elapsed  = (double)(now_time - start_time) / CLOCKS_PER_SEC;
+ 
+@@ -22824,7 +22824,7 @@ done:
+         func_log_uint64_1(__func__, "                      timeout", timeout);
+         func_log_int1(__func__, "                      iter", tmp_cnt);
+         if (tmp_cnt > 0)
+-            usleep(1000000);
++            usleep(1000); /* aio_bench patch: was 1 s */
+         tmp_cnt++;
+     }
+     func_log_int1(__func__, "acquired global lock, count", mutex_count);

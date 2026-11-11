@@ -1,0 +1,95 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\section{Conclusions and Recommendations}
+\label{sec:conclusion}
+
+Sleep-based compute emulation answers a narrow question: \emph{if the
+application left every node resource idle during its computation phase, how
+much of the I/O could be hidden?} This is a useful upper bound, but it is
+not the question practitioners need answered. In this paper, we surveyed 17
+evaluations and benchmarks of asynchronous I/O and found that \texttt{sleep},
+an unspecified compute phase, or no compute phase at all is the norm. We then
+measured five asynchronous I/O implementations with compute surrogates that
+consume resources. With these surrogates, the application ran longer than a
+\texttt{sleep}-based evaluation predicts in \ExcLongerFive of \ExcN
+configurations, by up to \ExcMaxPct\%. Depending on the implementation, the
+cost appeared as a slower computation or as I/O that did not progress during
+the computation. Based on these results and on the surveyed literature, we
+provide the following recommendations.
+
+\paragraph{For authors evaluating asynchronous I/O.}
+\begin{enumerate}
+  \item \textbf{Treat sleep as an upper bound, and label it as such.} Results
+        obtained with \texttt{sleep()} should be presented as the best-case
+        overlap, not as the expected benefit for an application.
+  \item \textbf{Use compute surrogates that consume resources.} At a minimum,
+        include a CPU-bound and a memory-bandwidth-bound surrogate calibrated
+        to the same duration, as overlap benchmarks such as IMB-IO already
+        do~\cite{intel_imb_io}. In addition, include a communication-bound
+        surrogate, which was the most sensitive surrogate in our
+        measurements.
+  \item \textbf{Report the end-to-end time and attribute it.} The figure of
+        merit is the run time that the application observes. Report it, and
+        break the difference from the ideal into compute-phase slowdown and
+        exposed I/O. An I/O time that drops to near zero while the compute
+        phase grows is not an improvement, and neither is an undisturbed
+        compute phase followed by a long wait for I/O that never progressed.
+        A sleep phase can reveal neither case.
+  \item \textbf{Report the core allocation explicitly.} State whether cores
+        were reserved for background threads and how many ranks and threads
+        ran per node. In addition, evaluate both fully subscribed and
+        reserved configurations, because the placement changed our results
+        considerably.
+  \item \textbf{Validate on at least one real application.} Kernel results
+        should be checked against a full application. The gap between
+        sleep-based I/O-time speedups and end-to-end speedups in real codes,
+        such as Flash-X~\cite{jain2022flashx}, shows why.
+  \item \textbf{Do not tune the compute phase to hide the I/O.} Choosing the
+        emulated compute length so that the overlap is complete guarantees
+        the outcome. Instead, derive $t_{comp}$ from measured application
+        profiles, and sweep it to show where the benefit begins and ends.
+  \item \textbf{Repeat the measurements, and check the synchronous
+        baseline.} I/O time can vary considerably between runs, as it did on
+        our node, and a single synchronous run can inflate or deflate a
+        speedup. In addition, \texttt{sleep} itself slowed down the
+        synchronous I/O in our measurements, by \RecheckMinPct\% to
+        \RecheckMaxPct\%, which inflates \texttt{sleep}-based speedups
+        further. Comparing asynchronous runs directly, as we do, reduces
+        this sensitivity.
+  \item \textbf{Benchmark suites should offer more than sleep.} Tools such as
+        h5bench~\cite{li2021h5bench} could provide selectable compute
+        surrogates alongside the existing emulated-compute parameter.
+\end{enumerate}
+
+\paragraph{For readers interpreting existing results.}
+\begin{enumerate}
+  \item \textbf{Read sleep-based speedups as upper bounds.} They show the
+        overhead of the asynchronous mechanism without contention and the
+        maximum attainable hiding, which is valuable, but they do not
+        predict the speedup of an application.
+  \item \textbf{Check what is being measured.} Many studies report the
+        observed I/O time with the emulated computation excluded. Such
+        numbers cannot reveal a slower compute phase or I/O that stalls
+        behind the computation, and they should not be equated with an
+        end-to-end speedup.
+  \item \textbf{Consider the resource profile of the workload.} Sleep is a
+        closer approximation when the host CPU is actually idle during the
+        computation, as for GPU-offloaded codes~\cite{tang2022async}. In our
+        measurements with pinned ranks, \texttt{sleep} predicted the
+        asynchronous run time with a GPU kernel within a few percent for
+        POSIX, HDF5, and MPI-IO, but not for ADIOS2. Even in this case, the
+        speedup should be computed against a synchronous run with the real
+        computation, because \texttt{sleep} slows down the synchronous
+        baseline. Sleep is a poor approximation for CPU-bound,
+        memory-bandwidth-bound, or communication-heavy codes running on fully
+        subscribed nodes.
+  \item \textbf{Look for stated caveats.} Statements such as ``in the absence
+        of node-level oversubscription'' or recommendations to reserve a core
+        mark the boundary of the validity of a result.
+\end{enumerate}
+
+Asynchronous I/O remains a promising technique, and the studies surveyed in
+this paper show that its mechanisms can be made efficient. Our argument is
+about the evidence, not about the technique. Ultimately, to know how much
+asynchronous I/O helps a real application, its evaluation must include a
+computation phase that actually computes.

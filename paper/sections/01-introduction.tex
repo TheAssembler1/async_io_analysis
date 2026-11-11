@@ -1,0 +1,78 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+
+Many high-performance computing (HPC) simulations and analysis codes
+alternate between computation and Input/Output (I/O) phases. A simulation
+advances a number of timesteps and then writes a checkpoint or plot file,
+while an analysis code reads a timestep and then processes it. When I/O is
+performed synchronously, the computation stalls until the I/O phase
+completes. Because storage bandwidth has grown more slowly than compute
+capability, these stalls can become a significant fraction of the total run
+time.
+
+Asynchronous I/O addresses this problem by separating the issue of an I/O
+operation from its completion. The application initiates an I/O operation,
+continues with its next computation phase, and only waits for completion
+when it needs the buffer again or reaches a synchronization point.
+Implementations range from POSIX asynchronous I/O (AIO) and non-blocking
+MPI-IO to background-thread frameworks, such as the HDF5 asynchronous
+Virtual Object Layer (VOL) connector~\cite{tang2019async,tang2022async}, and
+server-based approaches that use dedicated cores or staging
+resources~\cite{dorier2016damaris}. In the ideal case, the observed I/O cost
+per step falls from $t_{io}$ to a small overhead, and the time per step
+becomes approximately $\max(t_{comp}, t_{io})$ rather than
+$t_{comp} + t_{io}$~\cite{ravi2023evaluating}.
+
+Whether this ideal is reached depends on a question that is easy to
+overlook: \emph{what is the application doing while the I/O runs in the
+background?} The background I/O engine needs CPU time, memory bandwidth for
+buffer copies, and network bandwidth to reach the parallel file system (PFS).
+A real computation phase competes for all three. However, a common practice
+in the asynchronous I/O literature is to replace the computation phase with
+a call to \texttt{sleep()} of a chosen
+duration~\cite{li2021h5bench,tang2022async,ravi2023evaluating}. This choice
+is convenient, because it makes experiments cheap and allows the authors to
+select a compute phase long enough to fully hide the I/O. However, it also
+removes the contention that could prevent the overlap.
+
+Contention can appear on either side of the overlap. The background engine
+can take CPU time, memory bandwidth, or MPI resources from the application,
+which makes the computation run longer. Alternatively, the application can
+starve the engine, so the I/O does not progress during the computation and
+the application waits for it at the next synchronization point. Studies that
+report only the observed I/O time cannot clearly see either effect, and
+studies that use \texttt{sleep} cannot see them at all, because a sleeping
+thread neither competes for resources nor withholds them. For this reason,
+we evaluate asynchronous I/O by the quantity the application actually
+experiences, its end-to-end run time, and attribute any difference to the
+compute side or the I/O side.
+
+In this paper, our contributions are the following:
+\begin{itemize}
+  \item We survey how 17 asynchronous I/O and overlap evaluations spanning
+        HDF5, ADIOS, PDC, POSIX-level checkpointing, and deep-learning I/O
+        treat the computation phase. Only 6 of them use a computation that
+        consumes the resources background I/O needs
+        (Section~\ref{sec:survey}).
+  \item We collect the evidence that bears on the validity of
+        \texttt{sleep}-based evaluation from interference studies,
+        real-application evaluations, overlap benchmarks, and the caveats
+        stated by the \texttt{sleep}-based studies themselves.
+  \item We present an open benchmark that drives POSIX, MPI-IO, HDF5, and
+        ADIOS2 with interchangeable compute surrogates calibrated to the same
+        standalone duration. We use it to measure how far
+        \texttt{sleep}-based estimates of the benefit of asynchronous I/O
+        diverge from estimates that include contention
+        (Section~\ref{sec:eval}).
+  \item We provide recommendations for designing future evaluations and for
+        interpreting published results that rely on \texttt{sleep()}.
+\end{itemize}
+
+The remainder of the paper is organized as follows.
+Section~\ref{sec:related} reviews related work. Section~\ref{sec:survey}
+describes our survey methodology and its findings. Section~\ref{sec:eval}
+presents our benchmark and experimental results. Lastly,
+Section~\ref{sec:conclusion} presents our recommendations and concludes the
+paper.

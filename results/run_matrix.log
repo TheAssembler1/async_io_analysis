@@ -1,0 +1,922 @@
+16:59:53 === phase io0
+16:59:56 [io0] rc=0    2.6s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.074 final=0.000 total=0.369
+16:59:59 [io0] rc=0    3.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.086 final=0.007 total=0.420
+17:00:03 [io0] rc=0    3.9s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.456 final=0.649 total=1.328
+17:00:16 [io0] rc=0   12.8s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.640 final=2.082 total=10.255
+17:00:19 [io0] rc=0    3.3s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.084 final=0.000 total=0.418
+17:00:22 [io0] rc=0    3.2s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.089 final=0.083 total=0.509
+17:00:27 [io0] rc=0    4.7s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.253 final=0.000 total=1.249
+17:00:32 [io0] rc=0    5.3s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.462 final=0.270 total=1.866
+17:00:43 [io0] rc=0   11.1s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=3.145 final=7.317 total=8.137
+17:01:01 [io0] rc=0   17.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.685 final=5.116 total=14.498
+17:01:05 [io0] rc=0    4.0s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.266 final=0.000 total=1.329
+17:01:09 [io0] rc=0    4.7s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.293 final=0.247 total=1.685
+17:01:26 [io0] rc=0   16.5s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.821 final=0.000 total=12.288
+17:01:37 [io0] rc=0   11.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.601 final=0.687 total=6.200
+--- relaunch after vol-async patch
+17:05:02 === phase io0
+17:05:05 [io0] rc=0    2.8s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.064 final=0.000 total=0.310
+17:05:08 [io0] rc=0    3.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.079 final=0.007 total=0.383
+17:05:13 [io0] rc=0    4.4s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.394 final=0.001 total=1.969
+17:05:18 [io0] rc=0    4.9s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.340 final=0.480 total=2.134
+17:05:21 [io0] rc=0    3.0s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.082 final=0.000 total=0.411
+17:05:24 [io0] rc=0    3.2s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.087 final=0.081 total=0.506
+17:05:30 [io0] rc=0    6.1s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.380 final=0.000 total=2.937
+17:05:36 [io0] rc=0    5.7s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.059 final=0.972 total=2.783
+17:05:50 [io0] rc=0   14.8s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.350 final=0.001 total=11.752
+17:06:03 [io0] rc=0   12.1s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.635 final=1.300 total=9.371
+17:06:07 [io0] rc=0    4.7s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.322 final=0.000 total=1.610
+17:06:14 [io0] rc=0    6.9s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.292 final=2.311 total=3.747
+17:06:35 [io0] rc=0   20.9s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=5.278 final=0.000 total=15.425
+17:06:48 [io0] rc=0   12.8s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.140 final=0.997 total=8.511
+--- relaunch: per-run sync + repetitions
+17:09:03 === phase io0
+17:09:06 [io0] rc=0    2.9s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.077 final=0.000 total=0.378
+17:09:09 [io0] rc=0    2.9s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.082 final=0.008 total=0.392
+17:09:14 [io0] rc=0    5.0s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.452 final=0.001 total=2.261
+17:09:18 [io0] rc=0    4.8s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.344 final=0.397 total=2.087
+17:09:22 [io0] rc=0    3.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.083 final=0.000 total=0.414
+17:09:25 [io0] rc=0    3.0s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.088 final=0.081 total=0.510
+17:09:29 [io0] rc=0    4.9s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.472 final=0.000 total=1.736
+17:09:34 [io0] rc=0    4.3s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.263 final=0.028 total=1.323
+17:09:48 [io0] rc=0   14.7s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.342 final=0.001 total=11.712
+17:09:58 [io0] rc=0    9.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.998 final=1.406 total=6.286
+17:10:03 [io0] rc=0    5.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.459 final=0.000 total=2.296
+17:10:08 [io0] rc=0    4.9s adios2/async/none[full] P=48 alone=0.000 comp=0.001 (x0.00) io/step=0.271 final=0.234 total=1.575
+17:10:18 [io0] rc=0   10.4s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.087 final=0.000 total=5.922
+17:10:30 [io0] rc=0   11.9s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.077 final=1.334 total=7.743
+17:11:31 [io0] rc=0   61.5s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=11.273 final=0.002 total=56.368
+17:12:12 [io0] rc=0   41.0s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.238 final=6.465 total=37.174
+17:12:27 [io0] rc=0   14.5s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.057 final=0.000 total=10.274
+17:12:46 [io0] rc=0   19.0s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.690 final=1.090 total=14.517
+17:13:37 [io0] rc=0   51.5s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.145 final=0.000 total=38.677
+17:14:08 [io0] rc=0   30.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.446 final=0.767 total=21.285
+17:18:02 [io0] rc=0  234.5s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=44.927 final=0.003 total=224.638
+17:20:44 [io0] rc=0  162.3s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=26.734 final=25.345 total=157.695
+17:21:33 [io0] rc=0   48.5s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.171 final=0.000 total=40.857
+17:22:21 [io0] rc=0   48.3s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.384 final=4.967 total=41.872
+17:22:31 [io0] rc=0    9.5s posix/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=3.852 final=0.000 total=7.195
+17:22:39 [io0] rc=0    8.2s posix/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.731 final=0.429 total=5.859
+17:22:55 [io0] rc=0   15.9s hdf5/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.583 final=0.001 total=12.918
+17:23:06 [io0] rc=0   10.9s hdf5/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.644 final=1.379 total=9.212
+17:23:11 [io0] rc=0    4.7s adios2/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=0.589 final=0.000 total=2.947
+17:23:20 [io0] rc=0    9.0s adios2/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.365 final=0.308 total=7.125
+17:23:43 [io0] rc=0   23.1s posix/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=5.862 final=0.000 total=18.056
+17:24:41 [io0] rc=0   58.0s hdf5/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=10.590 final=0.002 total=52.953
+17:25:00 [io0] rc=0   19.6s adios2/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=2.874 final=0.000 total=14.370
+17:25:02 [io0] rc=0    2.3s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.075 final=0.000 total=0.364
+17:25:05 [io0] rc=0    2.6s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.082 final=0.007 total=0.393
+17:25:10 [io0] rc=0    4.4s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.424 final=0.001 total=2.119
+17:25:14 [io0] rc=0    4.6s hdf5/async/none[full] P=48 alone=0.000 comp=0.001 (x0.00) io/step=0.344 final=0.875 total=2.550
+17:25:17 [io0] rc=0    2.8s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.082 final=0.000 total=0.411
+17:25:20 [io0] rc=0    2.8s adios2/async/none[full] P=48 alone=0.000 comp=0.001 (x0.00) io/step=0.089 final=0.081 total=0.512
+17:25:24 [io0] rc=0    4.4s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.245 final=0.000 total=1.211
+17:25:28 [io0] rc=0    3.8s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.260 final=0.029 total=1.298
+17:25:42 [io0] rc=0   13.8s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.174 final=0.001 total=10.872
+17:25:52 [io0] rc=0   10.6s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.393 final=1.270 total=8.109
+17:25:56 [io0] rc=0    4.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.284 final=0.000 total=1.417
+17:26:01 [io0] rc=0    4.3s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.287 final=0.247 total=1.668
+17:26:12 [io0] rc=0   11.6s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.326 final=0.000 total=6.632
+17:26:27 [io0] rc=0   14.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.669 final=1.336 total=9.952
+17:27:24 [io0] rc=0   57.7s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=10.452 final=0.002 total=52.264
+17:27:54 [io0] rc=0   29.9s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.131 final=6.274 total=26.485
+17:28:08 [io0] rc=0   13.8s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.990 final=0.000 total=8.272
+17:28:25 [io0] rc=0   17.0s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.101 final=1.052 total=11.537
+17:29:23 [io0] rc=0   57.7s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=9.957 final=0.000 total=43.626
+17:29:53 [io0] rc=0   30.3s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.461 final=0.777 total=21.502
+--- relaunch: MPI-IO added as fourth backend
+17:38:49 === phase io0
+17:38:54 [io0] rc=0    4.7s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.439 final=0.000 total=2.193
+17:39:00 [io0] rc=0    6.1s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.696 final=0.423 total=3.876
+17:39:11 [io0] rc=0   11.7s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.767 final=0.000 total=8.833
+17:39:32 [io0] rc=0   20.3s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.893 final=2.865 total=17.294
+17:40:22 [io0] rc=0   49.8s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.925 final=0.000 total=44.624
+--- relaunch: HDF5 baselines re-measured with ROMIO hints
+17:41:48 === phase io0
+17:41:53 [io0] rc=0    4.2s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.358 final=0.001 total=1.792
+17:41:57 [io0] rc=0    4.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.339 final=0.389 total=2.054
+17:42:10 [io0] rc=0   13.3s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.081 final=0.001 total=10.406
+17:42:22 [io0] rc=0   12.0s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.968 final=4.591 total=9.323
+17:43:23 [io0] rc=0   61.2s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=11.105 final=0.002 total=55.527
+17:43:55 [io0] rc=0   31.6s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.594 final=5.800 total=28.448
+17:47:11 [io0] rc=0  196.1s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=37.236 final=0.000 total=186.181
+17:53:16 [io0] rc=0  364.8s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=61.992 final=47.721 total=357.650
+17:57:18 [io0] rc=0  242.6s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=46.488 final=0.003 total=232.444
+17:59:52 [io0] rc=0  154.1s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=24.363 final=28.409 total=148.831
+18:00:05 [io0] rc=0   12.3s mpiio/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.943 final=0.000 total=9.712
+18:00:32 [io0] rc=0   26.9s mpiio/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=3.943 final=3.426 total=23.132
+18:00:47 [io0] rc=0   15.7s hdf5/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.658 final=0.001 total=13.289
+18:01:01 [io0] rc=0   13.2s hdf5/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.025 final=1.825 total=11.439
+18:01:53 [io0] rc=0   52.6s mpiio/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=9.448 final=0.000 total=47.241
+18:02:50 [io0] rc=0   56.5s hdf5/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=10.259 final=0.002 total=51.295
+18:02:54 [io0] rc=0    4.3s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.445 final=0.000 total=2.224
+18:03:00 [io0] rc=0    6.0s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.724 final=0.468 total=4.064
+18:03:04 [io0] rc=0    4.3s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.407 final=0.001 total=2.035
+18:03:08 [io0] rc=0    4.3s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.354 final=0.426 total=2.163
+18:03:20 [io0] rc=0   11.8s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.780 final=0.000 total=8.902
+18:03:42 [io0] rc=0   21.8s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.649 final=5.987 total=19.207
+18:03:58 [io0] rc=0   16.1s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.713 final=0.001 total=13.563
+18:04:09 [io0] rc=0   11.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.390 final=1.825 total=8.658
+18:04:57 [io0] rc=0   47.5s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.465 final=0.000 total=42.323
+18:06:19 [io0] rc=0   82.0s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=13.267 final=11.788 total=78.089
+18:07:15 [io0] rc=0   56.7s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=10.271 final=0.002 total=51.355
+18:07:49 [io0] rc=0   33.7s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.385 final=8.407 total=29.932
+18:11:02 [io0] rc=0  192.3s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=36.507 final=0.000 total=182.537
+18:16:39 [io0] rc=0  338.0s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=57.037 final=45.701 total=330.859
+18:20:32 [io0] rc=0  232.4s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=44.597 final=0.018 total=223.003
+18:23:13 [io0] rc=0  160.8s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=26.649 final=23.910 total=155.519
+18:24:00 [io0] rc=0   47.6s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.808 final=0.000 total=39.037
+18:24:48 [io0] rc=0   48.1s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.706 final=7.159 total=40.665
+18:24:56 [io0] rc=0    8.0s posix/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.922 final=0.000 total=5.506
+18:25:03 [io0] rc=0    7.0s posix/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=0.872 final=0.470 total=4.546
+18:25:20 [io0] rc=0   17.0s mpiio/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.856 final=0.000 total=14.281
+18:25:50 [io0] rc=0   29.8s mpiio/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=4.696 final=2.632 total=26.100
+18:26:09 [io0] rc=0   19.2s hdf5/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=3.280 final=0.001 total=16.399
+18:26:21 [io0] rc=0   11.3s hdf5/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.684 final=1.377 total=9.483
+18:26:25 [io0] rc=0    4.3s adios2/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=0.508 final=0.000 total=2.539
+18:26:34 [io0] rc=0    8.6s adios2/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.277 final=0.312 total=6.684
+18:26:52 [io0] rc=0   18.4s posix/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=4.020 final=0.000 total=13.723
+18:27:39 [io0] rc=0   46.8s mpiio/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=8.469 final=0.000 total=42.345
+18:28:33 [io0] rc=0   54.3s hdf5/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=9.983 final=0.002 total=49.919
+18:28:53 [io0] rc=0   19.4s adios2/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=2.896 final=0.000 total=14.478
+18:28:53 === phase main
+18:29:12 [main] rc=0   19.3s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.822 final=0.000 total=14.232
+18:29:30 [main] rc=0   18.4s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.596 final=2.085 total=13.604
+18:30:08 [main] rc=0   37.8s posix/sync/sleep[full] P=48 alone=1.570 comp=1.571 (x1.00) io/step=2.390 final=0.000 total=29.690
+18:30:38 [main] rc=0   30.1s posix/async/sleep[full] P=48 alone=1.570 comp=1.571 (x1.00) io/step=0.698 final=2.356 total=22.567
+18:31:22 [main] rc=0   43.6s posix/sync/spin[full] P=48 alone=1.519 comp=1.585 (x1.04) io/step=4.397 final=0.000 total=32.662
+18:32:06 [main] rc=0   44.4s posix/async/spin[full] P=48 alone=1.571 comp=1.744 (x1.11) io/step=3.601 final=1.879 total=33.496
+18:32:46 [main] rc=0   39.4s posix/sync/dgemm[full] P=48 alone=1.566 comp=1.589 (x1.01) io/step=2.226 final=0.000 total=27.844
+18:33:21 [main] rc=0   35.0s posix/async/dgemm[full] P=48 alone=1.560 comp=1.693 (x1.09) io/step=1.359 final=1.012 total=23.641
+18:34:04 [main] rc=0   43.4s posix/sync/stream[full] P=48 alone=1.547 comp=1.422 (x0.92) io/step=4.365 final=0.000 total=31.166
+18:34:48 [main] rc=0   44.3s posix/async/stream[full] P=48 alone=1.554 comp=1.715 (x1.10) io/step=3.792 final=1.844 total=32.252
+18:36:24 [main] rc=0   95.5s posix/sync/halo[full] P=48 alone=1.574 comp=7.891 (x5.01) io/step=6.814 final=0.000 total=83.963
+18:37:49 [main] rc=0   84.9s posix/async/halo[full] P=48 alone=1.568 comp=6.884 (x4.39) io/step=4.662 final=2.170 total=73.369
+18:39:20 [main] rc=0   91.8s posix/sync/heat[full] P=48 alone=1.560 comp=7.589 (x4.86) io/step=6.525 final=0.000 total=80.684
+--- relaunch: per-step barrier + per-phase baselines (main restarted)
+18:41:25 === phase io0
+18:41:25 === phase main
+18:43:34 [main] rc=0  129.0s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=12.316 final=0.000 total=123.108
+18:44:51 [main] rc=0   76.8s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.921 final=2.673 total=71.832
+--- relaunch after page-cache check
+18:52:29 === phase io0
+18:52:30 === phase main
+18:55:45 [main] rc=0  195.1s posix/async/sleep[full] P=48 alone=15.390 comp=15.390 (x1.00) io/step=0.150 final=4.519 total=159.920
+19:00:49 [main] rc=0  304.6s posix/sync/spin[full] P=48 alone=15.390 comp=15.563 (x1.01) io/step=8.236 final=0.000 total=236.163
+--- relaunch: breadth-first repetitions, short-target calibration
+19:05:16 === phase io0 rep 0
+19:05:16 === phase main rep 0
+19:09:43 [main] rc=0  266.9s posix/sync/dgemm[full] P=48 alone=16.529 comp=15.464 (x0.94) io/step=8.220 final=0.000 total=224.716
+19:13:01 [main] rc=0  198.1s posix/async/dgemm[full] P=48 alone=15.315 comp=15.546 (x1.02) io/step=1.434 final=2.958 total=159.261
+19:17:55 [main] rc=0  293.6s posix/sync/stream[full] P=48 alone=15.199 comp=15.169 (x1.00) io/step=10.445 final=0.000 total=253.797
+19:21:36 [main] rc=0  221.8s posix/async/stream[full] P=48 alone=15.210 comp=15.418 (x1.01) io/step=3.039 final=3.078 total=182.993
+19:26:26 [main] rc=0  289.5s posix/sync/halo[full] P=48 alone=15.315 comp=15.372 (x1.00) io/step=9.590 final=0.000 total=249.630
+19:30:27 [main] rc=0  241.2s posix/async/halo[full] P=48 alone=15.363 comp=19.687 (x1.28) io/step=0.165 final=3.333 total=201.847
+19:35:08 [main] rc=0  281.4s posix/sync/heat[full] P=48 alone=15.364 comp=15.361 (x1.00) io/step=8.810 final=0.000 total=241.685
+19:38:45 [main] rc=0  216.7s posix/async/heat[full] P=48 alone=15.342 comp=17.008 (x1.11) io/step=0.257 final=5.347 total=177.789
+19:40:01 [main] rc=0   75.8s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.112 final=0.000 total=71.117
+19:42:14 [main] rc=0  132.6s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=11.948 final=9.352 total=128.775
+19:45:40 [main] rc=0  206.7s mpiio/sync/sleep[full] P=48 alone=8.890 comp=8.890 (x1.00) io/step=9.578 final=0.000 total=184.681
+19:49:27 [main] rc=0  227.1s mpiio/async/sleep[full] P=48 alone=8.891 comp=8.891 (x1.00) io/step=10.732 final=9.327 total=205.487
+19:52:21 [main] rc=0  173.5s mpiio/sync/spin[full] P=48 alone=8.884 comp=8.905 (x1.00) io/step=5.813 final=0.000 total=146.863
+19:56:42 [main] rc=0  260.9s mpiio/async/spin[full] P=48 alone=8.873 comp=8.877 (x1.00) io/step=13.748 final=8.861 total=234.913
+19:59:59 [main] rc=0  197.3s mpiio/sync/dgemm[full] P=48 alone=8.896 comp=8.943 (x1.01) io/step=8.765 final=0.000 total=169.974
+20:04:03 [main] rc=0  244.1s mpiio/async/dgemm[full] P=48 alone=8.861 comp=8.865 (x1.00) io/step=12.148 final=9.611 total=217.851
+20:07:26 [main] rc=0  202.6s mpiio/sync/stream[full] P=48 alone=8.796 comp=8.792 (x1.00) io/step=8.918 final=0.000 total=175.584
+20:11:12 [main] rc=0  226.2s mpiio/async/stream[full] P=48 alone=8.865 comp=9.009 (x1.02) io/step=11.562 final=10.121 total=199.873
+20:14:25 [main] rc=0  193.6s mpiio/sync/halo[full] P=48 alone=8.859 comp=8.954 (x1.01) io/step=7.696 final=0.000 total=166.507
+20:18:48 [main] rc=0  262.6s mpiio/async/halo[full] P=48 alone=9.462 comp=9.277 (x0.98) io/step=13.383 final=8.851 total=235.318
+20:22:00 [main] rc=0  192.5s mpiio/sync/heat[full] P=48 alone=8.836 comp=8.853 (x1.00) io/step=7.741 final=0.000 total=165.900
+20:26:03 [main] rc=0  243.0s mpiio/async/heat[full] P=48 alone=8.578 comp=8.504 (x0.99) io/step=12.249 final=9.356 total=216.734
+20:27:38 [main] rc=0   94.8s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.960 final=0.026 total=89.629
+20:28:31 [main] rc=0   52.6s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.459 final=4.574 total=49.091
+20:32:48 [main] rc=0  257.0s hdf5/sync/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.758 final=0.003 total=229.585
+20:35:17 [main] rc=0  149.3s hdf5/async/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=0.308 final=7.690 total=122.705
+20:39:20 [main] rc=0  242.5s hdf5/sync/spin[full] P=48 alone=11.183 comp=11.288 (x1.01) io/step=9.909 final=0.003 total=210.847
+20:42:27 [main] rc=0  187.8s hdf5/async/spin[full] P=48 alone=11.199 comp=15.079 (x1.35) io/step=3.924 final=4.523 total=157.062
+20:46:28 [main] rc=0  241.0s hdf5/sync/dgemm[full] P=48 alone=11.217 comp=11.226 (x1.00) io/step=10.580 final=0.003 total=209.230
+20:49:33 [main] rc=0  184.6s hdf5/async/dgemm[full] P=48 alone=11.087 comp=14.750 (x1.33) io/step=4.495 final=4.470 total=153.844
+20:53:39 [main] rc=0  245.9s hdf5/sync/stream[full] P=48 alone=11.064 comp=11.077 (x1.00) io/step=10.566 final=0.027 total=214.556
+20:56:37 [main] rc=0  177.7s hdf5/async/stream[full] P=48 alone=11.047 comp=13.794 (x1.25) io/step=3.934 final=4.574 total=147.559
+21:00:37 [main] rc=0  240.9s hdf5/sync/halo[full] P=48 alone=11.138 comp=11.161 (x1.00) io/step=9.784 final=0.003 total=209.448
+21:04:14 [main] rc=0  216.4s hdf5/async/halo[full] P=48 alone=11.150 comp=17.875 (x1.60) io/step=0.280 final=4.450 total=185.906
+21:08:14 [main] rc=0  240.4s hdf5/sync/heat[full] P=48 alone=11.165 comp=11.170 (x1.00) io/step=9.721 final=0.027 total=208.912
+21:11:12 [main] rc=0  177.4s hdf5/async/heat[full] P=48 alone=11.181 comp=13.727 (x1.23) io/step=0.579 final=4.480 total=147.421
+21:11:32 [main] rc=0   20.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.579 final=0.000 total=15.794
+21:11:54 [main] rc=0   21.7s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.631 final=1.116 total=17.374
+21:12:53 [main] rc=0   59.7s adios2/sync/sleep[full] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.979 final=0.021 total=49.508
+21:13:34 [main] rc=0   40.3s adios2/async/sleep[full] P=48 alone=1.970 comp=1.971 (x1.00) io/step=1.006 final=2.141 total=31.876
+21:14:22 [main] rc=0   48.5s adios2/sync/spin[full] P=48 alone=1.969 comp=1.982 (x1.01) io/step=1.540 final=0.000 total=35.082
+21:15:12 [main] rc=0   49.4s adios2/async/spin[full] P=48 alone=1.968 comp=2.491 (x1.27) io/step=1.434 final=1.564 total=36.519
+21:16:04 [main] rc=0   52.5s adios2/sync/dgemm[full] P=48 alone=1.957 comp=2.122 (x1.08) io/step=2.099 final=0.015 total=39.212
+21:16:52 [main] rc=0   47.5s adios2/async/dgemm[full] P=48 alone=1.959 comp=2.727 (x1.39) io/step=1.303 final=1.085 total=33.709
+21:17:46 [main] rc=0   54.3s adios2/sync/stream[full] P=48 alone=1.968 comp=2.005 (x1.02) io/step=2.167 final=0.001 total=40.917
+21:18:34 [main] rc=0   48.1s adios2/async/stream[full] P=48 alone=1.946 comp=2.628 (x1.35) io/step=1.495 final=1.017 total=35.411
+21:19:26 [main] rc=0   52.1s adios2/sync/halo[full] P=48 alone=1.965 comp=2.041 (x1.04) io/step=1.891 final=0.001 total=39.323
+21:20:19 [main] rc=0   53.0s adios2/async/halo[full] P=48 alone=1.961 comp=3.377 (x1.72) io/step=0.512 final=1.251 total=40.109
+21:21:13 [main] rc=0   53.6s adios2/sync/heat[full] P=48 alone=1.965 comp=1.993 (x1.01) io/step=2.011 final=0.001 total=40.010
+21:21:59 [main] rc=0   46.2s adios2/async/heat[full] P=48 alone=1.966 comp=2.605 (x1.32) io/step=0.660 final=1.013 total=33.563
+21:21:59 === phase gpu rep 0
+21:22:32 [gpu] rc=0   33.2s posix/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.963 final=0.000 total=29.633
+21:22:49 [gpu] rc=0   16.6s posix/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.308 final=0.613 total=13.689
+21:24:03 [gpu] rc=0   74.4s posix/sync/sleep[full] P=4 alone=3.700 comp=3.700 (x1.00) io/step=2.636 final=0.000 total=63.362
+21:24:53 [gpu] rc=0   50.5s posix/async/sleep[full] P=4 alone=3.700 comp=3.700 (x1.00) io/step=0.183 final=1.419 total=40.247
+21:25:26 [gpu] rc=0   32.8s posix/sync/gpu-block[full] P=4 alone=0.737 comp=0.607 (x0.82) io/step=2.090 final=0.000 total=26.251
+21:25:52 [gpu] rc=0   25.7s posix/async/gpu-block[full] P=4 alone=0.614 comp=0.648 (x1.05) io/step=1.169 final=1.563 total=18.791
+21:26:28 [gpu] rc=0   36.3s posix/sync/gpu-spin[full] P=4 alone=1.787 comp=1.770 (x0.99) io/step=1.181 final=0.000 total=28.965
+21:27:17 [gpu] rc=0   48.8s posix/async/gpu-spin[full] P=4 alone=3.393 comp=3.399 (x1.00) io/step=0.185 final=1.130 total=36.170
+21:28:29 [gpu] rc=0   72.3s posix/sync/dgemm[full] P=4 alone=3.698 comp=3.702 (x1.00) io/step=2.089 final=0.000 total=57.498
+21:29:28 [gpu] rc=0   58.5s posix/async/dgemm[full] P=4 alone=3.696 comp=4.004 (x1.08) io/step=0.511 final=1.014 total=43.960
+21:29:53 [gpu] rc=0   25.1s mpiio/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.188 final=0.000 total=21.880
+21:30:40 [gpu] rc=0   47.0s mpiio/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=3.805 final=5.560 total=43.599
+21:31:40 [gpu] rc=0   60.4s mpiio/sync/sleep[full] P=4 alone=2.740 comp=2.740 (x1.00) io/step=2.424 final=0.000 total=51.645
+21:32:53 [gpu] rc=0   72.8s mpiio/async/sleep[full] P=4 alone=2.741 comp=2.740 (x1.00) io/step=3.404 final=2.563 total=63.984
+21:33:22 [gpu] rc=0   29.2s mpiio/sync/gpu-block[full] P=4 alone=0.668 comp=0.543 (x0.81) io/step=1.810 final=0.000 total=22.921
+21:34:08 [gpu] rc=0   45.7s mpiio/async/gpu-block[full] P=4 alone=0.697 comp=0.713 (x1.02) io/step=3.123 final=2.910 total=38.320
+21:34:55 [gpu] rc=0   47.4s mpiio/sync/gpu-spin[full] P=4 alone=2.537 comp=2.515 (x0.99) io/step=1.263 final=0.000 total=37.124
+21:35:51 [gpu] rc=0   55.4s mpiio/async/gpu-spin[full] P=4 alone=1.472 comp=1.392 (x0.95) io/step=3.117 final=3.027 total=47.122
+21:36:52 [gpu] rc=0   61.2s mpiio/sync/dgemm[full] P=4 alone=2.739 comp=2.741 (x1.00) io/step=2.091 final=0.000 total=48.117
+21:38:06 [gpu] rc=0   74.1s mpiio/async/dgemm[full] P=4 alone=2.732 comp=2.731 (x1.00) io/step=3.058 final=2.552 total=60.212
+21:38:31 [gpu] rc=0   25.1s hdf5/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=2.200 final=0.025 total=22.026
+21:38:52 [gpu] rc=0   21.0s hdf5/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.763 final=1.403 total=19.024
+21:39:52 [gpu] rc=0   60.2s hdf5/sync/sleep[full] P=4 alone=2.750 comp=2.750 (x1.00) io/step=2.434 final=0.025 total=51.864
+21:40:36 [gpu] rc=0   43.2s hdf5/async/sleep[full] P=4 alone=2.750 comp=2.750 (x1.00) io/step=0.667 final=1.664 total=35.816
+21:41:04 [gpu] rc=0   28.6s hdf5/sync/gpu-block[full] P=4 alone=0.725 comp=0.801 (x1.11) io/step=1.495 final=0.025 total=22.554
+21:41:33 [gpu] rc=0   29.2s hdf5/async/gpu-block[full] P=4 alone=0.679 comp=0.685 (x1.01) io/step=1.637 final=1.376 total=23.470
+21:42:21 [gpu] rc=0   47.7s hdf5/sync/gpu-spin[full] P=4 alone=2.567 comp=2.538 (x0.99) io/step=1.254 final=0.029 total=37.323
+21:43:07 [gpu] rc=0   45.7s hdf5/async/gpu-spin[full] P=4 alone=2.570 comp=2.547 (x0.99) io/step=0.918 final=1.491 total=35.456
+21:44:14 [gpu] rc=0   67.0s hdf5/sync/dgemm[full] P=4 alone=2.748 comp=2.748 (x1.00) io/step=2.697 final=0.025 total=54.261
+21:45:12 [gpu] rc=0   57.9s hdf5/async/dgemm[full] P=4 alone=2.748 comp=3.908 (x1.42) io/step=1.461 final=1.379 total=45.948
+21:45:20 [gpu] rc=0    7.9s adios2/sync/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=0.569 final=0.000 total=5.695
+21:45:34 [gpu] rc=0   14.6s adios2/async/none[full] P=4 alone=0.000 comp=0.000 (x0.00) io/step=1.223 final=0.400 total=12.616
+21:45:57 [gpu] rc=0   22.6s adios2/sync/sleep[full] P=4 alone=0.710 comp=0.711 (x1.00) io/step=1.130 final=0.000 total=18.401
+21:46:17 [gpu] rc=0   20.4s adios2/async/sleep[full] P=4 alone=0.710 comp=0.711 (x1.00) io/step=0.924 final=0.384 total=16.725
+21:46:37 [gpu] rc=0   20.0s adios2/sync/gpu-block[full] P=4 alone=0.357 comp=0.413 (x1.16) io/step=1.080 final=0.000 total=14.539
+21:46:58 [gpu] rc=0   20.8s adios2/async/gpu-block[full] P=4 alone=0.371 comp=0.383 (x1.03) io/step=1.191 final=0.387 total=15.313
+21:47:13 [gpu] rc=0   15.3s adios2/sync/gpu-spin[full] P=4 alone=0.289 comp=0.287 (x0.99) io/step=0.791 final=0.000 total=10.477
+21:47:30 [gpu] rc=0   17.2s adios2/async/gpu-spin[full] P=4 alone=0.299 comp=0.366 (x1.23) io/step=0.992 final=0.421 total=13.363
+21:47:49 [gpu] rc=0   18.2s adios2/sync/dgemm[full] P=4 alone=0.705 comp=0.704 (x1.00) io/step=0.610 final=0.000 total=13.089
+21:48:13 [gpu] rc=0   24.1s adios2/async/dgemm[full] P=4 alone=0.700 comp=1.054 (x1.51) io/step=0.882 final=0.381 total=19.157
+21:48:13 === phase bind rep 0
+21:49:47 [bind] rc=0   94.4s posix/sync/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.938 final=0.000 total=89.379
+21:50:54 [bind] rc=0   67.2s posix/async/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=5.894 final=3.397 total=62.335
+21:52:19 [bind] rc=0   84.2s posix/sync/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.948 final=0.000 total=79.484
+21:53:31 [bind] rc=0   72.7s posix/async/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.823 final=0.192 total=68.426
+21:54:43 [bind] rc=0   71.6s posix/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=6.758 final=0.000 total=67.581
+21:55:32 [bind] rc=0   49.2s posix/async/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=3.759 final=7.880 total=45.467
+22:00:15 [bind] rc=0  283.2s posix/sync/sleep[full] P=48 alone=15.390 comp=15.390 (x1.00) io/step=9.391 final=0.000 total=247.806
+22:04:58 [bind] rc=0  283.1s posix/sync/sleep[smt] P=48 alone=15.390 comp=15.390 (x1.00) io/step=9.326 final=0.000 total=247.157
+22:09:44 [bind] rc=0  285.8s posix/sync/sleep[none] P=48 alone=15.390 comp=15.390 (x1.00) io/step=9.669 final=0.002 total=250.594
+22:14:22 [bind] rc=0  278.1s posix/sync/sleep[reserved] P=24 alone=15.390 comp=15.390 (x1.00) io/step=8.975 final=0.000 total=243.652
+22:17:38 [bind] rc=0  195.3s posix/async/sleep[full] P=48 alone=15.390 comp=15.390 (x1.00) io/step=0.140 final=4.484 total=159.781
+22:20:54 [bind] rc=0  196.6s posix/async/sleep[smt] P=48 alone=15.390 comp=15.390 (x1.00) io/step=0.136 final=5.895 total=161.154
+22:24:12 [bind] rc=0  197.9s posix/async/sleep[none] P=48 alone=15.390 comp=15.390 (x1.00) io/step=0.263 final=5.339 total=161.865
+22:27:27 [bind] rc=0  195.3s posix/async/sleep[reserved] P=24 alone=15.390 comp=15.390 (x1.00) io/step=0.161 final=4.564 total=160.074
+22:31:45 [bind] rc=0  257.7s posix/sync/dgemm[full] P=48 alone=15.315 comp=15.381 (x1.00) io/step=7.541 final=0.000 total=217.871
+22:36:03 [bind] rc=0  257.7s posix/sync/dgemm[smt] P=48 alone=15.259 comp=15.327 (x1.00) io/step=7.639 final=0.000 total=218.003
+22:39:13 [bind] rc=0  190.1s posix/sync/dgemm[none] P=48 alone=10.089 comp=7.961 (x0.79) io/step=8.905 final=0.001 total=161.033
+22:43:25 [bind] rc=0  252.5s posix/sync/dgemm[reserved] P=24 alone=15.369 comp=15.406 (x1.00) io/step=7.046 final=0.000 total=213.221
+22:46:40 [bind] rc=0  194.8s posix/async/dgemm[full] P=48 alone=15.142 comp=15.282 (x1.01) io/step=1.405 final=2.776 total=156.241
+22:50:00 [bind] rc=0  199.4s posix/async/dgemm[smt] P=48 alone=15.350 comp=15.603 (x1.02) io/step=1.459 final=3.580 total=160.249
+22:51:55 [bind] rc=0  115.6s posix/async/dgemm[none] P=48 alone=9.917 comp=8.024 (x0.81) io/step=0.998 final=5.409 total=87.831
+22:55:15 [bind] rc=0  199.6s posix/async/dgemm[reserved] P=24 alone=15.410 comp=15.577 (x1.01) io/step=1.540 final=4.736 total=161.453
+23:00:02 [bind] rc=0  286.9s posix/sync/stream[full] P=48 alone=15.217 comp=15.210 (x1.00) io/step=9.712 final=0.000 total=246.735
+23:04:47 [bind] rc=0  285.3s posix/sync/stream[smt] P=48 alone=15.266 comp=15.263 (x1.00) io/step=9.533 final=0.000 total=245.450
+23:08:05 [bind] rc=0  198.3s posix/sync/stream[none] P=48 alone=10.209 comp=8.490 (x0.83) io/step=8.714 final=0.000 total=168.200
+23:12:40 [bind] rc=0  274.3s posix/sync/stream[reserved] P=24 alone=15.382 comp=15.442 (x1.00) io/step=8.308 final=0.000 total=234.998
+23:16:21 [bind] rc=0  221.5s posix/async/stream[full] P=48 alone=15.199 comp=15.420 (x1.01) io/step=3.011 final=2.755 total=182.339
+23:19:54 [bind] rc=0  213.2s posix/async/stream[smt] P=48 alone=15.192 comp=15.465 (x1.02) io/step=1.838 final=5.609 total=174.068
+23:22:17 [bind] rc=0  142.6s posix/async/stream[none] P=48 alone=10.216 comp=8.559 (x0.84) io/step=3.006 final=1.037 total=113.387
+23:25:37 [bind] rc=0  200.4s posix/async/stream[reserved] P=24 alone=15.356 comp=15.699 (x1.02) io/step=0.431 final=4.017 total=162.325
+23:27:00 [bind] rc=0   82.5s mpiio/sync/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.807 final=0.000 total=78.072
+23:28:43 [bind] rc=0  103.0s mpiio/async/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=9.035 final=8.817 total=99.164
+23:30:11 [bind] rc=0   88.1s mpiio/sync/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.304 final=0.000 total=83.039
+23:32:09 [bind] rc=0  118.0s mpiio/async/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=10.091 final=12.838 total=113.740
+23:33:22 [bind] rc=0   73.2s mpiio/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=6.941 final=0.000 total=69.411
+23:34:39 [bind] rc=0   77.2s mpiio/async/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=6.622 final=7.658 total=73.879
+23:38:07 [bind] rc=0  207.4s mpiio/sync/sleep[full] P=48 alone=8.890 comp=8.890 (x1.00) io/step=9.610 final=0.000 total=185.000
+23:41:26 [bind] rc=0  199.0s mpiio/sync/sleep[smt] P=48 alone=8.890 comp=8.890 (x1.00) io/step=8.773 final=0.000 total=176.626
+23:44:56 [bind] rc=0  210.1s mpiio/sync/sleep[none] P=48 alone=8.890 comp=8.890 (x1.00) io/step=9.822 final=0.000 total=187.116
+23:48:21 [bind] rc=0  205.0s mpiio/sync/sleep[reserved] P=24 alone=8.890 comp=8.890 (x1.00) io/step=9.452 final=0.000 total=183.417
+23:52:01 [bind] rc=0  219.9s mpiio/async/sleep[full] P=48 alone=8.892 comp=8.891 (x1.00) io/step=9.928 final=9.961 total=198.082
+23:55:15 [bind] rc=0  194.5s mpiio/async/sleep[smt] P=48 alone=8.890 comp=8.890 (x1.00) io/step=7.769 final=6.636 total=173.230
+23:58:58 [bind] rc=0  223.2s mpiio/async/sleep[none] P=48 alone=8.891 comp=8.894 (x1.00) io/step=10.343 final=8.763 total=201.090
+00:02:02 [bind] rc=0  183.6s mpiio/async/sleep[reserved] P=24 alone=8.890 comp=8.890 (x1.00) io/step=6.792 final=6.026 total=162.845
+00:05:21 [bind] rc=0  199.1s mpiio/sync/dgemm[full] P=48 alone=8.866 comp=8.953 (x1.01) io/step=8.957 final=0.000 total=171.520
+00:08:39 [bind] rc=0  197.7s mpiio/sync/dgemm[smt] P=48 alone=8.928 comp=8.976 (x1.01) io/step=8.799 final=0.000 total=170.040
+00:11:12 [bind] rc=0  153.4s mpiio/sync/dgemm[none] P=48 alone=6.645 comp=4.562 (x0.69) io/step=8.922 final=0.000 total=131.089
+00:14:22 [bind] rc=0  189.7s mpiio/sync/dgemm[reserved] P=24 alone=8.891 comp=8.881 (x1.00) io/step=8.247 final=0.000 total=163.194
+00:18:38 [bind] rc=0  256.0s mpiio/async/dgemm[full] P=48 alone=8.888 comp=8.907 (x1.00) io/step=13.321 final=9.792 total=229.871
+00:21:56 [bind] rc=0  197.7s mpiio/async/dgemm[smt] P=48 alone=8.894 comp=8.995 (x1.01) io/step=8.276 final=8.069 total=171.155
+00:25:07 [bind] rc=0  191.6s mpiio/async/dgemm[none] P=48 alone=8.803 comp=8.431 (x0.96) io/step=11.165 final=6.374 total=165.300
+00:28:07 [bind] rc=0  179.8s mpiio/async/dgemm[reserved] P=24 alone=8.765 comp=8.797 (x1.00) io/step=6.008 final=8.910 total=154.622
+00:31:34 [bind] rc=0  207.3s mpiio/sync/stream[full] P=48 alone=8.863 comp=8.855 (x1.00) io/step=9.308 final=0.000 total=180.162
+00:34:58 [bind] rc=0  203.8s mpiio/sync/stream[smt] P=48 alone=8.889 comp=8.882 (x1.00) io/step=8.937 final=0.000 total=176.732
+00:37:37 [bind] rc=0  158.4s mpiio/sync/stream[none] P=48 alone=6.707 comp=5.133 (x0.77) io/step=9.012 final=0.000 total=135.573
+00:40:42 [bind] rc=0  185.6s mpiio/sync/stream[reserved] P=24 alone=8.876 comp=8.934 (x1.01) io/step=7.143 final=0.000 total=159.287
+00:44:34 [bind] rc=0  232.0s mpiio/async/stream[full] P=48 alone=8.839 comp=8.824 (x1.00) io/step=12.114 final=9.513 total=205.417
+00:48:01 [bind] rc=0  207.1s mpiio/async/stream[smt] P=48 alone=8.796 comp=8.851 (x1.01) io/step=8.666 final=8.315 total=181.235
+00:51:13 [bind] rc=0  191.4s mpiio/async/stream[none] P=48 alone=8.616 comp=9.031 (x1.05) io/step=12.574 final=10.484 total=165.560
+00:54:08 [bind] rc=0  175.5s mpiio/async/stream[reserved] P=24 alone=8.898 comp=8.951 (x1.01) io/step=5.835 final=4.267 total=150.319
+00:55:44 [bind] rc=0   96.2s hdf5/sync/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=9.151 final=0.026 total=91.532
+00:56:53 [bind] rc=0   68.5s hdf5/async/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.012 final=5.006 total=65.128
+00:58:33 [bind] rc=0  100.4s hdf5/sync/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=9.605 final=0.004 total=96.055
+00:59:52 [bind] rc=0   78.3s hdf5/async/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.972 final=4.934 total=74.645
+01:01:12 [bind] rc=0   80.1s hdf5/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=7.627 final=0.026 total=76.293
+01:02:13 [bind] rc=0   61.1s hdf5/async/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=5.408 final=4.462 total=58.540
+01:06:28 [bind] rc=0  255.5s hdf5/sync/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.600 final=0.026 total=228.026
+01:10:41 [bind] rc=0  252.8s hdf5/sync/sleep[smt] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.363 final=0.027 total=225.659
+01:14:52 [bind] rc=0  251.1s hdf5/sync/sleep[none] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.177 final=0.027 total=223.803
+01:19:09 [bind] rc=0  256.6s hdf5/sync/sleep[reserved] P=24 alone=11.200 comp=11.200 (x1.00) io/step=11.768 final=0.026 total=229.705
+01:21:38 [bind] rc=0  149.0s hdf5/async/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=0.304 final=7.394 total=122.365
+01:24:04 [bind] rc=0  145.5s hdf5/async/sleep[smt] P=48 alone=11.200 comp=11.200 (x1.00) io/step=0.294 final=4.740 total=119.676
+01:26:43 [bind] rc=0  159.8s hdf5/async/sleep[none] P=48 alone=11.200 comp=11.200 (x1.00) io/step=1.537 final=6.724 total=134.089
+01:29:10 [bind] rc=0  146.6s hdf5/async/sleep[reserved] P=24 alone=11.200 comp=11.200 (x1.00) io/step=0.502 final=4.496 total=121.518
+01:33:08 [bind] rc=0  238.5s hdf5/sync/dgemm[full] P=48 alone=11.182 comp=11.274 (x1.01) io/step=10.401 final=0.026 total=207.086
+01:37:10 [bind] rc=0  241.4s hdf5/sync/dgemm[smt] P=48 alone=11.177 comp=11.250 (x1.01) io/step=10.655 final=0.029 total=209.756
+01:39:52 [bind] rc=0  162.6s hdf5/sync/dgemm[none] P=48 alone=7.584 comp=5.268 (x0.69) io/step=9.055 final=0.030 total=138.532
+01:43:49 [bind] rc=0  236.7s hdf5/sync/dgemm[reserved] P=24 alone=11.179 comp=11.120 (x0.99) io/step=10.443 final=0.026 total=205.926
+01:46:56 [bind] rc=0  186.4s hdf5/async/dgemm[full] P=48 alone=11.080 comp=14.825 (x1.34) io/step=4.489 final=6.226 total=156.317
+01:49:39 [bind] rc=0  163.8s hdf5/async/dgemm[smt] P=48 alone=11.154 comp=12.729 (x1.14) io/step=2.059 final=4.302 total=133.355
+01:51:40 [bind] rc=0  120.5s hdf5/async/dgemm[none] P=48 alone=7.985 comp=7.933 (x0.99) io/step=3.954 final=5.088 total=96.789
+01:54:22 [bind] rc=0  162.3s hdf5/async/dgemm[reserved] P=24 alone=11.233 comp=12.240 (x1.09) io/step=1.224 final=6.890 total=132.620
+01:58:28 [bind] rc=0  246.2s hdf5/sync/stream[full] P=48 alone=11.111 comp=11.112 (x1.00) io/step=10.547 final=0.027 total=214.701
+02:02:39 [bind] rc=0  250.6s hdf5/sync/stream[smt] P=48 alone=11.159 comp=11.198 (x1.00) io/step=10.935 final=0.027 total=219.089
+02:05:43 [bind] rc=0  183.7s hdf5/sync/stream[none] P=48 alone=7.761 comp=5.944 (x0.77) io/step=10.062 final=0.032 total=158.691
+02:09:48 [bind] rc=0  245.4s hdf5/sync/stream[reserved] P=24 alone=11.203 comp=11.256 (x1.00) io/step=10.334 final=0.025 total=214.153
+02:12:47 [bind] rc=0  179.4s hdf5/async/stream[full] P=48 alone=11.114 comp=13.942 (x1.25) io/step=4.094 final=4.717 total=149.197
+02:15:35 [bind] rc=0  167.8s hdf5/async/stream[smt] P=48 alone=11.150 comp=12.018 (x1.08) io/step=2.610 final=4.470 total=137.142
+02:17:57 [bind] rc=0  141.8s hdf5/async/stream[none] P=48 alone=7.859 comp=6.742 (x0.86) io/step=5.250 final=9.484 total=117.654
+02:20:32 [bind] rc=0  155.3s hdf5/async/stream[reserved] P=24 alone=11.200 comp=11.537 (x1.03) io/step=0.619 final=6.659 total=126.140
+02:21:00 [bind] rc=0   27.4s adios2/sync/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.115 final=0.000 total=21.149
+02:21:32 [bind] rc=0   31.8s adios2/async/none[smt] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.550 final=1.173 total=26.670
+02:21:57 [bind] rc=0   25.8s adios2/sync/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.041 final=0.002 total=20.409
+02:22:42 [bind] rc=0   44.4s adios2/async/none[none] P=48 alone=0.000 comp=0.000 (x0.00) io/step=3.616 final=3.133 total=39.289
+02:23:13 [bind] rc=0   31.2s adios2/sync/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=2.610 final=0.000 total=26.099
+02:23:47 [bind] rc=0   34.3s adios2/async/none[reserved] P=24 alone=0.000 comp=0.000 (x0.00) io/step=2.737 final=1.933 total=29.297
+02:24:44 [bind] rc=0   56.7s adios2/sync/sleep[full] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.742 final=0.000 total=47.126
+02:25:37 [bind] rc=0   53.0s adios2/sync/sleep[smt] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.378 final=0.001 total=43.480
+02:26:32 [bind] rc=0   55.1s adios2/sync/sleep[none] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.616 final=0.000 total=45.865
+02:27:26 [bind] rc=0   53.9s adios2/sync/sleep[reserved] P=24 alone=1.970 comp=1.970 (x1.00) io/step=2.512 final=0.001 total=44.824
+02:28:06 [bind] rc=0   39.7s adios2/async/sleep[full] P=48 alone=1.970 comp=1.971 (x1.00) io/step=0.782 final=3.360 total=30.849
+02:28:51 [bind] rc=0   45.5s adios2/async/sleep[smt] P=48 alone=1.970 comp=1.970 (x1.00) io/step=1.287 final=4.186 total=36.756
+02:29:42 [bind] rc=0   51.0s adios2/async/sleep[none] P=48 alone=1.970 comp=1.970 (x1.00) io/step=1.745 final=3.646 total=40.795
+02:30:29 [bind] rc=0   46.8s adios2/async/sleep[reserved] P=24 alone=1.970 comp=1.970 (x1.00) io/step=1.671 final=1.498 total=37.901
+02:31:27 [bind] rc=0   58.2s adios2/sync/dgemm[full] P=48 alone=1.944 comp=2.287 (x1.18) io/step=2.592 final=0.000 total=43.785
+02:32:23 [bind] rc=0   55.5s adios2/sync/dgemm[smt] P=48 alone=1.939 comp=2.238 (x1.15) io/step=2.368 final=0.013 total=41.516
+02:33:13 [bind] rc=0   50.5s adios2/sync/dgemm[none] P=48 alone=1.919 comp=1.683 (x0.88) io/step=2.853 final=0.005 total=37.489
+02:34:10 [bind] rc=0   57.3s adios2/sync/dgemm[reserved] P=24 alone=1.961 comp=2.096 (x1.07) io/step=2.666 final=0.000 total=44.308
+02:35:01 [bind] rc=0   50.3s adios2/async/dgemm[full] P=48 alone=1.933 comp=2.647 (x1.37) io/step=1.670 final=1.486 total=37.334
+02:35:51 [bind] rc=0   50.4s adios2/async/dgemm[smt] P=48 alone=1.975 comp=2.478 (x1.25) io/step=1.647 final=2.136 total=37.629
+02:36:38 [bind] rc=0   46.6s adios2/async/dgemm[none] P=48 alone=1.906 comp=1.768 (x0.93) io/step=1.985 final=5.166 total=34.287
+02:37:34 [bind] rc=0   55.9s adios2/async/dgemm[reserved] P=24 alone=1.947 comp=2.164 (x1.11) io/step=1.803 final=4.538 total=42.829
+02:38:22 [bind] rc=0   48.3s adios2/sync/stream[full] P=48 alone=1.967 comp=2.034 (x1.03) io/step=1.588 final=0.000 total=35.211
+02:39:18 [bind] rc=0   55.9s adios2/sync/stream[smt] P=48 alone=1.947 comp=2.100 (x1.08) io/step=2.343 final=0.000 total=42.505
+02:40:13 [bind] rc=0   55.4s adios2/sync/stream[none] P=48 alone=1.876 comp=1.378 (x0.73) io/step=3.188 final=0.000 total=41.717
+02:41:11 [bind] rc=0   57.3s adios2/sync/stream[reserved] P=24 alone=1.969 comp=1.995 (x1.01) io/step=2.468 final=0.000 total=44.221
+02:42:04 [bind] rc=0   53.2s adios2/async/stream[full] P=48 alone=1.947 comp=2.514 (x1.29) io/step=1.702 final=4.029 total=40.433
+02:42:54 [bind] rc=0   49.8s adios2/async/stream[smt] P=48 alone=1.947 comp=2.330 (x1.20) io/step=1.542 final=1.049 total=36.518
+02:43:46 [bind] rc=0   52.5s adios2/async/stream[none] P=48 alone=1.850 comp=1.579 (x0.85) io/step=2.875 final=1.190 total=39.367
+02:44:37 [bind] rc=0   50.5s adios2/async/stream[reserved] P=24 alone=1.969 comp=2.283 (x1.16) io/step=1.366 final=1.937 total=37.923
+02:44:37 === phase sweep rep 0
+02:46:34 [sweep] rc=0  117.5s posix/sync/sleep[full] P=48 alone=3.080 comp=3.080 (x1.00) io/step=7.563 final=0.000 total=106.431
+02:47:53 [sweep] rc=0   79.2s posix/async/sleep[full] P=48 alone=3.080 comp=3.081 (x1.00) io/step=3.387 final=3.555 total=68.211
+02:49:57 [sweep] rc=0  123.2s posix/sync/dgemm[full] P=48 alone=3.080 comp=3.116 (x1.01) io/step=7.947 final=0.000 total=107.860
+02:51:05 [sweep] rc=0   68.8s posix/async/dgemm[full] P=48 alone=3.039 comp=3.117 (x1.03) io/step=2.340 final=2.501 total=54.066
+02:53:18 [sweep] rc=0  133.1s posix/sync/stream[full] P=48 alone=3.072 comp=3.091 (x1.01) io/step=8.763 final=0.000 total=117.713
+02:54:47 [sweep] rc=0   88.1s posix/async/stream[full] P=48 alone=3.070 comp=3.188 (x1.04) io/step=3.901 final=4.083 total=73.061
+02:57:35 [sweep] rc=0  168.4s posix/sync/sleep[full] P=48 alone=6.160 comp=6.160 (x1.00) io/step=8.898 final=0.000 total=150.581
+02:59:24 [sweep] rc=0  109.5s posix/async/sleep[full] P=48 alone=6.160 comp=6.161 (x1.00) io/step=2.328 final=7.334 total=92.213
+03:01:46 [sweep] rc=0  141.6s posix/sync/dgemm[full] P=48 alone=6.136 comp=6.194 (x1.01) io/step=6.284 final=0.000 total=120.139
+03:03:32 [sweep] rc=0  106.2s posix/async/dgemm[full] P=48 alone=6.055 comp=6.201 (x1.02) io/step=2.606 final=2.789 total=85.240
+03:06:19 [sweep] rc=0  166.8s posix/sync/stream[full] P=48 alone=6.147 comp=6.159 (x1.00) io/step=8.502 final=0.000 total=145.358
+03:08:29 [sweep] rc=0  129.8s posix/async/stream[full] P=48 alone=6.130 comp=6.265 (x1.02) io/step=4.557 final=3.369 total=108.983
+03:11:57 [sweep] rc=0  208.1s posix/sync/sleep[full] P=48 alone=9.230 comp=9.230 (x1.00) io/step=9.276 final=0.000 total=185.057
+03:14:10 [sweep] rc=0  132.6s posix/async/sleep[full] P=48 alone=9.230 comp=9.230 (x1.00) io/step=1.176 final=5.003 total=109.063
+03:17:28 [sweep] rc=0  198.6s posix/sync/dgemm[full] P=48 alone=9.162 comp=9.215 (x1.01) io/step=8.540 final=0.000 total=170.424
+03:19:40 [sweep] rc=0  131.7s posix/async/dgemm[full] P=48 alone=9.230 comp=9.394 (x1.02) io/step=1.652 final=3.028 total=104.743
+03:23:07 [sweep] rc=0  207.0s posix/sync/stream[full] P=48 alone=9.106 comp=9.120 (x1.00) io/step=8.985 final=0.000 total=179.456
+03:25:51 [sweep] rc=0  164.5s posix/async/stream[full] P=48 alone=9.127 comp=9.291 (x1.02) io/step=4.614 final=1.800 total=137.613
+03:30:02 [sweep] rc=0  250.7s posix/sync/sleep[full] P=48 alone=12.310 comp=12.310 (x1.00) io/step=9.835 final=0.000 total=221.453
+03:32:42 [sweep] rc=0  159.8s posix/async/sleep[full] P=48 alone=12.310 comp=12.311 (x1.00) io/step=0.282 final=4.534 total=130.440
+03:36:25 [sweep] rc=0  223.6s posix/sync/dgemm[full] P=48 alone=12.254 comp=12.285 (x1.00) io/step=7.637 final=0.000 total=189.771
+03:39:08 [sweep] rc=0  162.1s posix/async/dgemm[full] P=48 alone=12.253 comp=12.429 (x1.01) io/step=1.327 final=2.914 total=128.689
+03:43:16 [sweep] rc=0  248.2s posix/sync/stream[full] P=48 alone=12.254 comp=12.240 (x1.00) io/step=9.386 final=0.000 total=214.266
+03:46:30 [sweep] rc=0  194.0s posix/async/stream[full] P=48 alone=12.228 comp=12.433 (x1.02) io/step=3.794 final=2.444 total=160.535
+03:52:00 [sweep] rc=0  330.0s posix/sync/sleep[full] P=48 alone=18.470 comp=18.470 (x1.00) io/step=10.372 final=0.000 total=288.416
+03:55:52 [sweep] rc=0  232.3s posix/async/sleep[full] P=48 alone=18.470 comp=18.470 (x1.00) io/step=0.135 final=4.454 total=190.507
+04:00:40 [sweep] rc=0  287.5s posix/sync/dgemm[full] P=48 alone=18.323 comp=18.427 (x1.01) io/step=7.029 final=0.000 total=241.460
+04:04:37 [sweep] rc=0  237.5s posix/async/dgemm[full] P=48 alone=18.450 comp=18.700 (x1.01) io/step=1.655 final=4.590 total=192.184
+04:09:52 [sweep] rc=0  315.2s posix/sync/stream[full] P=48 alone=18.269 comp=18.266 (x1.00) io/step=8.950 final=0.000 total=269.392
+04:14:06 [sweep] rc=0  253.9s posix/async/stream[full] P=48 alone=18.250 comp=18.490 (x1.01) io/step=2.637 final=2.750 total=208.644
+04:20:35 [sweep] rc=0  389.3s posix/sync/sleep[full] P=48 alone=24.620 comp=24.620 (x1.00) io/step=8.926 final=0.000 total=335.460
+04:25:42 [sweep] rc=0  306.9s posix/async/sleep[full] P=48 alone=24.620 comp=24.620 (x1.00) io/step=0.136 final=5.962 total=253.521
+04:31:53 [sweep] rc=0  371.1s posix/sync/dgemm[full] P=48 alone=24.282 comp=24.456 (x1.01) io/step=8.614 final=0.000 total=312.775
+04:37:03 [sweep] rc=0  310.0s posix/async/dgemm[full] P=48 alone=24.710 comp=24.888 (x1.01) io/step=2.232 final=2.484 total=251.950
+04:43:39 [sweep] rc=0  395.1s posix/sync/stream[full] P=48 alone=24.421 comp=24.424 (x1.00) io/step=9.619 final=0.000 total=336.686
+04:49:03 [sweep] rc=0  324.0s posix/async/stream[full] P=48 alone=24.272 comp=24.537 (x1.01) io/step=2.477 final=3.191 total=266.659
+04:58:05 [sweep] rc=0  542.1s posix/sync/sleep[full] P=48 alone=36.930 comp=36.930 (x1.00) io/step=9.419 final=0.000 total=463.491
+05:05:38 [sweep] rc=0  453.3s posix/async/sleep[full] P=48 alone=36.930 comp=36.931 (x1.00) io/step=0.144 final=4.545 total=375.279
+05:14:10 [sweep] rc=0  511.8s posix/sync/dgemm[full] P=48 alone=36.701 comp=37.045 (x1.01) io/step=8.402 final=0.000 total=428.692
+05:21:50 [sweep] rc=0  460.5s posix/async/dgemm[full] P=48 alone=37.168 comp=37.443 (x1.01) io/step=3.076 final=2.210 total=377.563
+05:30:53 [sweep] rc=0  542.9s posix/sync/stream[full] P=48 alone=36.370 comp=36.387 (x1.00) io/step=10.175 final=0.000 total=460.324
+05:38:32 [sweep] rc=0  459.1s posix/async/stream[full] P=48 alone=36.803 comp=37.159 (x1.01) io/step=1.111 final=3.189 total=376.293
+05:40:22 [sweep] rc=0  109.3s mpiio/sync/sleep[full] P=48 alone=1.780 comp=1.780 (x1.00) io/step=8.320 final=0.000 total=100.998
+05:43:00 [sweep] rc=0  158.0s mpiio/async/sleep[full] P=48 alone=1.782 comp=1.781 (x1.00) io/step=12.155 final=10.736 total=150.031
+05:44:47 [sweep] rc=0  107.7s mpiio/sync/dgemm[full] P=48 alone=1.777 comp=1.834 (x1.03) io/step=7.886 final=0.000 total=95.207
+05:47:15 [sweep] rc=0  147.9s mpiio/async/dgemm[full] P=48 alone=1.765 comp=1.781 (x1.01) io/step=10.882 final=10.181 total=136.280
+05:49:04 [sweep] rc=0  108.7s mpiio/sync/stream[full] P=48 alone=1.792 comp=1.803 (x1.01) io/step=7.872 final=0.000 total=96.229
+05:51:59 [sweep] rc=0  174.8s mpiio/async/stream[full] P=48 alone=1.873 comp=1.823 (x0.97) io/step=13.872 final=9.347 total=162.550
+05:54:03 [sweep] rc=0  124.3s mpiio/sync/sleep[full] P=48 alone=3.560 comp=3.560 (x1.00) io/step=7.710 final=0.000 total=112.703
+05:56:57 [sweep] rc=0  173.7s mpiio/async/sleep[full] P=48 alone=3.562 comp=3.561 (x1.00) io/step=11.752 final=9.296 total=162.357
+05:59:11 [sweep] rc=0  134.1s mpiio/sync/dgemm[full] P=48 alone=3.529 comp=3.562 (x1.01) io/step=8.500 final=0.000 total=117.310
+06:02:11 [sweep] rc=0  180.5s mpiio/async/dgemm[full] P=48 alone=3.548 comp=3.551 (x1.00) io/step=12.106 final=9.375 total=165.025
+06:04:25 [sweep] rc=0  133.4s mpiio/sync/stream[full] P=48 alone=3.534 comp=3.546 (x1.00) io/step=8.280 final=0.000 total=117.435
+06:07:34 [sweep] rc=0  189.1s mpiio/async/stream[full] P=48 alone=3.612 comp=3.673 (x1.02) io/step=13.466 final=9.573 total=172.914
+06:10:11 [sweep] rc=0  157.4s mpiio/sync/sleep[full] P=48 alone=5.330 comp=5.330 (x1.00) io/step=8.847 final=0.000 total=141.772
+06:13:03 [sweep] rc=0  171.4s mpiio/async/sleep[full] P=48 alone=5.332 comp=5.331 (x1.00) io/step=9.304 final=10.767 total=157.054
+06:15:27 [sweep] rc=0  144.1s mpiio/sync/dgemm[full] P=48 alone=5.341 comp=5.326 (x1.00) io/step=7.496 final=0.000 total=123.909
+06:18:30 [sweep] rc=0  183.0s mpiio/async/dgemm[full] P=48 alone=5.306 comp=5.336 (x1.01) io/step=10.056 final=11.357 total=163.714
+06:21:11 [sweep] rc=0  161.4s mpiio/sync/stream[full] P=48 alone=5.302 comp=5.331 (x1.01) io/step=8.908 final=0.000 total=141.091
+06:24:01 [sweep] rc=0  170.3s mpiio/async/stream[full] P=48 alone=5.192 comp=5.267 (x1.01) io/step=10.023 final=8.875 total=150.953
+06:26:56 [sweep] rc=0  174.3s mpiio/sync/sleep[full] P=48 alone=7.110 comp=7.110 (x1.00) io/step=8.441 final=0.000 total=155.515
+06:30:20 [sweep] rc=0  204.1s mpiio/async/sleep[full] P=48 alone=7.112 comp=7.111 (x1.00) io/step=10.553 final=9.344 total=185.916
+06:33:22 [sweep] rc=0  181.8s mpiio/sync/dgemm[full] P=48 alone=7.179 comp=7.208 (x1.00) io/step=9.183 final=0.000 total=157.832
+06:37:13 [sweep] rc=0  231.1s mpiio/async/dgemm[full] P=48 alone=7.080 comp=7.084 (x1.00) io/step=12.970 final=8.845 total=208.072
+06:40:17 [sweep] rc=0  184.3s mpiio/sync/stream[full] P=48 alone=7.018 comp=7.025 (x1.00) io/step=9.165 final=0.000 total=160.634
+06:44:15 [sweep] rc=0  238.0s mpiio/async/stream[full] P=48 alone=6.873 comp=7.044 (x1.02) io/step=14.380 final=13.875 total=215.272
+06:48:04 [sweep] rc=0  228.7s mpiio/sync/sleep[full] P=48 alone=10.670 comp=10.670 (x1.00) io/step=9.613 final=0.000 total=202.827
+06:52:13 [sweep] rc=0  249.0s mpiio/async/sleep[full] P=48 alone=10.673 comp=10.671 (x1.00) io/step=10.726 final=9.945 total=223.849
+06:55:49 [sweep] rc=0  216.6s mpiio/sync/dgemm[full] P=48 alone=10.649 comp=10.622 (x1.00) io/step=8.791 final=0.000 total=185.574
+07:00:22 [sweep] rc=0  272.2s mpiio/async/dgemm[full] P=48 alone=10.637 comp=10.641 (x1.00) io/step=12.945 final=8.686 total=242.195
+07:04:05 [sweep] rc=0  223.0s mpiio/sync/stream[full] P=48 alone=10.645 comp=10.641 (x1.00) io/step=8.748 final=0.000 total=192.121
+07:08:34 [sweep] rc=0  269.6s mpiio/async/stream[full] P=48 alone=9.700 comp=9.759 (x1.01) io/step=15.016 final=11.298 total=241.285
+07:13:15 [sweep] rc=0  280.7s mpiio/sync/sleep[full] P=48 alone=14.220 comp=14.220 (x1.00) io/step=10.543 final=0.000 total=247.635
+07:18:02 [sweep] rc=0  287.2s mpiio/async/sleep[full] P=48 alone=14.222 comp=14.221 (x1.00) io/step=10.314 final=9.356 total=254.636
+07:22:21 [sweep] rc=0  259.1s mpiio/sync/dgemm[full] P=48 alone=14.216 comp=14.231 (x1.00) io/step=9.084 final=0.000 total=221.379
+07:27:37 [sweep] rc=0  315.6s mpiio/async/dgemm[full] P=48 alone=14.217 comp=14.220 (x1.00) io/step=13.109 final=8.770 total=278.465
+07:32:06 [sweep] rc=0  269.0s mpiio/sync/stream[full] P=48 alone=14.020 comp=14.022 (x1.00) io/step=9.385 final=0.000 total=231.894
+07:37:25 [sweep] rc=0  319.5s mpiio/async/stream[full] P=48 alone=14.230 comp=14.389 (x1.01) io/step=14.917 final=10.660 total=282.557
+07:43:20 [sweep] rc=0  354.1s mpiio/sync/sleep[full] P=48 alone=21.341 comp=21.340 (x1.00) io/step=9.337 final=0.000 total=306.776
+07:49:39 [sweep] rc=0  379.7s mpiio/async/sleep[full] P=48 alone=21.342 comp=21.341 (x1.00) io/step=10.985 final=9.839 total=333.033
+07:55:22 [sweep] rc=0  343.2s mpiio/sync/dgemm[full] P=48 alone=21.067 comp=21.137 (x1.00) io/step=9.715 final=0.000 total=291.433
+08:02:03 [sweep] rc=0  400.9s mpiio/async/dgemm[full] P=48 alone=21.344 comp=21.347 (x1.00) io/step=13.132 final=10.618 total=349.813
+08:08:01 [sweep] rc=0  357.6s mpiio/sync/stream[full] P=48 alone=21.060 comp=21.063 (x1.00) io/step=9.817 final=0.000 total=305.489
+08:14:41 [sweep] rc=0  400.4s mpiio/async/stream[full] P=48 alone=20.742 comp=21.029 (x1.01) io/step=16.408 final=10.763 total=349.999
+08:16:55 [sweep] rc=0  133.4s hdf5/sync/sleep[full] P=48 alone=2.240 comp=2.240 (x1.00) io/step=10.131 final=0.030 total=123.738
+08:18:04 [sweep] rc=0   68.9s hdf5/async/sleep[full] P=48 alone=2.240 comp=2.241 (x1.00) io/step=3.153 final=7.161 total=61.033
+08:20:13 [sweep] rc=0  129.8s hdf5/sync/dgemm[full] P=48 alone=2.224 comp=2.265 (x1.02) io/step=9.528 final=0.030 total=115.779
+08:21:27 [sweep] rc=0   73.8s hdf5/async/dgemm[full] P=48 alone=2.238 comp=3.747 (x1.67) io/step=3.607 final=4.499 total=61.309
+08:23:36 [sweep] rc=0  129.1s hdf5/sync/stream[full] P=48 alone=2.208 comp=2.217 (x1.00) io/step=9.372 final=0.026 total=115.400
+08:24:56 [sweep] rc=0   79.9s hdf5/async/stream[full] P=48 alone=2.230 comp=2.814 (x1.26) io/step=4.142 final=4.562 total=67.552
+08:27:30 [sweep] rc=0  153.7s hdf5/sync/sleep[full] P=48 alone=4.480 comp=4.480 (x1.00) io/step=9.521 final=0.027 total=140.043
+08:28:42 [sweep] rc=0   71.8s hdf5/async/sleep[full] P=48 alone=4.480 comp=4.480 (x1.00) io/step=0.811 final=6.436 total=59.290
+08:31:12 [sweep] rc=0  149.8s hdf5/sync/dgemm[full] P=48 alone=4.467 comp=4.531 (x1.01) io/step=9.111 final=0.026 total=132.022
+08:32:57 [sweep] rc=0  105.8s hdf5/async/dgemm[full] P=48 alone=4.441 comp=7.354 (x1.66) io/step=4.095 final=6.320 total=88.466
+08:35:29 [sweep] rc=0  152.1s hdf5/sync/stream[full] P=48 alone=4.481 comp=4.496 (x1.00) io/step=9.000 final=0.028 total=134.027
+08:37:32 [sweep] rc=0  122.5s hdf5/async/stream[full] P=48 alone=4.470 comp=5.529 (x1.24) io/step=5.499 final=7.915 total=105.479
+08:40:41 [sweep] rc=0  188.5s hdf5/sync/sleep[full] P=48 alone=6.720 comp=6.720 (x1.00) io/step=10.286 final=0.027 total=170.090
+08:42:15 [sweep] rc=0   94.2s hdf5/async/sleep[full] P=48 alone=6.720 comp=6.720 (x1.00) io/step=0.310 final=7.023 total=77.258
+08:45:22 [sweep] rc=0  187.0s hdf5/sync/dgemm[full] P=48 alone=6.714 comp=6.773 (x1.01) io/step=10.132 final=0.026 total=164.132
+08:47:33 [sweep] rc=0  130.8s hdf5/async/dgemm[full] P=48 alone=6.727 comp=10.254 (x1.52) io/step=4.240 final=4.488 total=109.035
+08:50:48 [sweep] rc=0  195.3s hdf5/sync/stream[full] P=48 alone=6.644 comp=6.656 (x1.00) io/step=10.781 final=0.030 total=173.103
+08:53:07 [sweep] rc=0  139.2s hdf5/async/stream[full] P=48 alone=6.646 comp=8.326 (x1.25) io/step=5.022 final=4.603 total=117.764
+08:56:51 [sweep] rc=0  223.5s hdf5/sync/sleep[full] P=48 alone=8.960 comp=8.960 (x1.00) io/step=11.105 final=0.026 total=200.675
+08:58:50 [sweep] rc=0  119.0s hdf5/async/sleep[full] P=48 alone=8.960 comp=8.960 (x1.00) io/step=0.305 final=4.890 total=97.474
+09:02:32 [sweep] rc=0  222.7s hdf5/sync/dgemm[full] P=48 alone=8.889 comp=8.968 (x1.01) io/step=11.254 final=0.027 total=195.526
+09:05:15 [sweep] rc=0  162.9s hdf5/async/dgemm[full] P=48 alone=8.936 comp=13.022 (x1.46) io/step=4.911 final=4.461 total=136.639
+09:09:05 [sweep] rc=0  230.0s hdf5/sync/stream[full] P=48 alone=8.863 comp=8.879 (x1.00) io/step=11.564 final=0.030 total=202.867
+09:11:47 [sweep] rc=0  162.1s hdf5/async/stream[full] P=48 alone=8.910 comp=11.119 (x1.25) io/step=4.446 final=7.867 total=136.339
+09:16:32 [sweep] rc=0  284.3s hdf5/sync/sleep[full] P=48 alone=13.440 comp=13.440 (x1.00) io/step=11.776 final=0.030 total=252.195
+09:19:26 [sweep] rc=0  174.7s hdf5/async/sleep[full] P=48 alone=13.440 comp=13.440 (x1.00) io/step=0.323 final=6.883 total=144.451
+09:23:58 [sweep] rc=0  271.9s hdf5/sync/dgemm[full] P=48 alone=13.340 comp=13.465 (x1.01) io/step=11.116 final=0.027 total=236.001
+09:27:39 [sweep] rc=0  220.4s hdf5/async/dgemm[full] P=48 alone=13.425 comp=17.855 (x1.33) io/step=5.316 final=4.645 total=185.131
+09:32:05 [sweep] rc=0  266.6s hdf5/sync/stream[full] P=48 alone=13.281 comp=13.300 (x1.00) io/step=10.023 final=0.029 total=231.010
+09:35:38 [sweep] rc=0  213.2s hdf5/async/stream[full] P=48 alone=13.240 comp=16.407 (x1.24) io/step=4.981 final=6.860 total=178.973
+09:41:18 [sweep] rc=0  339.8s hdf5/sync/sleep[full] P=48 alone=17.930 comp=17.930 (x1.00) io/step=11.993 final=0.030 total=299.259
+09:45:06 [sweep] rc=0  227.6s hdf5/async/sleep[full] P=48 alone=17.930 comp=17.930 (x1.00) io/step=0.374 final=5.530 total=188.516
+09:50:33 [sweep] rc=0  326.9s hdf5/sync/dgemm[full] P=48 alone=17.829 comp=18.006 (x1.01) io/step=11.588 final=0.027 total=281.755
+09:55:05 [sweep] rc=0  272.2s hdf5/async/dgemm[full] P=48 alone=17.825 comp=21.962 (x1.23) io/step=5.349 final=6.836 total=228.436
+10:00:29 [sweep] rc=0  323.7s hdf5/sync/stream[full] P=48 alone=17.668 comp=17.690 (x1.00) io/step=10.483 final=0.029 total=278.883
+10:05:00 [sweep] rc=0  271.0s hdf5/async/stream[full] P=48 alone=17.871 comp=21.911 (x1.23) io/step=6.147 final=4.644 total=227.327
+10:12:15 [sweep] rc=0  435.5s hdf5/sync/sleep[full] P=48 alone=26.890 comp=26.890 (x1.00) io/step=10.813 final=0.026 total=377.054
+10:17:53 [sweep] rc=0  337.5s hdf5/async/sleep[full] P=48 alone=26.890 comp=26.890 (x1.00) io/step=0.374 final=7.305 total=279.878
+10:25:04 [sweep] rc=0  431.1s hdf5/sync/dgemm[full] P=48 alone=26.754 comp=27.020 (x1.01) io/step=11.842 final=0.026 total=368.209
+10:31:12 [sweep] rc=0  367.8s hdf5/async/dgemm[full] P=48 alone=26.552 comp=29.995 (x1.13) io/step=5.273 final=4.573 total=306.486
+10:38:36 [sweep] rc=0  444.3s hdf5/sync/stream[full] P=48 alone=26.784 comp=26.791 (x1.00) io/step=11.692 final=0.027 total=380.781
+10:45:01 [sweep] rc=0  385.1s hdf5/async/stream[full] P=48 alone=26.588 comp=31.705 (x1.19) io/step=8.775 final=4.628 total=323.824
+10:45:35 [sweep] rc=0   34.2s adios2/sync/sleep[full] P=48 alone=0.390 comp=0.391 (x1.00) io/step=2.446 final=0.011 total=28.373
+10:46:04 [sweep] rc=0   28.8s adios2/async/sleep[full] P=48 alone=0.390 comp=0.392 (x1.00) io/step=1.760 final=1.191 total=22.663
+10:46:33 [sweep] rc=0   29.1s adios2/sync/dgemm[full] P=48 alone=0.386 comp=0.393 (x1.02) io/step=1.900 final=0.013 total=22.209
+10:47:06 [sweep] rc=0   32.9s adios2/async/dgemm[full] P=48 alone=0.386 comp=0.565 (x1.46) io/step=2.130 final=1.100 total=25.776
+10:47:37 [sweep] rc=0   30.6s adios2/sync/stream[full] P=48 alone=0.382 comp=0.408 (x1.07) io/step=1.994 final=0.000 total=23.583
+10:48:09 [sweep] rc=0   32.8s adios2/async/stream[full] P=48 alone=0.380 comp=0.524 (x1.38) io/step=1.932 final=3.287 total=26.226
+10:48:48 [sweep] rc=0   38.2s adios2/sync/sleep[full] P=48 alone=0.790 comp=0.790 (x1.00) io/step=2.368 final=0.001 total=31.586
+10:49:16 [sweep] rc=0   28.0s adios2/async/sleep[full] P=48 alone=0.790 comp=0.792 (x1.00) io/step=1.053 final=2.917 total=21.318
+10:49:54 [sweep] rc=0   38.2s adios2/sync/dgemm[full] P=48 alone=0.745 comp=0.769 (x1.03) io/step=2.246 final=0.018 total=28.915
+10:50:32 [sweep] rc=0   37.8s adios2/async/dgemm[full] P=48 alone=0.723 comp=1.116 (x1.54) io/step=1.924 final=3.407 total=29.443
+10:51:08 [sweep] rc=0   36.8s adios2/sync/stream[full] P=48 alone=0.779 comp=0.827 (x1.06) io/step=2.032 final=0.000 total=27.879
+10:51:46 [sweep] rc=0   37.7s adios2/async/stream[full] P=48 alone=0.780 comp=1.056 (x1.35) io/step=2.120 final=1.094 total=29.883
+10:52:27 [sweep] rc=0   40.9s adios2/sync/sleep[full] P=48 alone=1.180 comp=1.181 (x1.00) io/step=2.128 final=0.018 total=33.101
+10:53:02 [sweep] rc=0   35.4s adios2/async/sleep[full] P=48 alone=1.180 comp=1.181 (x1.00) io/step=1.195 final=4.207 total=27.934
+10:53:43 [sweep] rc=0   40.7s adios2/sync/dgemm[full] P=48 alone=1.124 comp=1.246 (x1.11) io/step=1.946 final=0.000 total=29.897
+10:54:26 [sweep] rc=0   43.4s adios2/async/dgemm[full] P=48 alone=1.184 comp=1.733 (x1.46) io/step=2.024 final=2.083 total=33.923
+10:55:07 [sweep] rc=0   40.9s adios2/sync/stream[full] P=48 alone=1.175 comp=1.209 (x1.03) io/step=1.971 final=0.000 total=31.186
+10:55:45 [sweep] rc=0   37.3s adios2/async/stream[full] P=48 alone=1.174 comp=1.681 (x1.43) io/step=1.454 final=1.467 total=27.471
+10:56:33 [sweep] rc=0   48.9s adios2/sync/sleep[full] P=48 alone=1.580 comp=1.580 (x1.00) io/step=2.500 final=0.000 total=40.801
+10:57:10 [sweep] rc=0   36.2s adios2/async/sleep[full] P=48 alone=1.580 comp=1.581 (x1.00) io/step=0.934 final=3.086 total=28.202
+10:57:54 [sweep] rc=0   44.6s adios2/sync/dgemm[full] P=48 alone=1.532 comp=1.635 (x1.07) io/step=1.938 final=0.000 total=33.547
+10:58:38 [sweep] rc=0   43.8s adios2/async/dgemm[full] P=48 alone=1.583 comp=2.251 (x1.42) io/step=1.494 final=0.988 total=31.895
+10:59:26 [sweep] rc=0   47.9s adios2/sync/stream[full] P=48 alone=1.551 comp=1.590 (x1.02) io/step=2.112 final=0.000 total=36.240
+11:00:13 [sweep] rc=0   47.5s adios2/async/stream[full] P=48 alone=1.553 comp=2.063 (x1.33) io/step=2.013 final=1.053 total=36.327
+11:01:09 [sweep] rc=0   55.8s adios2/sync/sleep[full] P=48 alone=2.370 comp=2.371 (x1.00) io/step=2.108 final=0.001 total=44.780
+11:01:53 [sweep] rc=0   43.8s adios2/async/sleep[full] P=48 alone=2.370 comp=2.370 (x1.00) io/step=0.861 final=1.233 total=33.511
+11:02:52 [sweep] rc=0   59.5s adios2/sync/dgemm[full] P=48 alone=2.362 comp=2.538 (x1.07) io/step=2.352 final=0.000 total=45.426
+11:03:48 [sweep] rc=0   55.1s adios2/async/dgemm[full] P=48 alone=2.355 comp=3.073 (x1.30) io/step=1.302 final=3.655 total=39.859
+11:04:41 [sweep] rc=0   53.5s adios2/sync/stream[full] P=48 alone=2.362 comp=2.416 (x1.02) io/step=1.623 final=0.000 total=39.434
+11:05:35 [sweep] rc=0   53.9s adios2/async/stream[full] P=48 alone=2.364 comp=3.018 (x1.28) io/step=1.430 final=1.195 total=39.992
+11:06:44 [sweep] rc=0   68.8s adios2/sync/sleep[full] P=48 alone=3.160 comp=3.160 (x1.00) io/step=2.474 final=0.000 total=56.342
+11:07:39 [sweep] rc=0   55.6s adios2/async/sleep[full] P=48 alone=3.160 comp=3.161 (x1.00) io/step=0.764 final=4.504 total=43.722
+11:08:46 [sweep] rc=0   66.6s adios2/sync/dgemm[full] P=48 alone=3.152 comp=3.305 (x1.05) io/step=2.194 final=0.000 total=50.968
+11:09:50 [sweep] rc=0   63.9s adios2/async/dgemm[full] P=48 alone=3.167 comp=3.936 (x1.24) io/step=1.553 final=0.974 total=47.421
+11:10:52 [sweep] rc=0   62.2s adios2/sync/stream[full] P=48 alone=3.141 comp=3.199 (x1.02) io/step=1.563 final=0.000 total=46.481
+11:11:55 [sweep] rc=0   63.2s adios2/async/stream[full] P=48 alone=3.140 comp=3.761 (x1.20) io/step=1.520 final=1.003 total=48.246
+11:13:19 [sweep] rc=0   83.7s adios2/sync/sleep[full] P=48 alone=4.740 comp=4.740 (x1.00) io/step=2.189 final=0.000 total=69.294
+11:14:33 [sweep] rc=0   73.8s adios2/async/sleep[full] P=48 alone=4.740 comp=4.740 (x1.00) io/step=0.888 final=2.569 total=58.827
+11:16:01 [sweep] rc=0   87.8s adios2/sync/dgemm[full] P=48 alone=4.706 comp=4.902 (x1.04) io/step=2.441 final=0.000 total=68.114
+11:17:23 [sweep] rc=0   81.7s adios2/async/dgemm[full] P=48 alone=4.700 comp=5.433 (x1.16) io/step=1.610 final=1.462 total=62.321
+11:18:46 [sweep] rc=0   83.8s adios2/sync/stream[full] P=48 alone=4.725 comp=4.821 (x1.02) io/step=1.820 final=0.001 total=64.654
+11:20:05 [sweep] rc=0   78.9s adios2/async/stream[full] P=48 alone=4.727 comp=5.418 (x1.15) io/step=1.150 final=0.995 total=60.526
+11:20:05 === phase size rep 0
+11:20:10 [size] rc=0    5.2s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.313 final=0.000 total=3.131
+11:20:15 [size] rc=0    4.5s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.207 final=0.197 total=2.266
+11:20:26 [size] rc=0   10.6s posix/sync/sleep[full] P=48 alone=0.390 comp=0.390 (x1.00) io/step=0.354 final=0.000 total=7.445
+11:20:36 [size] rc=0   10.7s posix/async/sleep[full] P=48 alone=0.390 comp=0.391 (x1.00) io/step=0.085 final=3.038 total=7.783
+11:20:48 [size] rc=0   11.7s posix/sync/dgemm[full] P=48 alone=0.389 comp=0.346 (x0.89) io/step=0.429 final=0.000 total=7.504
+11:20:57 [size] rc=0    9.1s posix/async/dgemm[full] P=48 alone=0.389 comp=0.425 (x1.09) io/step=0.108 final=0.474 total=5.375
+11:21:13 [size] rc=0   15.8s posix/sync/stream[full] P=48 alone=0.374 comp=0.385 (x1.03) io/step=0.823 final=0.000 total=11.851
+11:21:26 [size] rc=0   12.7s posix/async/stream[full] P=48 alone=0.396 comp=0.413 (x1.04) io/step=0.453 final=0.248 total=8.681
+11:21:38 [size] rc=0   12.4s posix/sync/heat[full] P=48 alone=0.386 comp=0.392 (x1.02) io/step=0.448 final=0.000 total=8.365
+11:21:48 [size] rc=0    9.7s posix/async/heat[full] P=48 alone=0.386 comp=0.414 (x1.07) io/step=0.135 final=0.355 total=5.679
+11:21:54 [size] rc=0    6.1s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.379 final=0.000 total=3.790
+11:22:03 [size] rc=0    9.8s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.702 final=0.497 total=7.457
+11:22:15 [size] rc=0   12.0s mpiio/sync/sleep[full] P=48 alone=0.470 comp=0.470 (x1.00) io/step=0.410 final=0.000 total=8.804
+11:22:30 [size] rc=0   14.2s mpiio/async/sleep[full] P=48 alone=0.472 comp=0.471 (x1.00) io/step=0.614 final=0.427 total=11.212
+11:22:44 [size] rc=0   14.0s mpiio/sync/dgemm[full] P=48 alone=0.470 comp=0.475 (x1.01) io/step=0.503 final=0.000 total=9.600
+11:23:00 [size] rc=0   16.0s mpiio/async/dgemm[full] P=48 alone=0.472 comp=0.477 (x1.01) io/step=0.645 final=0.412 total=11.449
+11:23:13 [size] rc=0   13.4s mpiio/sync/stream[full] P=48 alone=0.444 comp=0.447 (x1.01) io/step=0.476 final=0.000 total=9.069
+11:23:28 [size] rc=0   14.6s mpiio/async/stream[full] P=48 alone=0.451 comp=0.453 (x1.00) io/step=0.622 final=0.453 total=9.975
+11:23:41 [size] rc=0   13.4s mpiio/sync/heat[full] P=48 alone=0.465 comp=0.472 (x1.01) io/step=0.461 final=0.000 total=9.294
+11:23:56 [size] rc=0   15.2s mpiio/async/heat[full] P=48 alone=0.483 comp=0.475 (x0.98) io/step=0.543 final=0.476 total=10.465
+11:24:06 [size] rc=0   10.2s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.795 final=0.001 total=7.949
+11:24:12 [size] rc=0    5.4s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.306 final=0.224 total=3.233
+11:24:30 [size] rc=0   18.0s hdf5/sync/sleep[full] P=48 alone=0.990 comp=0.990 (x1.00) io/step=0.380 final=0.001 total=13.703
+11:24:45 [size] rc=0   15.0s hdf5/async/sleep[full] P=48 alone=0.990 comp=0.990 (x1.00) io/step=0.033 final=0.293 total=10.455
+11:25:06 [size] rc=0   21.4s hdf5/sync/dgemm[full] P=48 alone=1.064 comp=1.051 (x0.99) io/step=0.532 final=0.001 total=15.068
+11:25:27 [size] rc=0   21.0s hdf5/async/dgemm[full] P=48 alone=1.053 comp=1.308 (x1.24) io/step=0.320 final=1.273 total=14.586
+11:25:49 [size] rc=0   22.1s hdf5/sync/stream[full] P=48 alone=1.002 comp=0.995 (x0.99) io/step=0.542 final=0.001 total=15.167
+11:26:09 [size] rc=0   19.6s hdf5/async/stream[full] P=48 alone=1.000 comp=1.233 (x1.23) io/step=0.345 final=0.334 total=12.926
+11:26:30 [size] rc=0   21.2s hdf5/sync/heat[full] P=48 alone=1.002 comp=1.002 (x1.00) io/step=0.490 final=0.001 total=14.892
+11:26:49 [size] rc=0   19.1s hdf5/async/heat[full] P=48 alone=1.002 comp=1.145 (x1.14) io/step=0.066 final=0.386 total=12.384
+11:26:52 [size] rc=0    3.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.074 final=0.000 total=0.741
+11:26:56 [size] rc=0    3.5s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.085 final=0.073 total=0.912
+11:27:00 [size] rc=0    4.4s adios2/sync/sleep[full] P=48 alone=0.090 comp=0.090 (x1.00) io/step=0.081 final=0.000 total=1.711
+11:27:04 [size] rc=0    3.8s adios2/async/sleep[full] P=48 alone=0.090 comp=0.090 (x1.00) io/step=0.038 final=0.074 total=1.332
+11:27:09 [size] rc=0    4.9s adios2/sync/dgemm[full] P=48 alone=0.091 comp=0.090 (x0.99) io/step=0.092 final=0.000 total=1.669
+11:27:13 [size] rc=0    4.0s adios2/async/dgemm[full] P=48 alone=0.090 comp=0.114 (x1.26) io/step=0.056 final=0.074 total=1.476
+11:27:18 [size] rc=0    4.5s adios2/sync/stream[full] P=48 alone=0.089 comp=0.093 (x1.06) io/step=0.084 final=0.000 total=1.691
+11:27:22 [size] rc=0    4.7s adios2/async/stream[full] P=48 alone=0.096 comp=0.128 (x1.33) io/step=0.074 final=0.073 total=1.674
+11:27:28 [size] rc=0    5.2s adios2/sync/heat[full] P=48 alone=0.094 comp=0.098 (x1.04) io/step=0.084 final=0.000 total=1.757
+11:27:32 [size] rc=0    4.9s adios2/async/heat[full] P=48 alone=0.094 comp=0.131 (x1.40) io/step=0.062 final=0.074 total=1.874
+11:27:51 [size] rc=0   19.0s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.557 final=0.000 total=15.569
+11:28:08 [size] rc=0   16.7s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.234 final=0.857 total=13.185
+11:28:51 [size] rc=0   42.4s posix/sync/sleep[full] P=48 alone=1.950 comp=1.950 (x1.00) io/step=1.543 final=0.000 total=34.928
+11:29:19 [size] rc=0   28.2s posix/async/sleep[full] P=48 alone=1.950 comp=1.950 (x1.00) io/step=0.035 final=1.242 total=21.098
+11:30:04 [size] rc=0   45.3s posix/sync/dgemm[full] P=48 alone=1.952 comp=1.912 (x0.98) io/step=1.535 final=0.000 total=33.430
+11:30:40 [size] rc=0   35.8s posix/async/dgemm[full] P=48 alone=1.934 comp=1.978 (x1.02) io/step=0.560 final=0.687 total=24.248
+11:31:26 [size] rc=0   46.2s posix/sync/stream[full] P=48 alone=1.922 comp=1.926 (x1.00) io/step=1.580 final=0.000 total=34.665
+11:32:09 [size] rc=0   42.4s posix/async/stream[full] P=48 alone=1.922 comp=1.972 (x1.03) io/step=1.125 final=0.679 total=30.837
+11:32:55 [size] rc=0   46.0s posix/sync/heat[full] P=48 alone=1.947 comp=1.951 (x1.00) io/step=1.487 final=0.000 total=34.358
+11:33:32 [size] rc=0   37.1s posix/async/heat[full] P=48 alone=1.946 comp=2.129 (x1.09) io/step=0.397 final=0.807 total=25.768
+11:33:55 [size] rc=0   23.6s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.007 final=0.000 total=20.071
+11:34:26 [size] rc=0   31.0s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.581 final=2.080 total=27.838
+11:35:15 [size] rc=0   49.1s mpiio/sync/sleep[full] P=48 alone=2.510 comp=2.510 (x1.00) io/step=1.525 final=0.000 total=40.351
+11:36:15 [size] rc=0   59.8s mpiio/async/sleep[full] P=48 alone=2.512 comp=2.511 (x1.00) io/step=2.371 final=2.135 total=50.886
+11:37:07 [size] rc=0   52.0s mpiio/sync/dgemm[full] P=48 alone=2.531 comp=2.501 (x0.99) io/step=1.551 final=0.000 total=38.559
+11:38:05 [size] rc=0   58.1s mpiio/async/dgemm[full] P=48 alone=2.494 comp=2.530 (x1.01) io/step=1.887 final=1.951 total=45.109
+11:38:58 [size] rc=0   52.4s mpiio/sync/stream[full] P=48 alone=2.496 comp=2.512 (x1.01) io/step=1.503 final=0.000 total=39.583
+11:40:03 [size] rc=0   65.7s mpiio/async/stream[full] P=48 alone=2.589 comp=2.566 (x0.99) io/step=2.963 final=2.166 total=52.525
+11:40:54 [size] rc=0   50.6s mpiio/sync/heat[full] P=48 alone=2.503 comp=2.504 (x1.00) io/step=1.285 final=0.000 total=37.873
+11:41:56 [size] rc=0   62.4s mpiio/async/heat[full] P=48 alone=2.521 comp=2.509 (x1.00) io/step=2.235 final=2.445 total=49.738
+11:42:18 [size] rc=0   21.2s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.749 final=0.001 total=17.496
+11:42:36 [size] rc=0   18.4s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.417 final=1.354 total=15.454
+11:43:23 [size] rc=0   47.3s hdf5/sync/sleep[full] P=48 alone=2.190 comp=2.190 (x1.00) io/step=1.717 final=0.001 total=39.074
+11:43:58 [size] rc=0   34.2s hdf5/async/sleep[full] P=48 alone=2.190 comp=2.190 (x1.00) io/step=0.258 final=2.151 total=26.590
+11:44:48 [size] rc=0   50.4s hdf5/sync/dgemm[full] P=48 alone=2.190 comp=2.164 (x0.99) io/step=1.736 final=0.001 total=37.347
+11:45:32 [size] rc=0   44.2s hdf5/async/dgemm[full] P=48 alone=2.153 comp=2.949 (x1.37) io/step=0.957 final=1.448 total=31.646
+11:46:25 [size] rc=0   53.1s hdf5/sync/stream[full] P=48 alone=2.186 comp=2.183 (x1.00) io/step=1.926 final=0.002 total=40.705
+11:47:08 [size] rc=0   42.2s hdf5/async/stream[full] P=48 alone=2.186 comp=2.779 (x1.27) io/step=0.828 final=1.414 total=30.268
+11:48:03 [size] rc=0   55.0s hdf5/sync/heat[full] P=48 alone=2.174 comp=2.184 (x1.00) io/step=2.097 final=0.001 total=42.774
+11:48:44 [size] rc=0   41.3s hdf5/async/heat[full] P=48 alone=2.184 comp=2.747 (x1.26) io/step=0.087 final=1.469 total=29.712
+11:48:54 [size] rc=0   10.3s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.595 final=0.000 total=5.951
+11:49:05 [size] rc=0   10.5s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.319 final=3.303 total=6.455
+11:49:27 [size] rc=0   22.5s adios2/sync/sleep[full] P=48 alone=0.740 comp=0.740 (x1.00) io/step=0.891 final=0.000 total=16.310
+11:49:42 [size] rc=0   14.4s adios2/async/sleep[full] P=48 alone=0.740 comp=0.741 (x1.00) io/step=0.131 final=0.260 total=8.941
+11:50:03 [size] rc=0   21.9s adios2/sync/dgemm[full] P=48 alone=0.684 comp=0.688 (x1.00) io/step=0.798 final=0.000 total=14.107
+11:50:20 [size] rc=0   16.5s adios2/async/dgemm[full] P=48 alone=0.674 comp=0.835 (x1.24) io/step=0.306 final=0.270 total=9.875
+11:50:45 [size] rc=0   25.0s adios2/sync/stream[full] P=48 alone=0.738 comp=0.744 (x1.01) io/step=1.051 final=0.000 total=17.597
+11:51:05 [size] rc=0   19.8s adios2/async/stream[full] P=48 alone=0.737 comp=0.864 (x1.17) io/step=0.586 final=0.240 total=13.415
+11:51:23 [size] rc=0   18.1s adios2/sync/heat[full] P=48 alone=0.750 comp=0.762 (x1.02) io/step=0.346 final=0.000 total=11.005
+11:51:43 [size] rc=0   20.1s adios2/async/heat[full] P=48 alone=0.738 comp=0.873 (x1.18) io/step=0.471 final=0.244 total=13.633
+11:53:03 [size] rc=0   80.1s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.577 final=0.000 total=75.771
+11:54:05 [size] rc=0   61.9s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=5.687 final=2.638 total=59.498
+11:57:37 [size] rc=0  212.1s posix/sync/sleep[full] P=48 alone=9.470 comp=9.470 (x1.00) io/step=9.408 final=0.000 total=188.781
+11:59:47 [size] rc=0  130.2s posix/async/sleep[full] P=48 alone=9.470 comp=9.471 (x1.00) io/step=0.560 final=5.811 total=106.097
+12:03:11 [size] rc=0  203.5s posix/sync/dgemm[full] P=48 alone=9.465 comp=9.516 (x1.01) io/step=8.739 final=0.000 total=175.279
+12:05:26 [size] rc=0  135.4s posix/async/dgemm[full] P=48 alone=9.488 comp=9.668 (x1.02) io/step=1.335 final=7.186 total=107.666
+12:08:54 [size] rc=0  207.4s posix/sync/stream[full] P=48 alone=9.390 comp=9.387 (x1.00) io/step=8.689 final=0.000 total=179.266
+12:11:39 [size] rc=0  165.0s posix/async/stream[full] P=48 alone=9.368 comp=9.537 (x1.02) io/step=4.322 final=2.454 total=137.481
+12:15:05 [size] rc=0  206.0s posix/sync/heat[full] P=48 alone=9.432 comp=9.439 (x1.00) io/step=8.397 final=0.000 total=178.340
+12:17:45 [size] rc=0  160.5s posix/async/heat[full] P=48 alone=9.411 comp=10.438 (x1.11) io/step=2.388 final=5.313 total=133.267
+12:19:00 [size] rc=0   74.8s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=6.999 final=0.000 total=69.989
+12:21:15 [size] rc=0  134.5s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=11.883 final=11.793 total=130.558
+12:24:33 [size] rc=0  198.4s mpiio/sync/sleep[full] P=48 alone=8.750 comp=8.750 (x1.00) io/step=8.897 final=0.000 total=176.470
+12:28:18 [size] rc=0  225.3s mpiio/async/sleep[full] P=48 alone=8.752 comp=8.751 (x1.00) io/step=10.719 final=8.844 total=203.478
+12:31:27 [size] rc=0  188.7s mpiio/sync/dgemm[full] P=48 alone=8.676 comp=8.721 (x1.01) io/step=8.211 final=0.000 total=161.967
+12:35:25 [size] rc=0  238.0s mpiio/async/dgemm[full] P=48 alone=8.745 comp=8.742 (x1.00) io/step=11.635 final=10.619 total=212.118
+12:38:41 [size] rc=0  195.8s mpiio/sync/stream[full] P=48 alone=8.645 comp=8.642 (x1.00) io/step=8.377 final=0.000 total=168.751
+12:42:41 [size] rc=0  240.1s mpiio/async/stream[full] P=48 alone=8.571 comp=8.593 (x1.00) io/step=13.470 final=10.445 total=214.292
+12:45:54 [size] rc=0  193.5s mpiio/sync/heat[full] P=48 alone=8.735 comp=8.739 (x1.00) io/step=7.982 final=0.000 total=167.190
+12:49:58 [size] rc=0  244.1s mpiio/async/heat[full] P=48 alone=8.622 comp=8.557 (x0.99) io/step=12.248 final=10.366 total=218.263
+12:51:31 [size] rc=0   92.3s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=8.787 final=0.026 total=87.892
+12:52:28 [size] rc=0   56.8s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=4.809 final=4.992 total=53.023
+12:56:44 [size] rc=0  256.6s hdf5/sync/sleep[full] P=48 alone=10.990 comp=10.990 (x1.00) io/step=11.954 final=0.026 total=229.464
+12:59:09 [size] rc=0  144.6s hdf5/async/sleep[full] P=48 alone=10.990 comp=10.990 (x1.00) io/step=0.320 final=6.064 total=119.092
+13:03:09 [size] rc=0  240.4s hdf5/sync/dgemm[full] P=48 alone=10.874 comp=11.010 (x1.01) io/step=10.810 final=0.026 total=208.856
+13:06:15 [size] rc=0  185.4s hdf5/async/dgemm[full] P=48 alone=10.977 comp=14.893 (x1.36) io/step=4.761 final=4.524 total=155.224
+13:10:20 [size] rc=0  245.4s hdf5/sync/stream[full] P=48 alone=10.842 comp=10.836 (x1.00) io/step=10.791 final=0.026 total=214.535
+13:13:15 [size] rc=0  175.2s hdf5/async/stream[full] P=48 alone=10.844 comp=13.624 (x1.26) io/step=3.999 final=4.664 total=145.646
+13:17:11 [size] rc=0  236.2s hdf5/sync/heat[full] P=48 alone=10.951 comp=10.941 (x1.00) io/step=9.588 final=0.026 total=205.289
+13:20:11 [size] rc=0  179.2s hdf5/async/heat[full] P=48 alone=10.957 comp=13.496 (x1.23) io/step=0.765 final=6.957 total=149.442
+13:20:36 [size] rc=0   25.2s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.995 final=0.000 total=19.950
+13:21:00 [size] rc=0   23.9s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.745 final=1.292 total=18.699
+13:21:57 [size] rc=0   57.2s adios2/sync/sleep[full] P=48 alone=2.490 comp=2.490 (x1.00) io/step=2.154 final=0.000 total=46.440
+13:22:42 [size] rc=0   45.7s adios2/async/sleep[full] P=48 alone=2.490 comp=2.490 (x1.00) io/step=1.039 final=1.066 total=36.325
+13:23:41 [size] rc=0   58.6s adios2/sync/dgemm[full] P=48 alone=2.494 comp=2.643 (x1.06) io/step=2.064 final=0.001 total=43.962
+13:24:36 [size] rc=0   54.8s adios2/async/dgemm[full] P=48 alone=2.478 comp=3.172 (x1.28) io/step=1.388 final=1.846 total=40.004
+13:25:31 [size] rc=0   55.1s adios2/sync/stream[full] P=48 alone=2.496 comp=2.533 (x1.01) io/step=1.586 final=0.000 total=40.422
+13:26:29 [size] rc=0   57.7s adios2/async/stream[full] P=48 alone=2.497 comp=3.037 (x1.22) io/step=1.762 final=1.131 total=44.175
+13:27:29 [size] rc=0   60.7s adios2/sync/heat[full] P=48 alone=2.471 comp=2.498 (x1.01) io/step=2.094 final=0.000 total=45.868
+13:28:25 [size] rc=0   55.1s adios2/async/heat[full] P=48 alone=2.484 comp=3.115 (x1.25) io/step=0.814 final=1.934 total=41.125
+13:34:23 [size] rc=0  358.8s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=34.797 final=0.000 total=347.969
+13:39:00 [size] rc=0  276.4s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=25.181 final=13.076 total=264.886
+13:54:12 [size] rc=0  911.8s posix/sync/sleep[full] P=48 alone=43.500 comp=43.500 (x1.00) io/step=37.872 final=0.000 total=813.716
+--- scope cut: no 1 TB, no repetitions; 48 GiB size point for POSIX and ADIOS2 only
+14:03:27 === phase sizelarge rep 0
+14:18:07 [size] rc=0  880.0s posix/sync/dgemm[full] P=48 alone=43.798 comp=43.989 (x1.00) io/step=37.322 final=0.000 total=784.745
+14:27:48 [size] rc=0  580.6s posix/async/dgemm[full] P=48 alone=37.255 comp=39.090 (x1.05) io/step=12.776 final=14.421 total=490.506
+14:44:07 [size] rc=0  979.4s posix/sync/stream[full] P=48 alone=42.957 comp=42.934 (x1.00) io/step=45.385 final=0.000 total=876.612
+14:56:50 [size] rc=0  762.4s posix/async/stream[full] P=48 alone=42.542 comp=43.196 (x1.02) io/step=23.172 final=13.041 total=661.730
+15:12:48 [size] rc=0  958.4s posix/sync/heat[full] P=48 alone=42.969 comp=43.032 (x1.00) io/step=42.546 final=0.000 total=855.753
+15:24:42 [size] rc=0  713.9s posix/async/heat[full] P=48 alone=42.786 comp=47.836 (x1.12) io/step=12.068 final=13.808 total=612.456
+15:26:09 [size] rc=0   86.6s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.704 final=0.001 total=77.030
+15:27:32 [size] rc=0   83.8s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.183 final=4.420 total=76.215
+15:31:01 [size] rc=0  208.6s adios2/sync/sleep[full] P=48 alone=9.630 comp=9.630 (x1.00) io/step=8.279 final=0.000 total=179.095
+15:33:33 [size] rc=0  152.2s adios2/async/sleep[full] P=48 alone=9.630 comp=9.630 (x1.00) io/step=1.884 final=8.864 total=123.976
+15:36:44 [size] rc=0  190.9s adios2/sync/dgemm[full] P=48 alone=9.589 comp=9.329 (x0.97) io/step=7.779 final=0.000 total=156.428
+15:39:50 [size] rc=0  185.7s adios2/async/dgemm[full] P=48 alone=9.690 comp=13.056 (x1.35) io/step=5.258 final=5.853 total=153.965
+15:43:08 [size] rc=0  198.0s adios2/sync/stream[full] P=48 alone=9.513 comp=9.790 (x1.03) io/step=7.173 final=0.000 total=165.202
+15:46:20 [size] rc=0  192.5s adios2/async/stream[full] P=48 alone=9.577 comp=12.338 (x1.29) io/step=5.637 final=6.366 total=159.463
+15:49:38 [size] rc=0  197.6s adios2/sync/heat[full] P=48 alone=9.531 comp=9.606 (x1.01) io/step=6.934 final=0.011 total=165.371
+15:52:44 [size] rc=0  185.6s adios2/async/heat[full] P=48 alone=9.530 comp=12.518 (x1.31) io/step=2.142 final=6.804 total=153.291
+15:52:44 === all requested phases done
+15:52:49 === phase recheck rep 0
+15:57:30 [recheck] rc=0  281.0s posix/sync/spin[full] P=48 alone=15.389 comp=15.561 (x1.01) io/step=8.629 final=0.000 total=240.107
+16:02:17 [recheck] rc=0  287.7s posix/sync/sleep[full] P=48 alone=15.390 comp=15.390 (x1.00) io/step=9.854 final=0.000 total=252.441
+16:05:20 [recheck] rc=0  182.1s mpiio/sync/spin[full] P=48 alone=8.881 comp=8.943 (x1.01) io/step=6.593 final=0.000 total=154.680
+16:08:49 [recheck] rc=0  209.3s mpiio/sync/sleep[full] P=48 alone=8.890 comp=8.890 (x1.00) io/step=9.765 final=0.000 total=186.550
+16:12:44 [recheck] rc=0  235.0s hdf5/sync/spin[full] P=48 alone=11.168 comp=11.291 (x1.01) io/step=9.231 final=0.026 total=203.727
+16:16:53 [recheck] rc=0  249.6s hdf5/sync/sleep[full] P=48 alone=11.200 comp=11.200 (x1.00) io/step=11.019 final=0.003 total=222.189
+16:17:41 [recheck] rc=0   47.7s adios2/sync/spin[full] P=48 alone=1.968 comp=1.986 (x1.01) io/step=1.499 final=0.000 total=34.649
+16:18:38 [recheck] rc=0   57.3s adios2/sync/sleep[full] P=48 alone=1.970 comp=1.970 (x1.00) io/step=2.934 final=0.000 total=49.035
+16:18:38 === all requested phases done
+--- rerun GPU kernels with warm-up + full-length calibration
+16:02:29 === phase gpu rep 0
+16:03:46 [gpu] rc=0   77.2s posix/sync/gpu-block[full] P=4 alone=3.734 comp=3.765 (x1.01) io/step=1.369 final=0.000 total=51.005
+16:04:51 [gpu] rc=0   64.9s posix/async/gpu-block[full] P=4 alone=3.622 comp=3.701 (x1.02) io/step=0.155 final=1.220 total=39.556
+16:06:11 [gpu] rc=0   79.7s posix/sync/gpu-spin[full] P=4 alone=3.718 comp=3.689 (x0.99) io/step=1.397 final=0.000 total=50.521
+16:07:20 [gpu] rc=0   69.4s posix/async/gpu-spin[full] P=4 alone=3.729 comp=3.732 (x1.00) io/step=0.212 final=1.124 total=40.076
+16:08:26 [gpu] rc=0   66.3s mpiio/sync/gpu-block[full] P=4 alone=2.719 comp=2.723 (x1.00) io/step=1.663 final=0.000 total=43.354
+16:09:51 [gpu] rc=0   84.9s mpiio/async/gpu-block[full] P=4 alone=2.713 comp=2.703 (x1.00) io/step=3.353 final=2.635 total=60.363
+16:10:59 [gpu] rc=0   67.6s mpiio/sync/gpu-spin[full] P=4 alone=2.770 comp=2.752 (x0.99) io/step=1.546 final=0.000 total=42.632
+16:12:23 [gpu] rc=0   84.1s mpiio/async/gpu-spin[full] P=4 alone=2.848 comp=2.708 (x0.95) io/step=2.754 final=2.553 total=56.322
+16:13:32 [gpu] rc=0   69.1s hdf5/sync/gpu-block[full] P=4 alone=2.757 comp=2.789 (x1.01) io/step=1.988 final=0.047 total=47.080
+16:14:36 [gpu] rc=0   64.0s hdf5/async/gpu-block[full] P=4 alone=2.702 comp=2.871 (x1.06) io/step=0.791 final=1.585 total=37.869
+16:15:45 [gpu] rc=0   69.5s hdf5/sync/gpu-spin[full] P=4 alone=2.761 comp=2.744 (x0.99) io/step=1.706 final=0.001 total=44.076
+16:16:46 [gpu] rc=0   60.2s hdf5/async/gpu-spin[full] P=4 alone=2.762 comp=2.769 (x1.00) io/step=0.665 final=1.417 total=35.126
+16:17:18 [gpu] rc=0   32.5s adios2/sync/gpu-block[full] P=4 alone=0.743 comp=0.584 (x0.79) io/step=1.265 final=0.000 total=18.183
+16:17:52 [gpu] rc=0   34.2s adios2/async/gpu-block[full] P=4 alone=0.745 comp=0.863 (x1.16) io/step=1.234 final=0.447 total=20.801
+16:18:25 [gpu] rc=0   32.9s adios2/sync/gpu-spin[full] P=4 alone=0.720 comp=0.715 (x0.99) io/step=0.865 final=0.000 total=15.627
+16:19:01 [gpu] rc=0   35.8s adios2/async/gpu-spin[full] P=4 alone=0.721 comp=0.740 (x1.03) io/step=1.157 final=0.382 total=18.938
+16:19:01 === all requested phases done
+--- 48 GiB size point for MPI-IO and HDF5
+14:45:14 === phase sizelarge rep 0
+14:51:20 [size] rc=0  366.0s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=35.474 final=0.000 total=354.740
+15:01:08 [size] rc=0  588.3s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=53.784 final=42.414 total=580.197
+15:16:19 [size] rc=0  911.0s mpiio/sync/sleep[full] P=48 alone=44.340 comp=44.340 (x1.00) io/step=36.882 final=0.000 total=812.225
+15:35:54 [size] rc=0 1175.5s mpiio/async/sleep[full] P=48 alone=44.342 comp=44.341 (x1.00) io/step=58.837 final=46.878 total=1078.589
+15:51:38 [size] rc=0  943.9s mpiio/sync/dgemm[full] P=48 alone=44.408 comp=44.231 (x1.00) io/step=43.165 final=0.000 total=839.540
+16:12:29 [size] rc=0 1250.8s mpiio/async/dgemm[full] P=48 alone=44.227 comp=44.225 (x1.00) io/step=67.079 final=45.171 total=1150.005
+16:28:50 [size] rc=0  981.2s mpiio/sync/stream[full] P=48 alone=43.506 comp=43.535 (x1.00) io/step=44.801 final=0.000 total=877.098
+16:51:07 [size] rc=0 1336.8s mpiio/async/stream[full] P=48 alone=46.473 comp=45.030 (x0.97) io/step=81.068 final=47.179 total=1229.964
+17:07:03 [size] rc=0  956.3s mpiio/sync/heat[full] P=48 alone=43.779 comp=43.989 (x1.00) io/step=41.269 final=0.000 total=852.560
+17:28:52 [size] rc=0 1309.0s mpiio/async/heat[full] P=48 alone=43.302 comp=43.926 (x1.01) io/step=72.344 final=46.445 total=1208.979
+17:35:41 [size] rc=0  408.7s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=39.864 final=0.004 total=398.647
+17:40:11 [size] rc=0  270.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=23.825 final=26.694 total=264.878
+17:57:45 [size] rc=0 1053.6s hdf5/sync/sleep[full] P=48 alone=49.830 comp=49.830 (x1.00) io/step=44.487 final=0.026 total=943.197
+18:08:30 [size] rc=0  645.0s hdf5/async/sleep[full] P=48 alone=49.831 comp=49.831 (x1.00) io/step=1.866 final=23.498 total=540.407
+18:28:52 [size] rc=0 1222.3s hdf5/sync/dgemm[full] P=48 alone=49.485 comp=55.439 (x1.12) io/step=74.083 final=0.005 total=1105.955
+--- stopped by user request; hdf5/async/dgemm 48 GiB hung (>7 h) and was killed
+--- PDC main configuration (1 server on a reserved core, 47 clients)
+15:21:17 === phase pdc rep 0
+15:25:47 [pdc] rc=0  269.9s pdc/sync/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=25.187 final=0.034 total=251.903
+15:30:18 [pdc] rc=0  271.5s pdc/async/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=21.608 final=25.505 total=241.529
+15:39:19 [pdc] rc=0  540.7s pdc/sync/sleep[pdc1] P=47 alone=31.490 comp=31.490 (x1.00) io/step=14.495 final=0.037 total=459.888
+15:46:21 [pdc] rc=0  422.0s pdc/async/sleep[pdc1] P=47 alone=31.490 comp=31.491 (x1.00) io/step=1.169 final=12.501 total=339.045
+15:55:18 [pdc] rc=0  537.4s pdc/sync/spin[pdc1] P=47 alone=31.268 comp=31.268 (x1.00) io/step=14.009 final=0.035 total=452.158
+16:06:57 [pdc] rc=0  698.4s pdc/async/spin[pdc1] P=47 alone=31.479 comp=59.339 (x1.89) io/step=0.703 final=13.632 total=613.152
+16:15:46 [pdc] rc=0  529.4s pdc/sync/dgemm[pdc1] P=47 alone=31.771 comp=32.146 (x1.01) io/step=14.500 final=0.034 total=443.780
+16:27:20 [pdc] rc=0  693.8s pdc/async/dgemm[pdc1] P=47 alone=31.825 comp=58.936 (x1.85) io/step=1.317 final=13.565 total=607.726
+16:36:20 [pdc] rc=0  539.8s pdc/sync/stream[pdc1] P=47 alone=31.195 comp=31.261 (x1.00) io/step=15.384 final=0.035 total=455.187
+16:45:18 [pdc] rc=0  538.1s pdc/async/stream[pdc1] P=47 alone=31.092 comp=42.969 (x1.38) io/step=8.671 final=8.461 total=453.511
+16:54:18 [pdc] rc=0  540.0s pdc/sync/halo[pdc1] P=47 alone=31.227 comp=31.187 (x1.00) io/step=14.386 final=0.036 total=455.760
+17:24:18 [pdc] rc=timeout 1800.2s killed after 1800 s
+t to ofi+tcp
+[INFO] PDC_CLIENT[0]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[0]: Connection string: ofi+tcp://eno12399np0:8000
+[INFO] PDC_CLIENT[1]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[2]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[4]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[5]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[6]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[7]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[8]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[9]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[10]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[12]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[13]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[14]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[15]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[16]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[17]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[18]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[19]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[20]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[21]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[22]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[23]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[24]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[25]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[26]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[27]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[28]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[29]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[30]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[31]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[32]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[33]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[34]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[36]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[37]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[38]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[39]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[40]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[41]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[42]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[43]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[44]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[45]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[46]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[3]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[11]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[35]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[0]: Using [/mnt/fast/nlewis/aio_scratch/pdc_3463597/tmp] as tmp dir, 47 clients per server
+
+killed after 1800 s
+17:33:19 [pdc] rc=0  541.0s pdc/sync/heat[pdc1] P=47 alone=31.285 comp=31.413 (x1.00) io/step=14.238 final=0.034 total=456.235
+17:41:47 [pdc] rc=0  507.5s pdc/async/heat[pdc1] P=47 alone=31.302 comp=40.381 (x1.29) io/step=0.690 final=13.597 total=423.774
+17:41:47 === all requested phases done
+16:03:20 === phase pdc rep 0
+16:33:20 [pdc] rc=timeout 1800.1s killed after 1800 s
+t to ofi+tcp
+[INFO] PDC_CLIENT[0]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[0]: Connection string: ofi+tcp://eno12399np0:8000
+[INFO] PDC_CLIENT[8]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[10]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[12]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[14]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[32]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[34]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[36]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[38]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[40]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[42]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[44]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[46]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[1]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[2]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[3]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[4]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[5]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[6]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[7]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[9]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[11]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[13]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[15]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[16]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[17]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[18]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[19]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[20]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[21]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[24]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[25]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[26]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[27]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[28]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[29]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[30]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[31]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[33]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[35]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[37]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[39]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[41]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[43]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[45]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[22]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[23]: Environment variable HG_HOST was set
+[INFO] PDC_CLIENT[0]: Using [/mnt/fast/nlewis/aio_scratch/pdc_3469532/tmp] as tmp dir, 47 clients per server
+
+killed after 1800 s
+16:40:22 [pdc] rc=0  421.9s pdc/async/sleep[pdc1smt] P=47 alone=31.490 comp=31.490 (x1.00) io/step=1.104 final=14.484 total=340.427
+16:47:37 [pdc] rc=0  434.9s pdc/async/spin[pdc1smt] P=47 alone=31.477 comp=32.132 (x1.02) io/step=1.721 final=14.125 total=347.890
+16:56:32 [pdc] rc=0  535.3s pdc/async/dgemm[pdc1smt] P=47 alone=31.356 comp=40.651 (x1.30) io/step=6.680 final=10.673 total=447.669
+16:56:32 === all requested phases done
+13:30:53 === phase pdc rep 0
+13:39:55 [pdc] rc=0  542.4s pdc/async/stream[pdc1smt] P=47 alone=31.332 comp=34.464 (x1.10) io/step=8.684 final=29.668 total=446.196
+13:48:32 [pdc] rc=0  516.4s pdc/async/halo[pdc1smt] P=47 alone=31.300 comp=36.925 (x1.18) io/step=3.252 final=29.775 total=431.538
+13:56:55 [pdc] rc=0  503.5s pdc/async/heat[pdc1smt] P=47 alone=31.286 comp=31.422 (x1.00) io/step=6.341 final=30.580 total=407.775
+13:56:55 === phase pdcgpu rep 0
+13:58:22 [pdcgpu] rc=0   86.6s pdc/sync/none[pdc1] P=4 alone=0.000 comp=0.000 (x0.00) io/step=6.798 final=0.007 total=67.990
+13:59:43 [pdcgpu] rc=0   80.9s pdc/async/none[pdc1] P=4 alone=0.000 comp=0.000 (x0.00) io/step=5.804 final=3.304 total=61.329
+14:02:21 [pdcgpu] rc=0  158.1s pdc/sync/sleep[pdc1] P=4 alone=8.500 comp=8.500 (x1.00) io/step=4.682 final=0.007 total=131.824
+14:04:35 [pdcgpu] rc=0  134.3s pdc/async/sleep[pdc1] P=4 alone=8.500 comp=8.500 (x1.00) io/step=0.682 final=5.609 total=97.416
+14:07:38 [pdcgpu] rc=0  182.6s pdc/sync/gpu-block[pdc1] P=4 alone=8.681 comp=8.846 (x1.02) io/step=4.574 final=0.007 total=133.907
+14:10:15 [pdcgpu] rc=0  156.7s pdc/async/gpu-block[pdc1] P=4 alone=8.599 comp=8.531 (x0.99) io/step=0.654 final=5.724 total=97.232
+14:13:20 [pdcgpu] rc=0  185.0s pdc/sync/gpu-spin[pdc1] P=4 alone=8.513 comp=8.430 (x0.99) io/step=4.622 final=0.007 total=130.153
+14:16:02 [pdcgpu] rc=0  162.3s pdc/async/gpu-spin[pdc1] P=4 alone=8.533 comp=8.575 (x1.00) io/step=0.669 final=5.633 total=97.533
+14:18:43 [pdcgpu] rc=0  161.0s pdc/sync/dgemm[pdc1] P=4 alone=8.491 comp=8.496 (x1.00) io/step=4.697 final=0.007 total=130.697
+14:22:09 [pdcgpu] rc=0  206.4s pdc/async/dgemm[pdc1] P=4 alone=8.492 comp=16.526 (x1.95) io/step=0.776 final=3.914 total=175.923
+14:22:09 === phase pdcsize rep 0
+14:22:26 [pdcsize] rc=0   17.0s pdc/sync/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=0.636 final=0.037 total=6.393
+14:22:43 [pdcsize] rc=0   16.8s pdc/async/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=0.595 final=0.147 total=6.049
+14:23:10 [pdcsize] rc=0   26.5s pdc/sync/sleep[pdc1] P=47 alone=0.800 comp=0.800 (x1.00) io/step=0.640 final=0.037 total=14.440
+14:23:32 [pdcsize] rc=0   22.2s pdc/async/sleep[pdc1] P=47 alone=0.800 comp=0.801 (x1.00) io/step=0.193 final=0.542 total=10.418
+14:24:00 [pdcsize] rc=0   27.8s pdc/sync/dgemm[pdc1] P=47 alone=0.781 comp=0.761 (x0.97) io/step=0.678 final=0.038 total=14.028
+14:24:29 [pdcsize] rc=0   29.8s pdc/async/dgemm[pdc1] P=47 alone=0.722 comp=1.330 (x1.84) io/step=0.226 final=0.541 total=15.860
+14:24:58 [pdcsize] rc=0   28.4s pdc/sync/stream[pdc1] P=47 alone=0.804 comp=0.799 (x0.99) io/step=0.673 final=0.034 total=14.295
+14:25:25 [pdcsize] rc=0   27.5s pdc/async/stream[pdc1] P=47 alone=0.804 comp=1.099 (x1.37) io/step=0.459 final=0.231 total=13.543
+14:25:53 [pdcsize] rc=0   28.1s pdc/sync/heat[pdc1] P=47 alone=0.797 comp=0.801 (x1.00) io/step=0.649 final=0.035 total=14.257
+14:26:21 [pdcsize] rc=0   27.3s pdc/async/heat[pdc1] P=47 alone=0.808 comp=1.064 (x1.32) io/step=0.277 final=0.394 total=13.348
+14:27:31 [pdcsize] rc=0   70.4s pdc/sync/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=5.894 final=0.036 total=58.975
+14:28:40 [pdcsize] rc=0   68.8s pdc/async/none[pdc1] P=47 alone=0.000 comp=0.000 (x0.00) io/step=5.432 final=3.425 total=57.696
+14:30:55 [pdcsize] rc=0  134.7s pdc/sync/sleep[pdc1] P=47 alone=7.370 comp=7.370 (x1.00) io/step=3.713 final=0.035 total=110.867
+14:32:52 [pdcsize] rc=0  117.1s pdc/async/sleep[pdc1] P=47 alone=7.370 comp=7.371 (x1.00) io/step=0.327 final=3.497 total=80.419
+14:35:14 [pdcsize] rc=0  142.2s pdc/sync/dgemm[pdc1] P=47 alone=7.356 comp=7.390 (x1.00) io/step=4.417 final=0.036 total=113.060
+14:38:11 [pdcsize] rc=0  176.4s pdc/async/dgemm[pdc1] P=47 alone=7.426 comp=13.674 (x1.84) io/step=1.032 final=3.202 total=147.454
+14:40:34 [pdcsize] rc=0  143.7s pdc/sync/stream[pdc1] P=47 alone=7.300 comp=7.311 (x1.00) io/step=4.551 final=0.034 total=115.287
+14:43:03 [pdcsize] rc=0  148.6s pdc/async/stream[pdc1] P=47 alone=7.342 comp=10.068 (x1.37) io/step=3.035 final=2.189 total=115.725
+14:45:26 [pdcsize] rc=0  143.4s pdc/sync/heat[pdc1] P=47 alone=7.355 comp=7.361 (x1.00) io/step=4.164 final=0.033 total=115.033
+14:47:46 [pdcsize] rc=0  139.2s pdc/async/heat[pdc1] P=47 alone=7.341 comp=9.564 (x1.30) io/step=0.888 final=4.778 total=108.827
+14:47:46 === phase pdcsweep rep 0
+14:52:36 [pdcsweep] rc=0  290.8s pdc/sync/sleep[pdc1] P=47 alone=6.300 comp=6.300 (x1.00) io/step=19.703 final=0.034 total=260.060
+14:57:19 [pdcsweep] rc=0  282.6s pdc/async/sleep[pdc1] P=47 alone=6.300 comp=6.300 (x1.00) io/step=15.160 final=26.761 total=241.308
+15:02:19 [pdcsweep] rc=0  300.4s pdc/sync/dgemm[pdc1] P=47 alone=6.307 comp=6.309 (x1.00) io/step=20.673 final=0.034 total=265.657
+15:07:12 [pdcsweep] rc=0  292.4s pdc/async/dgemm[pdc1] P=47 alone=6.302 comp=11.754 (x1.87) io/step=10.394 final=27.851 total=246.891
+15:12:18 [pdcsweep] rc=0  305.9s pdc/sync/stream[pdc1] P=47 alone=6.228 comp=6.234 (x1.00) io/step=21.199 final=0.034 total=271.263
+15:17:20 [pdcsweep] rc=0  302.6s pdc/async/stream[pdc1] P=47 alone=6.253 comp=8.625 (x1.38) io/step=17.146 final=24.506 total=268.144
+15:22:48 [pdcsweep] rc=0  327.3s pdc/sync/sleep[pdc1] P=47 alone=12.600 comp=12.600 (x1.00) io/step=15.792 final=0.034 total=283.960
+15:27:55 [pdcsweep] rc=0  307.3s pdc/async/sleep[pdc1] P=47 alone=12.600 comp=12.601 (x1.00) io/step=10.000 final=25.761 total=251.706
+15:33:47 [pdcsweep] rc=0  352.6s pdc/sync/dgemm[pdc1] P=47 alone=12.561 comp=12.662 (x1.01) io/step=18.645 final=0.034 total=304.623
+15:39:14 [pdcsweep] rc=0  326.9s pdc/async/dgemm[pdc1] P=47 alone=12.637 comp=23.619 (x1.87) io/step=3.586 final=17.520 total=279.407
+15:45:11 [pdcsweep] rc=0  356.5s pdc/sync/stream[pdc1] P=47 alone=12.566 comp=12.596 (x1.00) io/step=18.903 final=0.034 total=309.510
+15:51:12 [pdcsweep] rc=0  360.8s pdc/async/stream[pdc1] P=47 alone=12.495 comp=16.941 (x1.36) io/step=12.862 final=25.586 total=302.721
+15:58:53 [pdcsweep] rc=0  461.7s pdc/sync/sleep[pdc1] P=47 alone=25.190 comp=25.190 (x1.00) io/step=14.061 final=0.034 total=392.549
+16:04:46 [pdcsweep] rc=0  353.1s pdc/async/sleep[pdc1] P=47 alone=25.190 comp=25.191 (x1.00) io/step=0.831 final=24.929 total=285.088
+16:12:21 [pdcsweep] rc=0  454.6s pdc/sync/dgemm[pdc1] P=47 alone=25.193 comp=25.494 (x1.01) io/step=14.558 final=0.034 total=381.754
+16:21:52 [pdcsweep] rc=0  571.0s pdc/async/dgemm[pdc1] P=47 alone=25.328 comp=46.873 (x1.85) io/step=2.977 final=10.941 total=497.603
+16:29:45 [pdcsweep] rc=0  473.1s pdc/sync/stream[pdc1] P=47 alone=24.910 comp=25.007 (x1.00) io/step=16.120 final=0.034 total=400.999
+16:37:30 [pdcsweep] rc=0  465.3s pdc/async/stream[pdc1] P=47 alone=25.070 comp=34.549 (x1.38) io/step=8.628 final=12.857 total=392.903
+16:37:30 === all requested phases done

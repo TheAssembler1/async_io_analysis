@@ -1,0 +1,47 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\clearpage
+\onecolumn
+\appendix
+\section{Benchmark Source Code}
+\label{app:code}
+This appendix reproduces the complete source of the benchmark used in
+Section~\ref{sec:eval}. It is built with \texttt{make} in \texttt{src/}
+against the software stack in Table~\ref{tab:sw}, which
+\texttt{src/scripts/build\_deps.sh} builds from source.
+Table~\ref{tab:codemap} lists the code segments referred to in the paper,
+what each does, and where it is discussed.
+
+\input{code_table}
+
+\subsection{Benchmark driver}
+\srcfile{C}{aio_bench.h}{header}
+\srcfile{C}{aio_bench.c}{driver}
+
+\subsection{Compute surrogate kernels}
+\srcfile{C}{kernels.c}{kernels}
+\srcfile{CUDA}{gpu_kernels.cu}{gpu}
+\srcfile{C}{gpu_stub.c}{gpustub}
+
+\subsection{I/O backends}
+\srcfile{C}{io_posix.c}{posix}
+\srcfile{C}{io_mpiio.c}{mpiio}
+\srcfile{C}{io_hdf5.c}{hdf5}
+\srcfile{C}{io_adios2.c}{adios2}
+\srcfile{C}{io_pdc.c}{pdc}
+
+\subsection{Build and run scripts}
+\srcfile{make}{Makefile}{makefile}
+\srcfile{bash}{scripts/build_deps.sh}{builddeps}
+\srcfile{bash}{scripts/env.sh}{env}
+\srcfile{bash}{scripts/run_one.sh}{runone}
+\srcfile{Python}{scripts/run_matrix.py}{runmatrix}
+
+\subsection{Library patches}
+\srcfile{}{scripts/vol-async-wait.patch}{volasyncpatch}
+\srcfile{}{scripts/adios2-fsync.patch}{adiospatch}
+
+\subsection{Analysis scripts}
+\srcfile{Python}{analysis/plots_measured.py}{plotsmeasured}
+
+\twocolumn

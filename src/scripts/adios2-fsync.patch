@@ -1,0 +1,56 @@
+diff -ru adios2-orig/ADIOS2-2.12.1/source/adios2/engine/bp5/BP5Writer_EveryoneWrites_Async.cpp ADIOS2-2.12.1/source/adios2/engine/bp5/BP5Writer_EveryoneWrites_Async.cpp
+--- a/source/adios2/engine/bp5/BP5Writer_EveryoneWrites_Async.cpp	2026-04-29 00:58:00.000000000 +0000
++++ b/source/adios2/engine/bp5/BP5Writer_EveryoneWrites_Async.cpp	2026-10-05 15:50:24.046495871 +0000
+@@ -209,6 +209,7 @@
+             info->tokenChain->RecvToken();
+         }
+     }
++    info->tm->FlushFiles(); /* aio_bench patch */
+     info->tm->FinalizeSegment();
+     delete info->Data;
+     return 1;
+diff -ru adios2-orig/ADIOS2-2.12.1/source/adios2/engine/bp5/BP5Writer_TwoLevelShm_Async.cpp ADIOS2-2.12.1/source/adios2/engine/bp5/BP5Writer_TwoLevelShm_Async.cpp
+--- a/source/adios2/engine/bp5/BP5Writer_TwoLevelShm_Async.cpp	2026-04-29 00:58:00.000000000 +0000
++++ b/source/adios2/engine/bp5/BP5Writer_TwoLevelShm_Async.cpp	2026-10-05 15:50:34.154057010 +0000
+@@ -145,6 +145,7 @@
+         info->tokenChain->SendToken(nextWriterPos);
+         AsyncWriteThread_TwoLevelShm_Aggregator(info);
+         info->tokenChain->RecvToken();
++        info->tm->FlushFiles(); /* aio_bench patch */
+         info->tm->FinalizeSegment();
+     }
+     else
+diff -ru adios2-orig/ADIOS2-2.12.1/source/adios2/toolkit/transport/file/FilePOSIX.cpp ADIOS2-2.12.1/source/adios2/toolkit/transport/file/FilePOSIX.cpp
+--- a/source/adios2/toolkit/transport/file/FilePOSIX.cpp	2026-04-29 00:58:00.000000000 +0000
++++ b/source/adios2/toolkit/transport/file/FilePOSIX.cpp	2026-10-05 15:50:24.046161613 +0000
+@@ -10,6 +10,7 @@
+  *
+  */
+ #include "FilePOSIX.h"
++#include <cstdlib>
+ #include "adios2/helper/adiosLog.h"
+ #include "adios2/helper/adiosString.h"
+ 
+@@ -591,15 +592,13 @@
+ 
+ void FilePOSIX::Flush()
+ {
+-    /* Turn this off now because BP3/BP4 calls manager Flush and this syncing
+-     * slows down IO performance */
+-#if 0
+-#if (_POSIX_C_SOURCE >= 199309L || _XOPEN_SOURCE >= 500)
+-    fdatasync(m_FileDescriptor);
+-#else
+-    fsync(m_FileDescriptor)
+-#endif
+-#endif
++    /* aio_bench patch: BP3/BP4/BP5 never sync data; with ADIOS2_FSYNC=1 make
++     * every transport flush durable so that a completed step is on the device. */
++    static const bool doSync = getenv("ADIOS2_FSYNC") && atoi(getenv("ADIOS2_FSYNC"));
++    if (doSync && m_FileDescriptor >= 0)
++    {
++        fdatasync(m_FileDescriptor);
++    }
+ }
+ 
+ void FilePOSIX::Close()

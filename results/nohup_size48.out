@@ -1,0 +1,39 @@
+14:45:14 === phase sizelarge rep 0
+14:51:20 [size] rc=0  366.0s mpiio/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=35.474 final=0.000 total=354.740
+15:01:08 [size] rc=0  588.3s mpiio/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=53.784 final=42.414 total=580.197
+15:16:19 [size] rc=0  911.0s mpiio/sync/sleep[full] P=48 alone=44.340 comp=44.340 (x1.00) io/step=36.882 final=0.000 total=812.225
+15:35:54 [size] rc=0 1175.5s mpiio/async/sleep[full] P=48 alone=44.342 comp=44.341 (x1.00) io/step=58.837 final=46.878 total=1078.589
+15:51:38 [size] rc=0  943.9s mpiio/sync/dgemm[full] P=48 alone=44.408 comp=44.231 (x1.00) io/step=43.165 final=0.000 total=839.540
+16:12:29 [size] rc=0 1250.8s mpiio/async/dgemm[full] P=48 alone=44.227 comp=44.225 (x1.00) io/step=67.079 final=45.171 total=1150.005
+16:28:50 [size] rc=0  981.2s mpiio/sync/stream[full] P=48 alone=43.506 comp=43.535 (x1.00) io/step=44.801 final=0.000 total=877.098
+16:51:07 [size] rc=0 1336.8s mpiio/async/stream[full] P=48 alone=46.473 comp=45.030 (x0.97) io/step=81.068 final=47.179 total=1229.964
+17:07:03 [size] rc=0  956.3s mpiio/sync/heat[full] P=48 alone=43.779 comp=43.989 (x1.00) io/step=41.269 final=0.000 total=852.560
+17:28:52 [size] rc=0 1309.0s mpiio/async/heat[full] P=48 alone=43.302 comp=43.926 (x1.01) io/step=72.344 final=46.445 total=1208.979
+17:35:41 [size] rc=0  408.7s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=39.864 final=0.004 total=398.647
+17:40:11 [size] rc=0  270.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=23.825 final=26.694 total=264.878
+17:57:45 [size] rc=0 1053.6s hdf5/sync/sleep[full] P=48 alone=49.830 comp=49.830 (x1.00) io/step=44.487 final=0.026 total=943.197
+18:08:30 [size] rc=0  645.0s hdf5/async/sleep[full] P=48 alone=49.831 comp=49.831 (x1.00) io/step=1.866 final=23.498 total=540.407
+18:28:52 [size] rc=0 1222.3s hdf5/sync/dgemm[full] P=48 alone=49.485 comp=55.439 (x1.12) io/step=74.083 final=0.005 total=1105.955
+Traceback (most recent call last):
+  File "/mnt/fast/nlewis/async_io_analysis/src/scripts/run_matrix.py", line 226, in <module>
+    if p.returncode:
+                ^^^^
+  File "/mnt/fast/nlewis/async_io_analysis/src/scripts/run_matrix.py", line 196, in phase_sizelarge
+    run("size", "full", NP, io, mode, k, 1024, 10, tc, rep=rep)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/fast/nlewis/async_io_analysis/src/scripts/run_matrix.py", line 72, in run
+    p = subprocess.run(cmd, env=e, capture_output=True, text=True, timeout=7200)
+  File "/usr/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2154, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1268, in _check_timeout
+    raise TimeoutExpired(
+    ...<2 lines>...
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '['/mnt/fast/nlewis/async_io_analysis/src/scripts/run_one.sh', 'full', '48', 'hdf5', 'async', 'dgemm', '--mb', '1024', '--steps', '10', '--tcomp', '49.830', '--no-fsync', '--alone-reps', '2']' timed out after 7200 seconds

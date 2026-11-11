@@ -1,0 +1,12 @@
+\documentclass[tikz,border=0pt]{standalone}
+\usepackage{xcolor}
+\definecolor{brand}{HTML}{0B2545}
+\definecolor{accent}{HTML}{2A78D6}
+\definecolor{accent2}{HTML}{EB6834}
+\input{../logo}
+\begin{document}
+\begin{tikzpicture}
+  \fill[brand] (-3.55,-1.05) rectangle (2.85,1.30);
+  \pic {helicopter={white}{accent!70!white}{white}{accent2}};
+\end{tikzpicture}
+\end{document}

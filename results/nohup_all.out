@@ -1,0 +1,18 @@
+14:03:27 === phase sizelarge rep 0
+14:18:07 [size] rc=0  880.0s posix/sync/dgemm[full] P=48 alone=43.798 comp=43.989 (x1.00) io/step=37.322 final=0.000 total=784.745
+14:27:48 [size] rc=0  580.6s posix/async/dgemm[full] P=48 alone=37.255 comp=39.090 (x1.05) io/step=12.776 final=14.421 total=490.506
+14:44:07 [size] rc=0  979.4s posix/sync/stream[full] P=48 alone=42.957 comp=42.934 (x1.00) io/step=45.385 final=0.000 total=876.612
+14:56:50 [size] rc=0  762.4s posix/async/stream[full] P=48 alone=42.542 comp=43.196 (x1.02) io/step=23.172 final=13.041 total=661.730
+15:12:48 [size] rc=0  958.4s posix/sync/heat[full] P=48 alone=42.969 comp=43.032 (x1.00) io/step=42.546 final=0.000 total=855.753
+15:24:42 [size] rc=0  713.9s posix/async/heat[full] P=48 alone=42.786 comp=47.836 (x1.12) io/step=12.068 final=13.808 total=612.456
+15:26:09 [size] rc=0   86.6s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.704 final=0.001 total=77.030
+15:27:32 [size] rc=0   83.8s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=7.183 final=4.420 total=76.215
+15:31:01 [size] rc=0  208.6s adios2/sync/sleep[full] P=48 alone=9.630 comp=9.630 (x1.00) io/step=8.279 final=0.000 total=179.095
+15:33:33 [size] rc=0  152.2s adios2/async/sleep[full] P=48 alone=9.630 comp=9.630 (x1.00) io/step=1.884 final=8.864 total=123.976
+15:36:44 [size] rc=0  190.9s adios2/sync/dgemm[full] P=48 alone=9.589 comp=9.329 (x0.97) io/step=7.779 final=0.000 total=156.428
+15:39:50 [size] rc=0  185.7s adios2/async/dgemm[full] P=48 alone=9.690 comp=13.056 (x1.35) io/step=5.258 final=5.853 total=153.965
+15:43:08 [size] rc=0  198.0s adios2/sync/stream[full] P=48 alone=9.513 comp=9.790 (x1.03) io/step=7.173 final=0.000 total=165.202
+15:46:20 [size] rc=0  192.5s adios2/async/stream[full] P=48 alone=9.577 comp=12.338 (x1.29) io/step=5.637 final=6.366 total=159.463
+15:49:38 [size] rc=0  197.6s adios2/sync/heat[full] P=48 alone=9.531 comp=9.606 (x1.01) io/step=6.934 final=0.011 total=165.371
+15:52:44 [size] rc=0  185.6s adios2/async/heat[full] P=48 alone=9.530 comp=12.518 (x1.31) io/step=2.142 final=6.804 total=153.291
+15:52:44 === all requested phases done

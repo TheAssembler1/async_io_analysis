@@ -1,0 +1,118 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\section{Survey Methodology}
+\label{sec:survey}
+
+In this section, we describe how we selected and coded the evaluations in
+our survey, and we present our findings.
+
+\paragraph{Scope and search.} We searched for evaluations that quantify the
+benefit of asynchronous or overlapped I/O, together with the benchmarks those
+evaluations are built on. Starting from the HDF5 asynchronous VOL
+papers~\cite{tang2019async,tang2022async} and h5bench~\cite{li2021h5bench},
+we followed citations backward and forward. In addition, we searched IEEE
+Xplore, the ACM Digital Library, and Google Scholar for combinations of
+``asynchronous I/O,'' ``background thread,'' ``overlap,'' ``checkpoint,'' and
+``staging'' with the names of the major I/O libraries (HDF5, ADIOS and
+ADIOS2, PDC, MPI-IO, and POSIX). Because benchmark tools encode their
+methodology in code as much as in prose, we also inspected the released
+source code of h5bench, \texttt{adios\_iotest}, and DLIO.
+
+\paragraph{Inclusion criteria.} A source is included if it meets two
+criteria. First, it reports a quantitative evaluation of asynchronous I/O, or
+it is a benchmark designed to measure overlap. Second, the treatment of the
+application's computation phase can be determined from its text or released
+source code. We identified 26 sources, and 17 of them meet both criteria.
+These 17 works are listed in Table~\ref{tab:survey}. The other nine sources
+are library documentation, tutorials, and design papers whose evaluation has
+no interleaved computation. They provide context in
+Section~\ref{sec:related} but are not coded.
+
+\paragraph{Coding.} For each included work, we record the I/O library and
+five attributes:
+\begin{enumerate}
+  \item The \emph{compute phase}, which is \texttt{sleep}, a synthetic kernel
+        that consumes resources (busy), a real application, unspecified, or
+        none.
+  \item Whether the paper \emph{describes} what the compute phase does.
+  \item Whether it reports an \emph{application-side cost}, such as the
+        slowdown of the compute phase or the end-to-end time, rather than
+        only the observed I/O time.
+  \item Whether the \emph{core allocation} for background threads or servers
+        is stated.
+  \item Whether the results are validated on a \emph{real application} with
+        its own computation.
+\end{enumerate}
+Each attribute is marked as \yes{} (yes), \partly{} (partially or as a
+caveat), \no{} (no), \na{} (not applicable), or ? (not determinable from the
+sources we examined).
+
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}l l l c c c c@{}}
+\toprule
+Work & Stack & Compute phase & Described & App-side cost & Cores stated & Real app \\
+\midrule
+h5bench~\cite{li2021h5bench}                 & HDF5            & sleep                      & \yes & \no  & ?    & \no  \\
+Tang et al.\ '19~\cite{tang2019async}        & HDF5 async      & unspecified ``simulated''  & \no  & \no  & ?    & \no  \\
+Tang et al.\ '22~\cite{tang2022async}        & HDF5 async      & sleep                      & \yes & \no  & \partly & \partly \\
+Ravi et al.\ '23~\cite{ravi2023evaluating}   & HDF5 async      & sleep (30\,s)              & \yes & \no  & \partly & ?   \\
+Tang et al.\ '18~\cite{tang2018pdc}          & PDC             & sleep                      & \yes & \no  & \yes & \no  \\
+Tang et al.\ '19b~\cite{tang2019pdctune}     & PDC             & unspecified                & \no  & \no  & \yes & \partly \\
+Skel~\cite{logan2011skel}                    & ADIOS           & none (I/O-only skeleton)   & \na  & \no  & \na  & \no  \\
+\texttt{adios\_iotest}~\cite{adios2_iotest}  & ADIOS2          & sleep or busy loop         & \yes & \no  & \na  & \no  \\
+DLIO~\cite{devarajan2021dlio,dlio_github}    & DL loaders      & sleep (GPU-profiled)       & \yes & \partly & ?   & \no  \\
+Harmonia~\cite{kougkas2018harmonia}          & burst buffer    & unspecified math kernels   & \partly & ?   & ?    & \yes \\
+Gossman et al.\ '21~\cite{gossman2021aggregated} & VeloC / POSIX & none (flush timed alone)  & \na  & \no  & ?    & \no  \\
+\midrule
+Jain et al.\ '22~\cite{jain2022flashx}       & HDF5 async      & real (Flash-X)             & \yes & \yes & ?    & \yes \\
+Tseng et al.\ '21~\cite{tseng2021demystifying} & generic       & CPU/memory stressors       & \yes & \yes & ?    & \yes \\
+Tarraf et al.\ '24~\cite{tarraf2024behind}   & various         & real (WaComM++, HACC-IO)   & \yes & \yes & ?    & \yes \\
+IMB-IO~\cite{intel_imb_io}                   & MPI-IO          & calibrated CPU kernel      & \yes & \yes & \na  & \no  \\
+COMB~\cite{lawry2002comb}                    & MPI comm.       & busy work                  & \yes & \yes & \na  & \no  \\
+Denis \& Trahay~\cite{denis2016overlap}      & MPI comm.       & busy work                  & \yes & \yes & \na  & \no  \\
+\bottomrule
+\end{tabular}
+\caption{How surveyed evaluations treat the computation phase. Upper block:
+works whose compute phase cannot slow down (sleep), is unspecified, or is
+absent. Lower block: works whose compute phase consumes resources.
+\yes{}~yes, \partly{}~partially or as a caveat, \no{}~no, \na{}~not
+applicable, ?~not determinable from the sources examined.}
+\label{tab:survey}
+\end{table*}
+
+\paragraph{Findings.} Table~\ref{tab:survey} supports four observations.
+\begin{enumerate}
+  \item \textbf{Sleep is the most common treatment.} Of the 14 works that
+        evaluate I/O (excluding the two MPI communication benchmarks and the
+        generic study of Tseng et al.), 6 use \texttt{sleep}, 3 use a compute
+        phase they do not describe, and 2 have no compute phase. Only 3 works
+        (Jain et al., Tarraf et al., and IMB-IO) run the I/O against a
+        computation that can be slowed down by it.
+  \item \textbf{Sleep-based studies report I/O-side metrics.} Five of the six
+        sleep-based works report only I/O time or bandwidth. DLIO reports
+        end-to-end throughput, but with a sleeping compute phase it cannot
+        register a slowdown. Some works state explicitly that the reported
+        time ``excludes the computation time between the I/O
+        operations''~\cite{tang2019async}. None of the works in the upper
+        block reports the slowdown of the compute phase.
+  \item \textbf{Benchmark tools make sleep the default.} h5bench,
+        \texttt{adios\_iotest}, and DLIO all expose the compute phase as a
+        sleep duration. Studies that build on these tools inherit this
+        choice, often without stating it.
+  \item \textbf{Evaluations with real computation find smaller benefits and
+        identify contention as the cause.} All works in the lower block
+        report application-side costs. In addition, the works that evaluate
+        I/O attribute the reduced benefit to competition for CPU time,
+        memory bandwidth, or the
+        network~\cite{jain2022flashx,tseng2021demystifying,tarraf2024behind}.
+\end{enumerate}
+
+\summarybox{Sleep is the most common way to emulate computation in the
+evaluation of asynchronous I/O, and the most popular benchmark tools use it
+by default. Sleep-based studies report I/O-side metrics only, so they cannot
+observe a slower computation. The few evaluations that use real
+computation report smaller benefits and attribute the difference to
+contention.}

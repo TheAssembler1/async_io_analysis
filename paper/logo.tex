@@ -1,0 +1,32 @@
+% Helicopter logo (brand mark).  Usage inside a tikzpicture:
+%   \pic[scale=0.6] at (x,y) {helicopter={<body>}{<window>}{<rotor>}{<hub>}};
+% Colors: body, cockpit window, rotor blades, rotor hub / accent stripe.
+\tikzset{
+  pics/helicopter/.style n args={4}{code={
+    % main rotor: long tapered blade with a hub
+    \fill[#3] (-2.55,1.02) -- (2.55,1.02) -- (2.50,0.94) -- (-2.50,0.94) -- cycle;
+    \fill[#4] (-0.22,0.92) rectangle (0.22,1.06);
+    % mast
+    \fill[#1] (-0.07,0.60) rectangle (0.07,0.94);
+    % tail boom (tapered), ending in the tail rotor
+    \fill[#1] (-0.75,0.22) -- (-2.62,0.40) -- (-2.62,0.24) -- (-0.75,-0.12) -- cycle;
+    % tail rotor
+    \draw[#3, line width=1.1pt] (-2.86,0.33) circle (0.32);
+    \fill[#4] (-2.86,0.33) circle (0.08);
+    % cabin: teardrop body
+    \fill[#1] (1.25,-0.05) .. controls (1.25,0.55) and (0.55,0.70) .. (0.0,0.66)
+              .. controls (-0.55,0.62) and (-0.95,0.40) .. (-0.95,0.08)
+              .. controls (-0.95,-0.30) and (-0.55,-0.48) .. (0.0,-0.50)
+              .. controls (0.75,-0.52) and (1.25,-0.40) .. (1.25,-0.05) -- cycle;
+    % cockpit window
+    \fill[#2] (1.12,0.02) .. controls (1.10,0.42) and (0.70,0.55) .. (0.30,0.55)
+              -- (0.30,0.02) -- cycle;
+    % accent stripe along the body
+    \fill[#4] (-0.80,-0.10) -- (0.28,-0.10) -- (0.28,-0.20) -- (-0.75,-0.20) -- cycle;
+    % skids
+    \draw[#1, line width=1.3pt] (-0.35,-0.48) -- (-0.45,-0.80);
+    \draw[#1, line width=1.3pt] (0.55,-0.48) -- (0.65,-0.80);
+    \draw[#1, line width=1.6pt, line cap=round] (-0.95,-0.80) -- (1.15,-0.80)
+          .. controls (1.35,-0.80) and (1.42,-0.72) .. (1.45,-0.62);
+  }}
+}

@@ -1,0 +1,149 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+
+In this section, we review asynchronous I/O frameworks for HPC, describe how
+influential evaluations of these frameworks emulate the computation phase,
+and summarize the existing evidence on interference between background I/O
+and the application.
+
+\subsection{Asynchronous I/O frameworks for HPC}
+
+Asynchronous read and write operations have long been available through
+POSIX AIO and non-blocking MPI-IO, and early studies examined overlap
+strategies at the MPI-IO level~\cite{patrick2008overlap}. However, these
+interfaces do not cover non-data operations such as opening and closing
+files, and they require users to manage dependencies and byte offsets
+manually~\cite{tang2022async}. For this reason, high-level libraries have
+added their own mechanisms. Tang et al.\ introduced an HDF5 VOL connector
+that queues operations, tracks their dependencies as a directed acyclic graph
+(DAG), and executes them on a background thread managed by
+Argobots~\cite{tang2019async,tang2022async}. Damaris dedicates one or more
+cores per node to data management tasks, including asynchronous
+I/O~\cite{dorier2016damaris}. In addition, staging-based and server-based
+systems move data off the compute processes and persist it later.
+
+\subsection{Sleep-based compute emulation}
+
+Several influential evaluations of asynchronous I/O emulate the computation
+phase with \texttt{sleep()}. We describe them below.
+
+\paragraph{h5bench.} The h5bench suite~\cite{li2021h5bench} exposes an
+\texttt{EMULATED\_COMPUTE\_TIME\_PER\_TIMESTEP} parameter. After each
+iteration, the write and read kernels sleep for this duration to emulate the
+application's computation. Because h5bench is widely used as a standard HDF5
+benchmark, this choice propagates into many downstream studies.
+
+\paragraph{HDF5 asynchronous VOL.} In the TPDS evaluation of the HDF5
+asynchronous VOL connector~\cite{tang2022async}, all experiments write five
+timesteps with a sleep between them, sized so that asynchronous I/O can fully
+overlap with it. For the Nyx workload, all computation was replaced with
+sleep, so that the same data structures could be written without running the
+expensive simulation. The authors argue that the sleep durations, up to
+60\,s on Cori and 20\,s on Summit, are conservative relative to real VPIC
+compute phases.
+
+\paragraph{Modeling asynchronous I/O.} Ravi et al.~\cite{ravi2023evaluating}
+develop a model in which an asynchronous step costs
+$\max(t_{comp}, t_{io} - t_{comp}) + t_{\text{transact overhead}}$. Their
+VPIC-IO and BD-CATS-IO experiments use a 30-second sleep in place of the
+computation, and the emulated compute length is tuned manually to completely
+hide the asynchronous I/O time.
+
+\paragraph{Proactive Data Containers.} Proactive Data Containers (PDC) move
+data asynchronously through server processes that run on extra
+cores~\cite{tang2018pdc}. In the CCGrid'18 evaluation of PDC, the
+multi-timestep VPIC-IO runs ``added a sleep time, representing computations
+between writing data,'' and the client observes only the last write plus
+overhead. This yields up to a $5\times$ speedup over HDF5. The follow-up
+tuning study~\cite{tang2019pdctune} configures Nyx and BD-CATS-IO with
+``computation time (longer than I/O time)'' between timesteps, but does not
+describe what that computation is. However, it does state that PDC reserves
+one core per node for its servers.
+
+\paragraph{ADIOS.} The BP5 engine of ADIOS2 can write buffered data in the
+background after \texttt{EndStep}. It does so either naively or guided by
+\texttt{EnterComputationBlock} and \texttt{ExitComputationBlock} hints
+provided by the application~\cite{godoy2020adios2}. The ADIOS2 skeleton tool,
+\texttt{adios\_iotest}, expresses the compute phase of a workflow as a
+\texttt{sleep} command, or a \texttt{busy} loop, between I/O
+steps~\cite{adios2_iotest}. The earlier Skel generator produces ADIOS
+skeletal applications whose source contains ``the appropriate ADIOS I/O
+calls, data generation, and timers'' and no computation at
+all~\cite{logan2011skel}. It is important to note that the ADIOS developers
+themselves report mixed results for asynchronous writes in real codes. They
+observed a large gain for WarpX on Perlmutter, while on Frontier ``we don't
+see improvement over synchronous I/O''~\cite{podhorszki2024adiosslides}. In
+addition, the openPMD-api documentation warns that asynchronous writes ``can
+compete with MPI for communication resources, impacting the \emph{compute}
+performance of an application''~\cite{openpmd_adios2_docs}.
+
+\paragraph{Deep-learning I/O.} DLIO~\cite{devarajan2021dlio} emulates the I/O
+of scientific deep-learning training. Its per-step
+\texttt{computation\_time} is profiled on a specific accelerator, and its
+shipped configurations carry separate values for V100, A100, and H100 GPUs.
+This time is replayed by calling \texttt{time.sleep()}~\cite{dlio_github}.
+Because the DLIO reader workers prefetch the next batches while the main
+process sleeps, the benchmark cannot observe host-side contention between the
+input pipeline and the training step.
+
+\paragraph{POSIX-level and checkpointing systems.} Systems that flush
+checkpoints or burst-buffer contents in the background through POSIX are
+rarely evaluated against a running computation. Gossman et al.\ evaluate
+aggregation strategies for the asynchronous flush of VeloC by timing the
+flush phase alone~\cite{gossman2021aggregated,nicolae2019veloc}. Harmonia,
+an interference-aware burst-buffer scheduler, uses a synthetic benchmark
+whose computation phases are ``artificial math kernels,'' and the content of
+these kernels is not specified~\cite{kougkas2018harmonia}.
+
+\subsection{Evidence on interference and overlap}
+
+To the best of our knowledge, no study focuses specifically on sleep-based
+emulation as a methodological problem. Instead, the relevant evidence is
+distributed across several lines of work.
+
+\paragraph{Caveats within sleep-based studies.} The HDF5 asynchronous VOL
+paper notes that the background thread can affect application performance
+if all cores are used by the application, and recommends sparing resources
+for it~\cite{tang2022async}. It also explains that starting background
+execution while the main thread is active can cause the two threads to
+compete for shared resources, in the worst case serializing them. Ravi et
+al.\ limit the scope of their model to the absence of node-level
+oversubscription~\cite{ravi2023evaluating}. In addition, guidance from the
+HDF Group recommends that OpenMP applications leave one core per process for
+the background thread~\cite{hdfgroup2022sc}. In each case, the identified
+risk is one that a sleeping main thread cannot exhibit.
+
+\paragraph{Real-application evaluations.} Jain et al.\ evaluated HDF5
+asynchronous I/O in Flash-X on Summit~\cite{jain2022flashx}. They note that
+background threads compete for node resources and with communication, and
+they observe a measurable overhead from asynchronous I/O. This overhead is
+outweighed by the reduction in I/O time, which yields up to a $1.5\times$
+overall speedup. This figure is far more modest than the I/O-time speedups of
+roughly $4.5$ to $4.9\times$ reported with sleep-based
+emulation~\cite{tang2022async}, although the two metrics are not directly
+comparable.
+
+\paragraph{Interference studies.} Tseng et al.~\cite{tseng2021demystifying}
+study interference from background I/O directly. They argue that background
+I/O competes with the application for CPU time, memory bandwidth, and
+network bandwidth, and that multicore nodes make the problem worse because
+many I/O operations compete concurrently. Without accounting for this,
+asynchronous I/O may perform worse than blocking I/O. Their methodology
+stresses CPU and memory bandwidth separately and is validated on HACC.
+Tarraf et al.~\cite{tarraf2024behind} build on this observation. They note
+that developers often assume overlap will be sufficient regardless of the
+configuration, and they evaluate with real computation (WaComM++ and a
+modified HACC-IO) rather than sleep.
+
+\paragraph{Overlap benchmark methodology.} Benchmarks designed to measure
+overlap generally use computation that occupies the CPU. The non-blocking
+IMB-IO tests of the Intel MPI Benchmarks run a calibrated CPU-intensive
+kernel concurrently with the I/O, and compute the overlap as
+$(t_{pure} + t_{CPU} - t_{ovrl}) / \min(t_{pure}, t_{CPU})$~\cite{intel_imb_io}.
+Similarly, COMB~\cite{lawry2002comb} and the MPI overlap suite of Denis and
+Trahay~\cite{denis2016overlap} measure the overlap of communication and
+computation against busy work. These designs assume that the compute side
+can be slowed by the background activity, which is not possible with a
+sleep.

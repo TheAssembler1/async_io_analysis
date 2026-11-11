@@ -1,0 +1,157 @@
+% Part of main.tex; compile main.tex.
+\subsection{Compute surrogates}
+\label{sec:surrogates}
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}l l l r@{}}
+\toprule
+Surrogate & Resource exercised & Implementation & Lines \\
+\midrule
+sleep (baseline) & none & \texttt{nanosleep} & \clSleep \\
+spin & one core (ALU) & xorshift loop & \clSpin \\
+DGEMM & CPU, caches & OpenBLAS, $256^2$, 1 thread & \clDgemm \\
+STREAM & memory bandwidth & triad, $3\times 32$\,MiB/rank & \clStream \\
+halo & MPI, memory copies & 3-D 6-face exchange & \clHalo \\
+heat & CPU, memory, MPI & 7-pt Jacobi, $128^3$/rank & \clHeat \\
+GPU, host blocks & GPU only & FMA kernel, blocking sync & \clGpuKernel \\
+GPU, host spins & GPU, one core & FMA kernel, spin sync & \clGpuKernel \\
+\bottomrule
+\end{tabular}}
+\caption{Compute surrogates used in place of the computation phase. All are
+calibrated to the same standalone duration $t_{comp}$. Lines refer to
+Listing~\ref{lst:kernels} (CPU) and Listing~\ref{lst:gpu} (GPU).}
+\label{tab:surrogates}
+\end{table}
+
+Table~\ref{tab:surrogates} lists the compute surrogates. Each surrogate
+performs a fixed amount of \emph{work} rather than running for a fixed
+\emph{time}. A busy loop bounded by time, similar to \texttt{sleep}, would end
+on schedule no matter how much CPU time it received, and therefore could not
+reveal interference. Before the measured steps, the work of each surrogate is
+calibrated with all ranks running concurrently and no I/O in flight, so that
+its standalone duration matches $t_{comp}$. The calibration is shown in
+\srcCalibrate, and it is timed by \srcTimedMax. Because the work is linear in
+the number of units, the calibration targets at most 2\,s and scales the
+result to the full $t_{comp}$. The standalone time $t_{comp}^{alone}$ is then
+measured directly (\srcBaseline). As a result, differences in run time
+reflect interference rather than a change in the nominal compute length.
+
+The STREAM triad~\cite{mccalpin1995stream} uses arrays that together exceed
+the L3 cache. The heat mini-app is a 3-D Jacobi stencil with halo exchange,
+and it stands in for a real simulation. Its sweep is shown in \srcHeat, and
+its ghost-face exchange in \srcHeatHalo. The halo surrogate reuses the same
+six-neighbour exchange (\srcExchange) on a 3-D Cartesian decomposition
+(\srcCart). For the GPU surrogates, all ranks share the single GPU, and the
+output field is copied to the host at the end of each compute phase
+(\srcGpuRun). The wait mode of the host thread is selected in \srcGpuSetup.
+Fig.~\ref{fig:loop} shows the loop that all configurations share. The
+complete source code of the benchmark, its compute kernels, I/O backends, run
+scripts, library patches, and analysis scripts is reproduced in
+Appendix~\ref{app:code}.
+
+\begin{figure}[t]
+\begin{lstlisting}[language=C,numbers=none,xleftmargin=0pt]
+calibrate units so that kernel(units) takes t_comp
+  (all ranks concurrently, no I/O); measure t_alone
+backend->init()
+for (s = 0; s < steps; s++) {
+  a = now();
+  backend->compute_begin();      /* ADIOS2 Guided hint */
+  kernel_run(k, units);          /* fixed work, not time */
+  kernel_output(k, buf);         /* GPU: D2H copy      */
+  backend->compute_end();
+  b = now();
+  backend->issue(s, buf);        /* sync: write + wait;
+                    async: wait(s-1), then enqueue(s) */
+  MPI_Barrier();                 /* I/O phase ends on all ranks */
+  t_comp[s] = b - a;  t_io[s] = now() - b;
+}
+backend->wait(); backend->fini();  /* last step drains */
+\end{lstlisting}
+\caption{The epoch loop of \texttt{aio\_bench}, simplified from
+\srcLoop in the appendix. At most one asynchronous step is
+in flight, as in h5bench.}
+\label{fig:loop}
+\end{figure}
+
+\subsection{Workload}
+\label{sec:workload}
+The I/O pattern follows the write kernel of h5bench and VPIC-IO. In each
+timestep, every rank writes a contiguous block of a shared 1-D array of
+doubles. We vary the block from 16\,MiB to 1\,GiB per rank, which is 0.75\,GiB
+to 48\,GiB per timestep with 48 ranks, and we write 10 timesteps. As a result,
+a single run writes between 7.5\,GiB and 480\,GiB. The largest size is
+measured only for the two fastest backends, POSIX and ADIOS2, because MPI-IO
+and HDF5 need 30 to 40 minutes per run at that size. The main experiments
+use 256\,MiB per rank, which is 12\,GiB per step and 120\,GiB per run.
+
+Unless stated otherwise, $t_{comp}$ is set to $1.25\times$ the synchronous
+I/O time per step of an I/O-only run with the same backend, size, rank count,
+and number of steps. This I/O-only run is measured at the start of each
+experiment (\srcIoBaseline). With this choice, a sleep-based run can hide
+the I/O completely, which is the configuration used in prior
+work~\cite{tang2022async,ravi2023evaluating}. It is important to note that
+the ratio achieved in the experiments differs from 1.25, because the I/O
+time varies between runs. We therefore report the measured ratio for each
+backend in Section~\ref{sec:rq3}. In addition, each step ends with a barrier.
+Without it, ranks that finish their I/O early would charge the imbalance to
+the next compute phase, because communicating kernels wait for their
+neighbours.
+
+Each configuration is run once. The main experiment is defined in
+\srcPhaseMain, the size sweep in \srcPhaseSize and \srcPhaseSizeLarge, and
+each configuration is executed by \srcRunOne. Repeated runs are left to
+future work (Section~\ref{sec:future}). The only configurations that we ran
+twice are the I/O-only baselines, and they show how large the run-to-run
+variation is on this node. Across \VarPairs pairs, the two runs differ by a
+median of \VarMedian\%, by more than \VarPseventyfive\% for a quarter of
+them, and by up to \VarMax\%. This variation is mostly due to the different
+state of the page cache and of write-back between runs.
+Table~\ref{tab:codemap} in the appendix maps every mechanism described in
+this section to its implementation.
+
+\subsection{Metrics}
+\label{sec:metrics}
+We use the following metrics, where $n$ is the number of steps:
+\begin{itemize}
+  \item \textbf{Run time relative to the sleep prediction.} This metric
+        directly measures how much longer the application runs than a
+        sleep-based evaluation predicts. For a surrogate $k$, the sleep run
+        predicts an asynchronous run time of
+        $T_{async}(\texttt{sleep}) + n\,(t_{comp}^{alone}(k) -
+        t_{comp}^{alone}(\texttt{sleep}))$, which corrects for small
+        differences in the calibrated compute length. We divide the
+        observed asynchronous run time with $k$ by this prediction
+        (\srcExcess). Because
+        it compares asynchronous runs only, this metric does not depend on
+        the synchronous runs, whose I/O time varies between runs.
+  \item \textbf{End-to-end speedup} $S = T_{sync}/T_{async}$ over all
+        timesteps. This is the metric most prior work reports.
+  \item \textbf{Cost attribution.} We split the asynchronous run time into a
+        compute part $n\,t_{comp}^{\text{async}}$ and an exposed-I/O part
+        $T_{async} - n\,t_{comp}^{\text{async}}$. The exposed-I/O part
+        includes the waits for background I/O, the issue overhead, and the
+        final drain. We further split the compute part into the compute time
+        of the synchronous run, $n\,t_{comp}^{\text{sync}}$, and the
+        inflation, $n\,(t_{comp}^{\text{async}} - t_{comp}^{\text{sync}})$.
+        With perfect overlap and no interference, $T_{async}$ would equal
+        $n\,t_{comp}^{\text{sync}}$ plus one step of I/O. Any excess is
+        charged to the compute side (inflation) or to the I/O side (exposed
+        I/O).
+  \item \textbf{Compute slowdown}
+        $t_{comp}^{\text{async}} / t_{comp}^{\text{sync}}$. This is the
+        compute phase of the asynchronous run relative to that of the
+        synchronous run with the same configuration, in which no I/O runs
+        during the computation. We prefer this metric to the standalone
+        baseline $t_{comp}^{\text{alone}}$, because the turbo frequency of
+        the cores depends on whether they idle between compute phases, which
+        shifts the standalone time by up to about 6\% in our measurements.
+  \item \textbf{Exposed I/O}, which is the I/O time the application still
+        observes per step in asynchronous mode, relative to the synchronous
+        I/O time.
+\end{itemize}
+The per-step timings are reduced over ranks in \srcReduce, and the metrics
+are computed from the resulting CSV records in \srcMetrics.

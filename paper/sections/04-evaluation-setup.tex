@@ -1,0 +1,201 @@
+% Part of main.tex; compile main.tex.
+% ---------------------------------------------------------------------------
+\section{Evaluation}
+\label{sec:eval}
+
+\notebox{Scope}{All results in Section~\ref{sec:results} are measured on a
+single node, with one run per configuration. PDC is measured with one
+server in the main, ratio, size, and GPU experiments, but not at 48\,GiB per
+step, not at compute-to-I/O ratios above 1.25, and not in the core-allocation
+experiment (beyond the SMT-sibling placement of its clients). Its asynchronous
+run with the halo exchange did not complete (Section~\ref{sec:impl}).}
+
+In this section, we describe our research questions, the machine and
+software used in our experiments, and the asynchronous I/O implementations
+we evaluate. Sections~\ref{sec:surrogates} to~\ref{sec:metrics} then
+describe the compute surrogates, the workload, and the metrics, and
+Section~\ref{sec:results} presents the results.
+
+\subsection{Research questions}
+Our evaluation is guided by four research questions (RQs):
+\begin{itemize}
+  \item \textbf{RQ1:} How much longer does an application run than a
+        sleep-based evaluation predicts, when its computation consumes CPU
+        time, memory bandwidth, or network bandwidth?
+  \item \textbf{RQ2:} Where does the cost of interference appear, as a
+        slower computation or as exposed I/O, and which resource is
+        responsible for each asynchronous I/O implementation?
+  \item \textbf{RQ3:} How do conclusions drawn from sleep-based kernels
+        compare with those from a mini-application that combines
+        computation, memory traffic, and communication?
+  \item \textbf{RQ4:} How sensitive are the results to the core allocation
+        and to whether the computation runs on the CPU or the GPU?
+\end{itemize}
+
+\subsection{Machine setup}
+\label{sec:machine}
+All experiments run on a single dual-socket node. The hardware is described
+in Table~\ref{tab:hw}, and the software versions and configuration are
+described in Table~\ref{tab:sw}.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.27\columnwidth}p{0.68\columnwidth}@{}}
+\toprule
+Component & Configuration \\
+\midrule
+CPU & 2$\times$ Intel Xeon Gold 5418Y (Sapphire Rapids), 24 cores each,
+      2.0\,GHz base; 48 cores, 96 hardware threads (SMT on) \\
+Caches & 48\,KiB L1d and 2\,MiB L2 per core; 45\,MiB L3 per socket \\
+Memory & 256\,GB, two NUMA domains (128\,GB each); inter-node distance 21 \\
+GPU & NVIDIA RTX 5000 Ada Generation, 32\,GB, PCIe Gen4 $\times$16 \\
+Storage & 4$\times$ SanDisk PC SN8000S 4\,TB NVMe SSDs (PCIe Gen4 $\times$4 each)
+          in Linux MD RAID-0 (512\,KiB chunk), 16\,TB \\
+File system & ext4 (\texttt{stripe=512}, \texttt{relatime}) \\
+Page cache & bounded per run by a cgroup~v2 memory limit (footprint + 24\,GiB);
+             \texttt{vm.dirty\_ratio}=20, \texttt{dirty\_background\_ratio}=10 \\
+Other & transparent huge pages \texttt{madvise}; no other user jobs during runs \\
+\bottomrule
+\end{tabular}
+\caption{Hardware configuration of the test node.}
+\label{tab:hw}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}l l p{0.33\textwidth} p{0.33\textwidth}@{}}
+\toprule
+Software & Version & Build configuration & Runtime configuration \\
+\midrule
+Ubuntu / Linux & 26.04 LTS / 7.0.0-29 & distribution kernel & THP \texttt{madvise}; cgroup~v2 memory limit per run \\
+glibc & 2.43 & distribution & POSIX AIO: 1 helper thread (\texttt{aio\_init}) \\
+GCC & 15.2.0 & distribution & \texttt{-O2 -march=native} for the benchmark \\
+MPICH & 4.3.2 & distribution, \texttt{ch4:ucx}, Hydra & \texttt{MPI\_THREAD\_MULTIPLE}; explicit per-rank binding; ROMIO \texttt{cb\_config\_list=*:8}, \texttt{cb\_nodes=8}; async progress thread for non-blocking MPI-IO \\
+UCX / hwloc & 1.20.0 / 2.13.0 & distribution & defaults \\
+HDF5 & 1.14.6 & parallel, thread-safe, no compression, Release & MPI-IO VFD; collective data and metadata writes \\
+HDF5 async VOL & git \texttt{90fbba9} (2026-02-10) & \texttt{ENABLE\_WRITE\_MEMCPY=ON}; wait back-off patch (Sec.~\ref{sec:impl}) & \texttt{HDF5\_ASYNC\_EXE\_DCLOSE=1}; event sets, one step in flight \\
+Argobots & 1.2 & default & one execution stream per process (async VOL) \\
+ADIOS2 & 2.12.1 & MPI on; SST, Python, Fortran, compression off; opt-in fsync patch (inactive) & BP5; \texttt{AggregationType=TwoLevelShm}, \texttt{NumAggregators=8}; \texttt{AsyncWrite=Guided} (async) \\
+PDC & 0.7-398 (git \texttt{1ad9b312}) & MPI on; Mercury 2.2.0, libfabric 1.18.0 & \texttt{ofi+tcp}; 1 server on a reserved core; cache 24\,GiB \\
+OpenBLAS & 0.3.34 & \texttt{TARGET=SAPPHIRERAPIDS}, \texttt{USE\_THREAD=0} & single-threaded DGEMM \\
+CUDA & 13.3 (nvcc 13.3.73) & \texttt{-arch=native} (sm\_89) & driver 595.91.07; spin or blocking-sync scheduling \\
+Python & 3.14.4 & NumPy 2.5.2, Matplotlib 3.11.1 & analysis and plotting \\
+\bottomrule
+\end{tabular}
+\caption{Software configuration: versions, build options, and runtime settings
+used in all experiments. Build options are set in \srcBuildHdf (HDF5),
+\srcBuildVol (async VOL), and \srcBuildAdios (ADIOS2), and runtime settings in
+\srcMatrixEnv and \srcAsyncEnv.}
+\label{tab:sw}
+\end{table*}
+
+\paragraph{Process placement.} Unless stated otherwise, we run 48 MPI ranks.
+Each rank is bound to one hardware thread on a distinct physical core, and
+the ranks alternate between the two sockets. Background I/O threads inherit
+the binding of their rank, and therefore share its hardware thread. We call
+this configuration \emph{fully subscribed}. For RQ4, we also evaluate two
+other placements. In the \emph{SMT sibling} placement, each rank is bound to
+both hardware threads of its core. In the \emph{core reserved} placement,
+we run 24 ranks, each bound to two physical cores on the same socket. We
+also ran an unpinned placement, in which the operating system decides where
+each thread runs, but we exclude it. Without pinning, threads were placed
+differently during calibration and during the measurement, so the compute
+phases reached only 30\% to 75\% of their target length. The GPU experiments use 4 ranks that share the single GPU. The binding
+lists are constructed in \srcBinding.
+
+\paragraph{Storage behavior.} Due to the 256\,GB of memory on our node, the
+page cache could absorb most writes and turn the I/O into a memory copy. In
+contrast, the client of a parallel file system can cache only a small part
+of a checkpoint. For this reason, we run each experiment in a cgroup~v2
+scope whose memory limit is the memory footprint of the benchmark plus
+24\,GiB. Because page-cache pages are charged to the cgroup, this limit
+bounds the cache available to a run. Once the cache is full, writers stall
+in memory reclaim until dirty pages have been written back to the RAID
+array. It is important to note that dirty-page throttling itself remains
+global, at 20\% and 10\% of the memory, because the \texttt{io} controller is
+not delegated to user cgroups on this system. In addition, no backend calls
+\texttt{fsync} after each step. The HDF5 asynchronous VOL executes file
+flushes synchronously by design, so per-step durability would make it
+blocking. Every run starts with an empty output directory after a
+\texttt{sync}, as shown in \srcCgroup, and the memory limit is computed in
+\srcMemMax. As a result, small outputs of up to tens of gigabytes per run
+complete largely at memory speed, as they would with a burst buffer, while
+larger outputs are limited by write-back. The size sweep in
+Section~\ref{sec:size} covers both regimes.
+
+\subsection{Asynchronous I/O implementations}
+\label{sec:impl}
+Each backend has a blocking and an asynchronous mode behind a common
+interface, \texttt{io\_backend}, shown in \srcHeaderBackend. All runs
+initialize MPI with \texttt{MPI\_THREAD\_MULTIPLE} (\srcThreadInit). We
+describe each backend below.
+\begin{itemize}
+  \item \textbf{POSIX.} The blocking mode writes with \texttt{pwrite} to a
+        shared file per step, at the offset of the rank. The asynchronous
+        mode copies the buffer to a staging buffer and writes it with POSIX
+        AIO (\texttt{aio\_write}), which is executed by a glibc helper
+        thread. The write path is shown in \srcPosixIssue, and the
+        completion in \srcPosixWait.
+  \item \textbf{MPI-IO.} The blocking mode writes one shared file per step
+        with the collective \texttt{MPI\_File\_write\_at\_all}. The
+        asynchronous mode writes a staged copy of the buffer with the
+        non-blocking \texttt{MPI\_File\_iwrite\_at\_all} (\srcMpiioIssue).
+        ROMIO uses collective buffering with 8 aggregators on the node
+        (\texttt{cb\_config\_list=*:8}), which matches the ADIOS2 setting.
+        Because a non-blocking collective write only advances inside MPI
+        calls, the asynchronous mode enables the progress thread of MPICH
+        (\texttt{MPIR\_CVAR\_ASYNC\_PROGRESS=1}). Similar to the other
+        background engines, this thread inherits the binding of its rank.
+  \item \textbf{HDF5.} Both modes write one shared file with a new dataset
+        per step, using collective \texttt{H5Dwrite} and collective
+        metadata. The asynchronous mode uses \texttt{H5Dwrite\_async} with
+        event sets, which are executed by one Argobots background thread per
+        process with write-buffer copying enabled~\cite{tang2022async}.
+        Following the guidance of the connector for periodic
+        output~\cite{volasync_docs}, we set
+        \texttt{HDF5\_ASYNC\_EXE\_DCLOSE=1}, so that background execution
+        starts when the dataset is closed instead of after an idle-detection
+        period. The write path is shown in \srcHdfIssue, the wait in
+        \srcHdfWait, and the connector selection in \srcAsyncEnv.
+  \item \textbf{ADIOS2.} The blocking mode uses the BP5 engine with
+        \texttt{AsyncWrite} disabled, and the asynchronous mode uses
+        \texttt{AsyncWrite=Guided}, in which the compute phase is bracketed
+        with computation-block hints~\cite{godoy2020adios2}. Both modes use
+        two-level shared-memory aggregation with 8 aggregators. With the
+        default of one aggregator per node, a single process writes all of
+        the data of the node, which limits BP5 to about a third of the
+        bandwidth of POSIX on our single node. The engine setup is shown in
+        \srcBpInit, the per-step path in \srcBpIssue, the hints in
+        \srcBpHints, and the aggregation settings in \srcMatrixEnv.
+  \item \textbf{PDC.} The PDC backend uses synchronous or asynchronous
+        region transfers, with one PDC server per node on a reserved
+        core~\cite{tang2018pdc} (\srcPdcIssue). Following the PDC
+        deployment model, we run 1 server on a reserved core and 47 client
+        ranks on the remaining cores. The server cache is capped at
+        24\,GiB, the same budget as the page cache of the other backends,
+        and the cache is flushed before the timed run ends. Each client
+        rank runs a Mercury progress thread during asynchronous transfers,
+        which polls the network with a 1\,ms pause between polls. The
+        asynchronous run with the halo exchange hung in two attempts and
+        was stopped after 30 minutes each time (\srcRunPdc), so PDC has no
+        halo result.
+\end{itemize}
+
+\paragraph{A wait-path defect in the HDF5 asynchronous VOL.} In early
+runs, asynchronous HDF5 was slower than synchronous HDF5 even with no
+computation, and the waits were quantized in multiples of one second. By
+tracing system calls, we found that \texttt{H5VL\_async\_request\_wait},
+which is invoked by \texttt{H5ESwait}, sleeps for a full second
+(\texttt{usleep(1000000)}) whenever it fails to reacquire the global lock of
+HDF5 from the background thread. In addition, it polls the task status every
+100\,ms. This penalty applies only when the application waits while
+background I/O is still running. Because this happens more often under
+contention than with \texttt{sleep}, the unpatched connector would
+exaggerate the effect we study. We therefore reduce both intervals to 1\,ms.
+With this change, asynchronous HDF5 without computation performs on par
+with synchronous HDF5. The patch is shown in \srcVolPatch, and it is applied
+by the build script (\srcBuildVol).

@@ -1,0 +1,15 @@
+16:59:53 === phase io0
+16:59:56 [io0] rc=0    2.6s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.074 final=0.000 total=0.369
+16:59:59 [io0] rc=0    3.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.086 final=0.007 total=0.420
+17:00:03 [io0] rc=0    3.9s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.456 final=0.649 total=1.328
+17:00:16 [io0] rc=0   12.8s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.640 final=2.082 total=10.255
+17:00:19 [io0] rc=0    3.3s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.084 final=0.000 total=0.418
+17:00:22 [io0] rc=0    3.2s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.089 final=0.083 total=0.509
+17:00:27 [io0] rc=0    4.7s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.253 final=0.000 total=1.249
+17:00:32 [io0] rc=0    5.3s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.462 final=0.270 total=1.866
+17:00:43 [io0] rc=0   11.1s hdf5/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=3.145 final=7.317 total=8.137
+17:01:01 [io0] rc=0   17.2s hdf5/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.685 final=5.116 total=14.498
+17:01:05 [io0] rc=0    4.0s adios2/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.266 final=0.000 total=1.329
+17:01:09 [io0] rc=0    4.7s adios2/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=0.293 final=0.247 total=1.685
+17:01:26 [io0] rc=0   16.5s posix/sync/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=2.821 final=0.000 total=12.288
+17:01:37 [io0] rc=0   11.2s posix/async/none[full] P=48 alone=0.000 comp=0.000 (x0.00) io/step=1.601 final=0.687 total=6.200

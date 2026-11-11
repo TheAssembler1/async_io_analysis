@@ -1,0 +1,18 @@
+16:02:29 === phase gpu rep 0
+16:03:46 [gpu] rc=0   77.2s posix/sync/gpu-block[full] P=4 alone=3.734 comp=3.765 (x1.01) io/step=1.369 final=0.000 total=51.005
+16:04:51 [gpu] rc=0   64.9s posix/async/gpu-block[full] P=4 alone=3.622 comp=3.701 (x1.02) io/step=0.155 final=1.220 total=39.556
+16:06:11 [gpu] rc=0   79.7s posix/sync/gpu-spin[full] P=4 alone=3.718 comp=3.689 (x0.99) io/step=1.397 final=0.000 total=50.521
+16:07:20 [gpu] rc=0   69.4s posix/async/gpu-spin[full] P=4 alone=3.729 comp=3.732 (x1.00) io/step=0.212 final=1.124 total=40.076
+16:08:26 [gpu] rc=0   66.3s mpiio/sync/gpu-block[full] P=4 alone=2.719 comp=2.723 (x1.00) io/step=1.663 final=0.000 total=43.354
+16:09:51 [gpu] rc=0   84.9s mpiio/async/gpu-block[full] P=4 alone=2.713 comp=2.703 (x1.00) io/step=3.353 final=2.635 total=60.363
+16:10:59 [gpu] rc=0   67.6s mpiio/sync/gpu-spin[full] P=4 alone=2.770 comp=2.752 (x0.99) io/step=1.546 final=0.000 total=42.632
+16:12:23 [gpu] rc=0   84.1s mpiio/async/gpu-spin[full] P=4 alone=2.848 comp=2.708 (x0.95) io/step=2.754 final=2.553 total=56.322
+16:13:32 [gpu] rc=0   69.1s hdf5/sync/gpu-block[full] P=4 alone=2.757 comp=2.789 (x1.01) io/step=1.988 final=0.047 total=47.080
+16:14:36 [gpu] rc=0   64.0s hdf5/async/gpu-block[full] P=4 alone=2.702 comp=2.871 (x1.06) io/step=0.791 final=1.585 total=37.869
+16:15:45 [gpu] rc=0   69.5s hdf5/sync/gpu-spin[full] P=4 alone=2.761 comp=2.744 (x0.99) io/step=1.706 final=0.001 total=44.076
+16:16:46 [gpu] rc=0   60.2s hdf5/async/gpu-spin[full] P=4 alone=2.762 comp=2.769 (x1.00) io/step=0.665 final=1.417 total=35.126
+16:17:18 [gpu] rc=0   32.5s adios2/sync/gpu-block[full] P=4 alone=0.743 comp=0.584 (x0.79) io/step=1.265 final=0.000 total=18.183
+16:17:52 [gpu] rc=0   34.2s adios2/async/gpu-block[full] P=4 alone=0.745 comp=0.863 (x1.16) io/step=1.234 final=0.447 total=20.801
+16:18:25 [gpu] rc=0   32.9s adios2/sync/gpu-spin[full] P=4 alone=0.720 comp=0.715 (x0.99) io/step=0.865 final=0.000 total=15.627
+16:19:01 [gpu] rc=0   35.8s adios2/async/gpu-spin[full] P=4 alone=0.721 comp=0.740 (x1.03) io/step=1.157 final=0.382 total=18.938
+16:19:01 === all requested phases done

@@ -1,0 +1,155 @@
+% Part of main.tex; compile main.tex.
+\subsection{Discussion}
+\label{sec:discussion}
+In this section, we discuss when \texttt{sleep} is an acceptable stand-in for
+computation, the practical implications of our results, and the threats to
+their validity.
+
+Our measurements show that \texttt{sleep} is a fair stand-in for computation
+only under narrow conditions. The background engine must have a low CPU
+demand, as POSIX AIO does. In addition, the computation must neither
+communicate nor compete for the hardware thread of the engine, and the host
+thread must actually be idle. Even under these conditions, the halo exchange
+and the heat mini-app make the compute phase of POSIX AIO \SlowPosixHalo and
+\SlowPosixHeat$\times$ longer. For engines that perform real work on the
+hardware thread of the application, such as the HDF5 asynchronous VOL and
+ADIOS2 in Guided mode, the application runs up to \ExcmaxpctHdf\% and
+\ExcmaxpctAdios\% longer than \texttt{sleep} predicts. The same holds for
+engines that need CPU time to progress, such as non-blocking MPI-IO, which
+runs up to \ExcmaxpctMpiio\% longer. Moving the server of the DMS to a
+reserved core is not sufficient either: PDC runs up to \ExcmaxpctPdc\%
+longer, because its clients poll for progress on the cores of the
+application. Furthermore, the advantage of
+\texttt{sleep} persists across compute-to-I/O ratios and across output
+sizes up to 480\,GiB per run.
+
+Three practical observations follow from these results. First, the same
+contention appears in different places for different engines. It appears in
+the compute phase for POSIX, HDF5, and ADIOS2, and as exposed I/O for MPI-IO.
+Reporting only the I/O time hides the former, and reporting only the compute
+time hides the latter, while the end-to-end time captures both. Second,
+process placement matters more for asynchronous I/O than the literature
+suggests. Reserving hardware threads for the background engine recovers part
+of the loss for HDF5 and turns non-blocking MPI-IO from a loss into a small
+gain, but it costs compute resources. Third, GPU-resident computation is the
+case in which \texttt{sleep} comes closest to reality. With pinned ranks, the
+asynchronous run time with a GPU kernel matched the \texttt{sleep}
+prediction within a few percent for POSIX, HDF5, and MPI-IO, while the same
+ranks running DGEMM on the CPU ran up to \GpuexcpctHdfDgemm\% longer.
+However, ADIOS2 still ran longer than predicted, and \texttt{sleep} still
+inflated the speedups by slowing down the synchronous baseline.
+
+\paragraph{Threats to validity.}
+\label{sec:threats}
+Our platform is a single node with local NVMe storage. It reproduces
+contention for cores and memory bandwidth, but not contention for the
+network links that MPI traffic and parallel file system traffic share. Our
+halo surrogate approximates this contention only with intra-node
+shared-memory transfers. In addition, we emulate a small client cache with a
+cgroup memory limit rather than with the client of a real parallel file
+system, and 4 ranks share one GPU in the GPU experiments, whereas production
+GPU nodes typically have one GPU per rank.
+
+Every configuration was run once, and the I/O time on this node varies
+considerably between runs, with a median difference of \VarMedian\% and up
+to \VarMax\% between two I/O-only runs (Section~\ref{sec:workload}). It is
+important to note one systematic case. In the main experiment, the
+synchronous run with \texttt{sleep} had the slowest synchronous I/O of all
+surrogates for every backend: \SynciosleepPosix\,s per step for POSIX,
+compared to \SynciootherminPosix to \SyncioothermaxPosix\,s for the other
+surrogates, and \SynciosleepAdios\,s for ADIOS2, compared to
+\SynciootherminAdios to \SyncioothermaxAdios\,s. Because this run was the
+first one after the I/O-only baseline, we repeated the synchronous runs with
+spin and \texttt{sleep} in the opposite order, with spin first. The result
+did not change. The synchronous I/O after a \texttt{sleep} phase was again
+slower in every backend, by \RecheckpctPosix\% for POSIX, \RecheckpctMpiio\%
+for MPI-IO, \RecheckpctHdf\% for HDF5, and \RecheckpctAdios\% for ADIOS2.
+Therefore, this is not an ordering effect. Instead, synchronous I/O appears
+to run slower after the cores have been idle, possibly because of the power
+states and clock frequency of idle cores, which we cannot inspect without
+administrator access. This is a second way in which \texttt{sleep} distorts
+an evaluation: besides hiding contention in the asynchronous run, it slows
+down the synchronous baseline and thereby inflates the speedup. For this
+reason, we
+base our main comparison on asynchronous run times, which do not depend on
+the synchronous runs (Section~\ref{sec:metrics}). Individual values of this
+comparison are also uncertain, and effects of a few percent, such as
+\ExcpctAdiosHeat\% for ADIOS2 with the heat mini-app, are within the
+run-to-run variation. Therefore, our conclusions rest on the pattern rather
+than on individual values. The application runs longer than \texttt{sleep}
+predicts in \ExcLongerFive of \ExcN configurations, and the difference has the
+same sign across backends, ratios, sizes, and placements, which run-to-run
+variation would not produce systematically.
+
+\paragraph{Future work.}
+\label{sec:future}
+We see two kinds of future work. The first strengthens the measurements in
+this paper:
+\begin{itemize}
+  \item \textbf{Repeated runs.} Repeating each configuration would provide
+        confidence intervals for every value and settle the single-run
+        anomalies we note, such as ADIOS2 under different placements.
+  \item \textbf{Idle-core effects.} Measuring core frequencies and power
+        states would identify why synchronous I/O runs slower after a
+        \texttt{sleep} phase.
+  \item \textbf{Multi-node systems and larger outputs.} Running on a
+        multi-node system with a parallel file system would expose
+        contention for the network links that MPI and file system traffic
+        share, which a single node cannot. In addition, outputs at the
+        terabyte scale of production checkpoints would show whether the
+        effect continues to grow with the output size.
+  \item \textbf{PDC with more servers and larger outputs.} We measured PDC
+        with one server, in the main, ratio, size, and GPU experiments, but
+        not at 47\,GiB per step or at ratios above 1.25, because each run
+        writes through a single server. Varying the number of servers,
+        which would also make these runs affordable, and finding the cause
+        of the hang with the halo exchange would complete its picture. In
+        addition, a blocking or event-driven progress thread in the PDC client would likely remove most of the
+        interference we measured.
+\end{itemize}
+
+The second kind opens new research directions:
+\begin{itemize}
+  \item \textbf{Collective, independent, and single-rank I/O.} The
+        interference may depend on how the data is written. Comparing
+        collective I/O, independent I/O, and I/O funneled through a single
+        rank would show which access strategy interferes least with each
+        type of computation.
+  \item \textbf{Sensitivity of data management systems to the computational
+        kernel.} Our results suggest that each data management system (DMS)
+        is sensitive to a different resource. For example, the HDF5
+        asynchronous VOL slowed down every working surrogate, while POSIX
+        AIO mainly affected communicating ones. A systematic study of this
+        sensitivity across compute-bound, memory-bound, and
+        communication-bound kernels would characterize each DMS by the
+        workloads it suits.
+  \item \textbf{GPU data movement.} In our GPU experiments, the output is
+        copied from the device to the host before it is written. The cost
+        of this copy, and its interference with the background I/O, may
+        depend on whether the GPU kernel is compute-bound or memory-bound,
+        and on whether the data is moved to or from a running GPU kernel.
+        In addition, GPUDirect Storage (GDS) writes directly from GPU memory
+        to storage, which removes the host copy but may introduce its own
+        interference with the GPU kernel and with the PCIe traffic of the
+        application.
+\end{itemize}
+
+These directions lead to a practical question that clients of HPC systems
+ask, and to a research question that follows from it.
+\begin{itemize}
+  \item \textbf{Client question.} \emph{My workload is network-bound,
+        compute-bound, or memory-bound, and I want to overlap its I/O.
+        Which DMS will give me the largest speedup?} Our results show that
+        the answer depends on the workload: for a communication-heavy code,
+        POSIX AIO lost less benefit than the HDF5 asynchronous VOL and
+        ADIOS2, while non-blocking MPI-IO required a reserved core to help
+        at all.
+  \item \textbf{Research question.} \emph{Can a DMS take the
+        characteristics of the client workload into account to improve the
+        speedup of asynchronous I/O?} For example, a DMS could schedule
+        background I/O when the computation is not using the resource the
+        I/O needs, select its threading and aggregation strategy based on
+        whether the workload is network-bound, compute-bound, or
+        memory-bound, or reserve hardware threads only when the expected
+        gain exceeds the loss of compute resources.
+\end{itemize}

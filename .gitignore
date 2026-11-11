@@ -1,0 +1,16 @@
+# third-party sources and builds (rebuild with src/scripts/build_deps.sh)
+deps/
+# build products
+*.o
+src/aio_bench
+src/aio_bench_pdc
+__pycache__/
+# LaTeX intermediates
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+!results/*.log
+!results/*.out
