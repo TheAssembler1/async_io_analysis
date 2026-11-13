@@ -1,13 +1,13 @@
 #!/bin/bash
 # Build Mercury, PDC, aio_bench_pdc and progress_test on Perlmutter (run on a login node).
 #   build.sh [mercury] [pdc] [bench]       default: all three
-# MERCURY_REF (v2.4.0), PDC_REPO, PDC_REF: which sources to build. The default PDC
+# MERCURY_REF (v2.4.1; 2.4.0 does not build against libfabric 2.x), PDC_REPO, PDC_REF: which sources to build. The default PDC
 # branch is the one that sets up ofi+cxi on Perlmutter (cxi0:<pid> endpoints and
 # the CXI service/VNI lookup); stock PDC builds ofi+cxi://<hostname>:<port>.
 # libfabric is the system one (cray-libfabric, with the cxi and tcp providers).
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-MERCURY_REF=${MERCURY_REF:-v2.4.0}
+MERCURY_REF=${MERCURY_REF:-v2.4.1}
 PDC_REPO=${PDC_REPO:-https://github.com/hpc-io/pdc.git}
 PDC_REF=${PDC_REF:-fix/perlmutter-cxi-defaults}
 J=${J:-16}
@@ -23,7 +23,7 @@ build_mercury() {
   git -C "$SRC/mercury" submodule update -q --init --recursive
   rm -rf "$SRC/build-mercury"
   cmake -S "$SRC/mercury" -B "$SRC/build-mercury" -DCMAKE_C_COMPILER=cc -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX="$MERCURY_DIR" -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON \
+    -DCMAKE_INSTALL_PREFIX="$MERCURY_DIR" -DBUILD_SHARED_LIBS=ON \
     -DBUILD_TESTING=OFF -DMERCURY_USE_BOOST_PP=ON -DMERCURY_USE_CHECKSUMS=OFF \
     -DNA_USE_OFI=ON -DNA_USE_SM=ON
   cmake --build "$SRC/build-mercury" -j"$J" && cmake --install "$SRC/build-mercury"
