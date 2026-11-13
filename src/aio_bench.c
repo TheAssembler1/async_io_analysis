@@ -92,7 +92,7 @@ static void usage(void)
 {
     fprintf(stderr,
             "usage: aio_bench --io {posix|mpiio|hdf5|adios2|pdc|none} --mode {sync|async}\n"
-            "                 --kernel {none|sleep|spin|dgemm|stream|halo|heat|gpu-spin|gpu-block}\n"
+            "                 --kernel {none|sleep|spin|dgemm|stream|halo|heat|net|gpu-spin|gpu-block}\n"
             "                 [--tcomp s=2] [--mb MiB/rank=64] [--steps n=5] [--dir path=.]\n"
             "                 [--units u] [--tag label] [--csv file] [--no-fsync]\n"
             "                 [--alone-reps n=3]\n");

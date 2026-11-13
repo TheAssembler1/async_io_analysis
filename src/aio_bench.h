@@ -49,6 +49,7 @@ typedef enum {
     K_HEAT,      /* 3-D Jacobi stencil + halo exchange: mini-app */
     K_GPU_SPIN,  /* GPU FMA kernel, host spin-waits (CUDA default) */
     K_GPU_BLOCK, /* GPU FMA kernel, host blocks in the driver */
+    K_NET,       /* ring shift of 8 MiB messages to the next node: NIC bandwidth */
     K_NKERNELS
 } kernel_t;
 

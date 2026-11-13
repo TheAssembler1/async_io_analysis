@@ -31,8 +31,9 @@ aio_bench: $(OBJS)
 PDC_DIR     ?= /mnt/fast/nlewis/workspace/install/pdc
 MERCURY_DIR ?= /mnt/fast/nlewis/workspace/install/mercury
 PDC_OBJS = $(filter-out io_pdc.o,$(OBJS)) io_pdc_on.o
+PDC_API := $(shell grep -qs PDCobj_create_coll $(PDC_DIR)/include/*.h && echo -DPDC_COLL_API)
 io_pdc_on.o: io_pdc.c aio_bench.h
-	$(CC) $(CFLAGS) -DHAVE_PDC -I$(PDC_DIR)/include -I$(MERCURY_DIR)/include -c $< -o $@
+	$(CC) $(CFLAGS) -DHAVE_PDC $(PDC_API) -I$(PDC_DIR)/include -I$(MERCURY_DIR)/include -c $< -o $@
 pdc: $(PDC_OBJS)
 	$(CC) -o aio_bench_pdc $^ $(LDFLAGS) $(LIBS) -Wl,--disable-new-dtags -L$(PDC_DIR)/lib -Wl,-rpath,$(PDC_DIR)/lib \
 	  -L$(MERCURY_DIR)/lib -Wl,-rpath,$(MERCURY_DIR)/lib -lpdc -lpdc_commons -lmercury

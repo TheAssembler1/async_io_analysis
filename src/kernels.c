@@ -10,7 +10,7 @@
 #include <time.h>
 
 const char *kernel_names[K_NKERNELS] = {
-    "none", "sleep", "spin", "dgemm", "stream", "halo", "heat", "gpu-spin", "gpu-block"};
+    "none", "sleep", "spin", "dgemm", "stream", "halo", "heat", "gpu-spin", "gpu-block", "net"};
 
 int kernel_parse(const char *s)
 {
@@ -144,6 +144,38 @@ static void run_heat(double units)
     }
 }
 
+/* ---- net: every rank sends 8 MiB to the same local rank on the next node
+ * and receives from the previous one, so with more than one node all of it
+ * crosses the interconnect and every NIC sends and receives at once.  On a
+ * single node the partner is half the ranks away (shared memory). */
+#define NET_N (1L << 20)
+static double *nsend, *nrecv;
+static int net_to, net_from;
+static MPI_Comm net_comm;
+
+static void setup_net(MPI_Comm comm)
+{
+    MPI_Comm node;
+    int rank, n, per_node, shift;
+    MPI_Comm_dup(comm, &net_comm);
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &n);
+    MPI_Comm_split_type(comm, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &node);
+    MPI_Comm_size(node, &per_node);
+    MPI_Comm_free(&node);
+    shift = per_node < n ? per_node : n / 2;
+    net_to = (rank + shift) % n;
+    net_from = (rank - shift + n) % n;
+}
+
+static void run_net(double units)
+{
+    long n = (long)(units + 0.5);
+    for (long i = 0; i < n; i++)
+        MPI_Sendrecv(nsend, NET_N, MPI_DOUBLE, net_to, 7, nrecv, NET_N, MPI_DOUBLE, net_from, 7,
+                     net_comm, MPI_STATUS_IGNORE);
+}
+
 static double *xalloc(size_t n)
 {
     double *p;
@@ -169,6 +201,10 @@ void kernel_setup(kernel_t k, MPI_Comm comm, size_t io_bytes)
         setup_cart(comm);
         u0 = xalloc((size_t)HS * HS * HS); u1 = xalloc((size_t)HS * HS * HS);
         fsend = xalloc(6 * HN * HN); frecv = xalloc(6 * HN * HN);
+        break;
+    case K_NET:
+        setup_net(comm);
+        nsend = xalloc(NET_N); nrecv = xalloc(NET_N);
         break;
     case K_GPU_SPIN:
     case K_GPU_BLOCK:
@@ -196,6 +232,7 @@ void kernel_run(kernel_t k, double units)
     case K_STREAM: run_stream(units); break;
     case K_HALO:   run_halo(units); break;
     case K_HEAT:   run_heat(units); break;
+    case K_NET:    run_net(units); break;
     case K_GPU_SPIN:
     case K_GPU_BLOCK: gpu_run(units); break;
     default: break;
