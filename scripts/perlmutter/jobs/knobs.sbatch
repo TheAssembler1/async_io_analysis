@@ -15,7 +15,13 @@
 # NP (32), MB (256), STEPS (5), RATIO (1.25), REPS (3), KERNELS, HGS (ofi+cxi),
 # LOCATIONS (remote), GRID (1: timeout {0,1,10,100} x sleep {0,100,1000,10000} us)
 set -u
-PM_HERE=${PM_SCRIPTS:-$SLURM_SUBMIT_DIR}
+# sbatch runs a copy of this file; find scripts/perlmutter from where it was submitted.
+for PM_HERE in "${PM_SCRIPTS:-}" "$SLURM_SUBMIT_DIR" "$SLURM_SUBMIT_DIR/scripts/perlmutter" "$SLURM_SUBMIT_DIR/.."; do
+  [ -f "$PM_HERE/common.sh" ] && break
+done
+[ -f "$PM_HERE/common.sh" ] || { echo "scripts/perlmutter not found: submit from the repo root or set PM_SCRIPTS" >&2; exit 1; }
+export PM_SCRIPTS=$(cd "$PM_HERE" && pwd)
+PM_HERE=$PM_SCRIPTS
 source "$PM_HERE/env.sh"
 NP=${NP:-32} MB=${MB:-256} STEPS=${STEPS:-5} RATIO=${RATIO:-1.25} REPS=${REPS:-3}
 KERNELS=${KERNELS:-"sleep spin fma stream"}
