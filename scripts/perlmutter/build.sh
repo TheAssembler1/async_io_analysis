@@ -1,13 +1,17 @@
 #!/bin/bash
 # Build Mercury, PDC, aio_bench_pdc and progress_test on Perlmutter (run on a login node).
 #   build.sh [mercury] [pdc] [bench]       default: all three
-# MERCURY_REF (v2.4.1; 2.4.0 does not build against libfabric 2.x), PDC_REPO, PDC_REF: which sources to build. The default PDC
+# MERCURY_REF (v2.2.0, the version PDC's install docs pin and the paper used),
+# PDC_REPO, PDC_REF: which sources to build. The default PDC
 # branch is the one that sets up ofi+cxi on Perlmutter (cxi0:<pid> endpoints and
 # the CXI service/VNI lookup); stock PDC builds ofi+cxi://<hostname>:<port>.
-# libfabric is the system one (cray-libfabric, with the cxi and tcp providers).
+# libfabric is the system one (cray-libfabric, with the cxi and tcp providers):
+# the docs' libfabric 1.18.0 has no cxi provider (upstream added it in 1.21).
+# Mercury 2.4.0 does not compile against libfabric 2.x; 2.2.0 uses none of the
+# removed symbols.
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-MERCURY_REF=${MERCURY_REF:-v2.4.1}
+MERCURY_REF=${MERCURY_REF:-v2.2.0}
 PDC_REPO=${PDC_REPO:-https://github.com/hpc-io/pdc.git}
 PDC_REF=${PDC_REF:-fix/perlmutter-cxi-defaults}
 J=${J:-16}
@@ -38,10 +42,11 @@ build_mercury() {
   cmake -S "$SRC/mercury" -B "$SRC/build-mercury" -DCMAKE_C_COMPILER=cc -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="$MERCURY_DIR" -DBUILD_SHARED_LIBS=ON \
     -DBUILD_TESTING=OFF -DMERCURY_USE_BOOST_PP=ON -DMERCURY_USE_CHECKSUMS=OFF \
-    -DNA_USE_OFI=ON -DNA_USE_SM=ON
-  cmake --build "$SRC/build-mercury" -j"$J" && cmake --install "$SRC/build-mercury"
+    -DNA_USE_OFI=ON -DNA_USE_SM=OFF
+  cmake --build "$SRC/build-mercury" -j"$J"
+  rm -rf "$MERCURY_DIR" && cmake --install "$SRC/build-mercury"
   # PDC's pdc_private.h includes mercury_list.h (none of its macros are used),
-  # which Mercury stopped shipping after 2.3. Install the 2.3.1 copy.
+  # which Mercury stopped shipping after 2.3; only matters for a newer MERCURY_REF.
   [ -e "$MERCURY_DIR/include/mercury_list.h" ] ||
     git -C "$SRC/mercury" show v2.3.1:src/util/mercury_list.h > "$MERCURY_DIR/include/mercury_list.h"
 }
@@ -56,7 +61,8 @@ build_pdc() {
     -DCMAKE_INSTALL_PREFIX="$PDC_DIR" -DBUILD_SHARED_LIBS=ON \
     -DBUILD_TESTING=OFF -DPDC_ENABLE_MPI=ON -DPDC_SERVER_CACHE=ON \
     -DMERCURY_DIR="$MERCURY_DIR/share/cmake/mercury" -DCMAKE_PREFIX_PATH="$MERCURY_DIR"
-  cmake --build "$SRC/build-pdc" -j"$J" && cmake --install "$SRC/build-pdc"
+  cmake --build "$SRC/build-pdc" -j"$J"
+  rm -rf "$PDC_DIR" && cmake --install "$SRC/build-pdc"
   grep -q "^MERCURY_DIR:[A-Z]*=$MERCURY_DIR/" "$SRC/build-pdc/CMakeCache.txt" ||
     { echo "PDC configured against $(grep '^MERCURY_DIR:' "$SRC/build-pdc/CMakeCache.txt")" >&2; exit 1; }
   check_mercury "$PDC_DIR/bin/pdc_server"
