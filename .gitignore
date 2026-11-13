@@ -14,3 +14,6 @@ __pycache__/
 *.toc
 !results/*.log
 !results/*.out
+experiments/progress_knobs/progress_test
+# Office lock files
+~$*
