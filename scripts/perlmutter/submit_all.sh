@@ -1,7 +1,7 @@
 #!/bin/bash
 # Submit the Perlmutter jobs. Run jobs/smoke.sbatch first and check its output.
 #   ./submit_all.sh [job ...]        (account m2621 is set in the jobs; ACCOUNT=... overrides)
-# jobs: scale placement transport locality knobs   (default: all five)
+# jobs: scale placement locality knobs (default), transport (ofi+cxi vs ofi+tcp, on request)
 #   scale      NODE_COUNTS (1 2 4 8) nodes each
 #   locality   NODE_COUNTS without 1
 #   placement, transport  PAIR_NODES (2) nodes;  knobs  2 nodes
@@ -22,7 +22,7 @@ sub() { # sub NODES JOBFILE
   echo "$2 on $1 node(s): job $id"
 }
 
-for job in ${@:-scale placement transport locality knobs}; do
+for job in ${@:-scale placement locality knobs}; do
   case $job in
     scale)     for n in $NODE_COUNTS; do sub "$n" scale; done ;;
     locality)  for n in $NODE_COUNTS; do [ "$n" -ge 2 ] && sub "$n" locality; done ;;

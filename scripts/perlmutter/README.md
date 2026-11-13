@@ -46,7 +46,7 @@ The scripts make clients network-bound in two ways:
 | `smoke` | 2, debug QoS | every path once with 32 MiB transfers, plus network setup output |
 | `scale` | 1, 2, 4, 8 | kernels sleep, spin, dgemm, stream, halo, net; sync and async |
 | `placement` | 2 | shared / smt / reserved |
-| `transport` | 2 | ofi+cxi (NIC RDMA) against ofi+tcp over hsn0 (the paper's transport) |
+| `transport` | 2 | ofi+cxi against ofi+tcp over hsn0 (the paper's transport); not submitted by default |
 | `locality` | 2, 4, 8 | local vs. remote servers |
 | `knobs` | 2 | `progress_test` (Mercury only): HG_Progress timeout x sleep grid, blocking, placement; server on one node, 32 clients on the other |
 
