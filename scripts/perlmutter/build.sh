@@ -40,6 +40,10 @@ build_mercury() {
     -DBUILD_TESTING=OFF -DMERCURY_USE_BOOST_PP=ON -DMERCURY_USE_CHECKSUMS=OFF \
     -DNA_USE_OFI=ON -DNA_USE_SM=ON
   cmake --build "$SRC/build-mercury" -j"$J" && cmake --install "$SRC/build-mercury"
+  # PDC's pdc_private.h includes mercury_list.h (none of its macros are used),
+  # which Mercury stopped shipping after 2.3. Install the 2.3.1 copy.
+  [ -e "$MERCURY_DIR/include/mercury_list.h" ] ||
+    git -C "$SRC/mercury" show v2.3.1:src/util/mercury_list.h > "$MERCURY_DIR/include/mercury_list.h"
 }
 
 build_pdc() {
