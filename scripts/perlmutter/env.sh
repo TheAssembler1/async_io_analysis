@@ -5,8 +5,11 @@ module load PrgEnv-gnu cray-mpich cray-libsci cmake > /dev/null 2>&1
 PM_HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 export AIO_ROOT=${AIO_ROOT:-$(cd "$PM_HERE/../.." && pwd)}
 export PM_PREFIX=${PM_PREFIX:-$PSCRATCH/aio_pm}       # sources, builds, installs, binaries
-export MERCURY_DIR=${MERCURY_DIR:-$PM_PREFIX/install/mercury}
-export PDC_DIR=${PDC_DIR:-$PM_PREFIX/install/pdc}
+# PM_* names on purpose: a PDC setup script in the login shell often exports
+# MERCURY_DIR/PDC_DIR for another install, and PDC's CMake searches $MERCURY_DIR.
+export PM_MERCURY_DIR=${PM_MERCURY_DIR:-$PM_PREFIX/install/mercury}
+export PM_PDC_DIR=${PM_PDC_DIR:-$PM_PREFIX/install/pdc}
+export MERCURY_DIR=$PM_MERCURY_DIR PDC_DIR=$PM_PDC_DIR
 export PM_BIN=${PM_BIN:-$PM_PREFIX/bin}               # aio_bench_pdc, progress_test
 export PM_RUNDIR=${PM_RUNDIR:-$PSCRATCH/aio_runs}     # PDC_TMPDIR / PDC_DATA_LOC per run (Lustre)
 export PM_RESULTS=${PM_RESULTS:-$AIO_ROOT/results/perlmutter}

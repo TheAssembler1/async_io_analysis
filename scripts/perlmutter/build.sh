@@ -14,8 +14,21 @@ J=${J:-16}
 SRC=$PM_PREFIX/src
 mkdir -p "$SRC" "$PM_BIN"
 
+echo "Mercury -> $MERCURY_DIR"
+echo "PDC     -> $PDC_DIR"
 pkg-config --exists libfabric || { echo "libfabric not found by pkg-config (module load cray-libfabric?)" >&2; exit 1; }
 echo "libfabric $(pkg-config --modversion libfabric) from $(pkg-config --variable=prefix libfabric)"
+
+# Fail if a binary resolves libmercury from anywhere but $MERCURY_DIR (without
+# LD_LIBRARY_PATH, which env.sh points at the right one and would hide a bad rpath).
+check_mercury() {
+  local m
+  m=$(env -u LD_LIBRARY_PATH ldd "$1" | awk '/libmercury\.so/ {print $3}')
+  case $m in
+    "$MERCURY_DIR"/*) echo "$(basename "$1") uses $m" ;;
+    *) echo "$1 links libmercury from '$m', not $MERCURY_DIR" >&2; exit 1 ;;
+  esac
+}
 
 build_mercury() {
   [ -d "$SRC/mercury" ] || git clone -q --recurse-submodules https://github.com/mercury-hpc/mercury.git "$SRC/mercury"
@@ -36,9 +49,13 @@ build_pdc() {
   rm -rf "$SRC/build-pdc"
   # PDC_ENABLE_MULTITHREAD stays OFF (the default): busy-polling progress, as in the paper.
   cmake -S "$SRC/pdc" -B "$SRC/build-pdc" -DCMAKE_C_COMPILER=cc -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX="$PDC_DIR" -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON \
-    -DBUILD_TESTING=OFF -DPDC_ENABLE_MPI=ON -DPDC_SERVER_CACHE=ON -DMERCURY_DIR="$MERCURY_DIR"
+    -DCMAKE_INSTALL_PREFIX="$PDC_DIR" -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_TESTING=OFF -DPDC_ENABLE_MPI=ON -DPDC_SERVER_CACHE=ON \
+    -DMERCURY_DIR="$MERCURY_DIR/share/cmake/mercury" -DCMAKE_PREFIX_PATH="$MERCURY_DIR"
   cmake --build "$SRC/build-pdc" -j"$J" && cmake --install "$SRC/build-pdc"
+  grep -q "^MERCURY_DIR:[A-Z]*=$MERCURY_DIR/" "$SRC/build-pdc/CMakeCache.txt" ||
+    { echo "PDC configured against $(grep '^MERCURY_DIR:' "$SRC/build-pdc/CMakeCache.txt")" >&2; exit 1; }
+  check_mercury "$PDC_DIR/bin/pdc_server"
   echo "PDC $(git -C "$SRC/pdc" describe --always --tags) -> $PDC_DIR"
 }
 
@@ -68,6 +85,8 @@ EOF
   cc -O2 -march=znver3 -Wall -I"$MERCURY_DIR/include" -o "$PM_BIN/progress_test" \
     "$AIO_ROOT/experiments/progress_knobs/progress_test.c" \
     -L"$MERCURY_DIR/lib" -Wl,-rpath,"$MERCURY_DIR/lib" -lmercury -lna -lmercury_util -lpthread -lm
+  check_mercury "$PM_BIN/aio_bench_pdc"
+  check_mercury "$PM_BIN/progress_test"
   echo "built $PM_BIN/aio_bench_pdc ${api:+(collective API)} and $PM_BIN/progress_test"
 }
 
