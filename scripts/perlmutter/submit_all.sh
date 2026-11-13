@@ -1,6 +1,6 @@
 #!/bin/bash
 # Submit the Perlmutter jobs. Run jobs/smoke.sbatch first and check its output.
-#   ACCOUNT=m1234 ./submit_all.sh [job ...]
+#   ./submit_all.sh [job ...]        (account m2621 is set in the jobs; ACCOUNT=... overrides)
 # jobs: scale placement transport locality knobs   (default: all five)
 #   scale      NODE_COUNTS (1 2 4 8) nodes each
 #   locality   NODE_COUNTS without 1

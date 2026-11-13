@@ -6,8 +6,8 @@ servers, from 1 to 8 nodes. Every run starts its own set of servers.
 
     source env.sh
     ./build.sh                          # Mercury, PDC, aio_bench_pdc, progress_test
-    sbatch -A <account> jobs/smoke.sbatch           # check the output before the rest
-    ACCOUNT=<account> ./submit_all.sh
+    sbatch jobs/smoke.sbatch            # check the output before the rest
+    ./submit_all.sh
     ./summary.py > ../../results/perlmutter/summary.md
 
 ## Node layout

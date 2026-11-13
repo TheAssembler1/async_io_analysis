@@ -1,4 +1,5 @@
 #!/bin/bash
+#SBATCH --account=m2621
 #SBATCH -C cpu
 #SBATCH -q debug
 #SBATCH -t 00:30:00
