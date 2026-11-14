@@ -31,3 +31,11 @@
 2026-11-14 08:14:10 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote sync spin: pdc/sync/spin[cxi.shared.remote] P=128 alone=1.696 comp=1.695 (x1.00) io/step=1.350 final=0.012 total=15.228
 2026-11-14 08:15:16 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote async spin: pdc/async/spin[cxi.shared.remote] P=128 alone=1.695 comp=3.065 (x1.81) io/step=1.757 final=4.553 total=28.377
 2026-11-14 08:16:57 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote sync dgemm: pdc/sync/dgemm[cxi.shared.remote] P=128 alone=1.694 comp=1.698 (x1.00) io/step=1.388 final=0.012 total=15.214
+2026-11-14 08:18:45 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote async dgemm: pdc/async/dgemm[cxi.shared.remote] P=128 alone=1.693 comp=3.055 (x1.80) io/step=1.453 final=0.593 total=22.554
+2026-11-14 08:20:25 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote sync stream: pdc/sync/stream[cxi.shared.remote] P=128 alone=1.698 comp=1.699 (x1.00) io/step=2.245 final=0.012 total=15.335
+2026-11-14 08:22:06 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote async stream: pdc/async/stream[cxi.shared.remote] P=128 alone=1.697 comp=2.291 (x1.35) io/step=1.888 final=0.439 total=16.166
+2026-11-14 08:23:47 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote sync halo: pdc/sync/halo[cxi.shared.remote] P=128 alone=1.695 comp=1.695 (x1.00) io/step=1.348 final=0.011 total=15.227
+2026-11-14 08:31:22 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote async halo: pdc/async/halo[cxi.shared.remote] P=128 alone=1.684 comp=72.854 (x43.25) io/step=0.892 final=0.597 total=369.167
+2026-11-14 08:33:01 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote sync net: pdc/sync/net[cxi.shared.remote] P=128 alone=1.667 comp=1.668 (x1.00) io/step=1.378 final=0.011 total=15.154
+2026-11-14 08:34:40 [pdc_scale n4] ok   rep 3/3 cxi.shared.remote async net: pdc/async/net[cxi.shared.remote] P=128 alone=1.686 comp=1.761 (x1.04) io/step=0.989 final=0.578 total=13.610
+2026-11-14 08:34:50 [pdc_scale n4] done
