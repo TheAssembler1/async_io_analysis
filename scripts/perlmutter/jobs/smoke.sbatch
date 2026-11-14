@@ -31,7 +31,7 @@ echo "server placement: ${SRV_BIND[*]} (core 0, 16, ... of each node)"
 echo "client masks (shared): $(python3 "$PM_HERE/cpumask.py" client shared "$CPN" | cut -c1-120)..."
 
 # libfabric and Mercury errors go to the run logs, so a failed case says why.
-export FI_LOG_LEVEL=${FI_LOG_LEVEL:-warn} HG_LOG_LEVEL=${HG_LOG_LEVEL:-error}
+export FI_LOG_LEVEL=${FI_LOG_LEVEL:-warn} HG_LOG_LEVEL=${HG_LOG_LEVEL:-error} CXI_ENV_DEBUG=1
 
 echo "== PDC (ofi+cxi)"
 for TRANSPORT in cxi; do

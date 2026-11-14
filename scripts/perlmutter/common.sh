@@ -38,7 +38,7 @@ log() { echo "$(date '+%F %T') [$PM_NAME n$NODES] $*" | tee -a "$LOG" >&2; }
 # set_transport cxi|tcp -> HG_TRANSPORT and the launch wrapper WRAP
 set_transport() {
   case $1 in
-    cxi) export HG_TRANSPORT=ofi+cxi; WRAP=() ;;
+    cxi) export HG_TRANSPORT=ofi+cxi; WRAP=("$PM_HERE/cxi_env.sh") ;;
     tcp) export HG_TRANSPORT=ofi+tcp; WRAP=("$PM_HERE/hsn_host.sh") ;;
     *) log "unknown transport $1"; return 1 ;;
   esac
