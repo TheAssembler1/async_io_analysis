@@ -1,17 +1,19 @@
 #!/bin/bash
 # Build Mercury, PDC, aio_bench_pdc and progress_test on Perlmutter (run on a login node).
 #   build.sh [mercury] [pdc] [bench]       default: all three
-# MERCURY_REF (v2.2.0, the version PDC's install docs pin and the paper used),
+# MERCURY_REF (v2.4.1; PDC's docs and the paper use 2.2.0, see below),
 # PDC_REPO, PDC_REF: which sources to build. The default PDC
 # branch is the one that sets up ofi+cxi on Perlmutter (cxi0:<pid> endpoints and
 # the CXI service/VNI lookup); stock PDC builds ofi+cxi://<hostname>:<port>.
 # libfabric is the system one (cray-libfabric, with the cxi and tcp providers):
 # the docs' libfabric 1.18.0 has no cxi provider (upstream added it in 1.21).
-# Mercury 2.4.0 does not compile against libfabric 2.x; 2.2.0 uses none of the
-# removed symbols.
+# Mercury 2.2.0 builds against libfabric 2.x but cannot use cxi: it always sets
+# av_attr.rx_ctx_bits, which the cxi provider rejects ("SEPs not supported"), so
+# HG_Init fails. 2.4.0 does not compile against libfabric 2.x. 2.4.1 works and
+# also takes the CXI service/VNI from Slurm's SLINGSHOT_* variables.
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-MERCURY_REF=${MERCURY_REF:-v2.2.0}
+MERCURY_REF=${MERCURY_REF:-v2.4.1}
 PDC_REPO=${PDC_REPO:-https://github.com/hpc-io/pdc.git}
 PDC_REF=${PDC_REF:-fix/perlmutter-cxi-defaults}
 J=${J:-16}
@@ -46,7 +48,7 @@ build_mercury() {
   cmake --build "$SRC/build-mercury" -j"$J"
   rm -rf "$MERCURY_DIR" && cmake --install "$SRC/build-mercury"
   # PDC's pdc_private.h includes mercury_list.h (none of its macros are used),
-  # which Mercury stopped shipping after 2.3; only matters for a newer MERCURY_REF.
+  # which Mercury stopped shipping after 2.3. Install the 2.3.1 copy.
   [ -e "$MERCURY_DIR/include/mercury_list.h" ] ||
     git -C "$SRC/mercury" show v2.3.1:src/util/mercury_list.h > "$MERCURY_DIR/include/mercury_list.h"
 }

@@ -80,7 +80,9 @@ cases.
 - **ofi+tcp**: `hsn_host.sh` sets `HG_HOST` to the node's hsn0 address,
   so tcp runs over the same NIC as cxi and does not use the management network.
 
-Versions: Mercury 2.2.0 as in PDC's install docs and the paper, but against
-the system libfabric (2.3.1 as of this writing) instead of the docs' 1.18.0,
-which has no cxi provider. Also Cray MPICH with
-`MPICH_MAX_THREAD_SAFETY=multiple`, and PDC data on Lustre (`$PSCRATCH`).
+Versions: Mercury 2.4.1, not the 2.2.0 that PDC's install docs and the paper
+use. 2.2.0 cannot open a cxi endpoint with the system libfabric (2.3.1 as of
+this writing): it sets `rx_ctx_bits` on its address vector, which the cxi
+provider rejects. The docs' libfabric 1.18.0 has no cxi provider at all.
+`build.sh` adds the `mercury_list.h` header PDC still includes. Also Cray MPICH
+with `MPICH_MAX_THREAD_SAFETY=multiple`, and PDC data on Lustre (`$PSCRATCH`).
