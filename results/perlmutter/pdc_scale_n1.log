@@ -1,0 +1,41 @@
+2026-11-14 06:41:56 [pdc_scale n1] start: transports=[cxi] targets=[local] placements=[shared] kernels=[sleep spin dgemm stream halo net] modes=[sync async] reps=3, 32 clients + 2 servers per node, 256 MiB x 5 steps, nodes nid005339
+2026-11-14 06:42:35 [pdc_scale n1] ok   cxi.shared.local sync none: pdc/sync/none[cxi.shared.local] P=32 alone=0.000 comp=0.000 (x0.00) io/step=1.321 final=0.012 total=6.615
+2026-11-14 06:43:22 [pdc_scale n1] ok   cxi.shared.local sync none: pdc/sync/none[cxi.shared.local] P=32 alone=0.000 comp=0.000 (x0.00) io/step=1.312 final=0.012 total=6.574
+2026-11-14 06:43:33 [pdc_scale n1] cxi/local: sync I/O 1.31645 s/step -> compute 1.646 s/step
+2026-11-14 06:44:22 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync sleep: pdc/sync/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.647 (x1.00) io/step=1.311 final=0.012 total=14.799
+2026-11-14 06:45:20 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async sleep: pdc/async/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.646 (x1.00) io/step=0.702 final=0.697 total=12.384
+2026-11-14 06:46:37 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync spin: pdc/sync/spin[cxi.shared.local] P=32 alone=1.646 comp=1.646 (x1.00) io/step=1.294 final=0.011 total=14.702
+2026-11-14 06:47:49 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async spin: pdc/async/spin[cxi.shared.local] P=32 alone=1.646 comp=2.959 (x1.80) io/step=0.755 final=0.676 total=19.122
+2026-11-14 06:48:54 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync dgemm: pdc/sync/dgemm[cxi.shared.local] P=32 alone=1.646 comp=1.652 (x1.00) io/step=1.294 final=0.011 total=14.564
+2026-11-14 06:50:02 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async dgemm: pdc/async/dgemm[cxi.shared.local] P=32 alone=1.644 comp=2.968 (x1.81) io/step=0.792 final=0.680 total=19.114
+2026-11-14 06:51:06 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync stream: pdc/sync/stream[cxi.shared.local] P=32 alone=1.644 comp=1.647 (x1.00) io/step=2.163 final=0.010 total=14.817
+2026-11-14 06:52:11 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async stream: pdc/async/stream[cxi.shared.local] P=32 alone=1.641 comp=2.179 (x1.33) io/step=1.704 final=0.663 total=15.485
+2026-11-14 06:53:16 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync halo: pdc/sync/halo[cxi.shared.local] P=32 alone=1.635 comp=1.636 (x1.00) io/step=1.314 final=0.010 total=14.760
+2026-11-14 07:01:13 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async halo: pdc/async/halo[cxi.shared.local] P=32 alone=1.614 comp=88.900 (x55.08) io/step=0.748 final=0.667 total=448.825
+2026-11-14 07:02:18 [pdc_scale n1] ok   rep 1/3 cxi.shared.local sync net: pdc/sync/net[cxi.shared.local] P=32 alone=1.643 comp=1.591 (x0.97) io/step=2.022 final=0.010 total=14.104
+2026-11-14 07:03:26 [pdc_scale n1] ok   rep 1/3 cxi.shared.local async net: pdc/async/net[cxi.shared.local] P=32 alone=1.644 comp=3.593 (x2.19) io/step=2.583 final=0.691 total=22.497
+2026-11-14 07:04:26 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync sleep: pdc/sync/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.647 (x1.00) io/step=1.300 final=0.012 total=14.745
+2026-11-14 07:05:23 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async sleep: pdc/async/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.646 (x1.00) io/step=0.703 final=0.703 total=12.402
+2026-11-14 07:06:29 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync spin: pdc/sync/spin[cxi.shared.local] P=32 alone=1.646 comp=1.646 (x1.00) io/step=1.322 final=0.011 total=14.842
+2026-11-14 07:07:38 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async spin: pdc/async/spin[cxi.shared.local] P=32 alone=1.646 comp=2.961 (x1.80) io/step=0.757 final=0.704 total=19.179
+2026-11-14 07:08:42 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync dgemm: pdc/sync/dgemm[cxi.shared.local] P=32 alone=1.646 comp=1.659 (x1.01) io/step=1.359 final=0.011 total=14.945
+2026-11-14 07:09:49 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async dgemm: pdc/async/dgemm[cxi.shared.local] P=32 alone=1.647 comp=2.959 (x1.80) io/step=0.801 final=0.689 total=19.247
+2026-11-14 07:10:53 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync stream: pdc/sync/stream[cxi.shared.local] P=32 alone=1.644 comp=1.646 (x1.00) io/step=2.193 final=0.010 total=14.980
+2026-11-14 07:11:56 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async stream: pdc/async/stream[cxi.shared.local] P=32 alone=1.646 comp=2.157 (x1.31) io/step=1.590 final=0.659 total=14.803
+2026-11-14 07:12:58 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync halo: pdc/sync/halo[cxi.shared.local] P=32 alone=1.624 comp=1.631 (x1.00) io/step=1.301 final=0.010 total=14.667
+2026-11-14 07:20:43 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async halo: pdc/async/halo[cxi.shared.local] P=32 alone=1.666 comp=86.555 (x51.95) io/step=0.718 final=0.708 total=436.997
+2026-11-14 07:21:46 [pdc_scale n1] ok   rep 2/3 cxi.shared.local sync net: pdc/sync/net[cxi.shared.local] P=32 alone=1.607 comp=1.506 (x0.94) io/step=2.028 final=0.011 total=14.012
+2026-11-14 07:22:51 [pdc_scale n1] ok   rep 2/3 cxi.shared.local async net: pdc/async/net[cxi.shared.local] P=32 alone=1.597 comp=3.580 (x2.24) io/step=2.403 final=0.659 total=22.152
+2026-11-14 07:23:50 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync sleep: pdc/sync/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.647 (x1.00) io/step=1.303 final=0.012 total=14.755
+2026-11-14 07:24:47 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async sleep: pdc/async/sleep[cxi.shared.local] P=32 alone=1.647 comp=1.646 (x1.00) io/step=0.696 final=0.707 total=12.364
+2026-11-14 07:25:50 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync spin: pdc/sync/spin[cxi.shared.local] P=32 alone=1.646 comp=1.646 (x1.00) io/step=1.300 final=0.011 total=14.737
+2026-11-14 07:26:58 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async spin: pdc/async/spin[cxi.shared.local] P=32 alone=1.646 comp=2.961 (x1.80) io/step=0.756 final=0.665 total=19.126
+2026-11-14 07:28:01 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync dgemm: pdc/sync/dgemm[cxi.shared.local] P=32 alone=1.646 comp=1.651 (x1.00) io/step=1.330 final=0.011 total=14.704
+2026-11-14 07:29:08 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async dgemm: pdc/async/dgemm[cxi.shared.local] P=32 alone=1.646 comp=2.968 (x1.80) io/step=0.803 final=0.691 total=19.100
+2026-11-14 07:30:10 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync stream: pdc/sync/stream[cxi.shared.local] P=32 alone=1.645 comp=1.651 (x1.00) io/step=2.151 final=0.010 total=14.753
+2026-11-14 07:31:14 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async stream: pdc/async/stream[cxi.shared.local] P=32 alone=1.646 comp=2.206 (x1.34) io/step=1.728 final=0.679 total=15.360
+2026-11-14 07:32:17 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync halo: pdc/sync/halo[cxi.shared.local] P=32 alone=1.643 comp=1.624 (x0.99) io/step=1.308 final=0.010 total=14.672
+2026-11-14 07:40:11 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async halo: pdc/async/halo[cxi.shared.local] P=32 alone=1.616 comp=88.337 (x54.67) io/step=0.703 final=0.705 total=445.815
+2026-11-14 07:41:13 [pdc_scale n1] ok   rep 3/3 cxi.shared.local sync net: pdc/sync/net[cxi.shared.local] P=32 alone=1.626 comp=1.549 (x0.95) io/step=2.041 final=0.010 total=14.175
+2026-11-14 07:42:17 [pdc_scale n1] ok   rep 3/3 cxi.shared.local async net: pdc/async/net[cxi.shared.local] P=32 alone=1.600 comp=3.537 (x2.21) io/step=2.189 final=0.670 total=21.657
+2026-11-14 07:42:28 [pdc_scale n1] done
