@@ -1,0 +1,28 @@
+2026-11-13 13:49:36 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/1/server.log
+2026-11-13 13:51:37 [pdc_smoke n2] FAIL cxi.shared.local sync none (servers)
+2026-11-13 13:51:40 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/2/server.log
+2026-11-13 13:53:41 [pdc_smoke n2] FAIL cxi.shared.local async spin (servers)
+2026-11-13 13:53:42 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/3/server.log
+2026-11-13 13:55:43 [pdc_smoke n2] FAIL cxi.shared.local async net (servers)
+2026-11-13 13:55:44 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/4/server.log
+2026-11-13 13:57:45 [pdc_smoke n2] FAIL cxi.shared.remote sync none (servers)
+2026-11-13 13:57:48 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/5/server.log
+2026-11-13 13:59:49 [pdc_smoke n2] FAIL cxi.shared.remote async spin (servers)
+2026-11-13 13:59:51 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/6/server.log
+2026-11-13 14:01:53 [pdc_smoke n2] FAIL cxi.shared.remote async net (servers)
+2026-11-13 14:01:56 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/7/server.log
+2026-11-13 14:03:58 [pdc_smoke n2] FAIL tcp.shared.local sync none (servers)
+2026-11-13 14:04:00 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/8/server.log
+2026-11-13 14:06:01 [pdc_smoke n2] FAIL tcp.shared.local async spin (servers)
+2026-11-13 14:06:02 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/9/server.log
+2026-11-13 14:08:02 [pdc_smoke n2] FAIL tcp.shared.local async net (servers)
+2026-11-13 14:08:05 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/10/server.log
+2026-11-13 14:10:07 [pdc_smoke n2] FAIL tcp.shared.remote sync none (servers)
+2026-11-13 14:10:10 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/11/server.log
+2026-11-13 14:12:10 [pdc_smoke n2] FAIL tcp.shared.remote async spin (servers)
+2026-11-13 14:12:11 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/12/server.log
+2026-11-13 14:14:12 [pdc_smoke n2] FAIL tcp.shared.remote async net (servers)
+2026-11-13 14:14:14 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/13/server.log
+2026-11-13 14:16:15 [pdc_smoke n2] FAIL cxi.smt.remote async spin (servers)
+2026-11-13 14:16:18 [pdc_smoke n2] servers did not come up, see /pscratch/sd/n/nlewi26/aio_runs/61244397/14/server.log
+2026-11-13 14:18:19 [pdc_smoke n2] FAIL cxi.reserved.remote async spin (servers)
