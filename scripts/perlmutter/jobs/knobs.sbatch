@@ -48,13 +48,13 @@ run() {
   local rep=$1 loc=$2 hg=$3 place=$4 blk=$5 to=$6 sl=$7 k=$8 addr res sp cnode=${nodes[0]}
   addr=$RUNS/addr.$((++seq))
   [ "$loc" = remote ] && cnode=${nodes[1]}
-  PT_HG=$hg srun --overlap -N 1 -n 1 -w "${nodes[0]}" -c 256 --cpu-bind=mask_cpu:"$smask" \
+  PT_HG=$hg srun --overlap ${SRUN_EXTRA:-} -N 1 -n 1 -w "${nodes[0]}" -c 256 --cpu-bind=mask_cpu:"$smask" \
     "$PM_HERE/hsn_host.sh" "$PM_HERE/cxi_env.sh" "$PM_BIN/progress_test" server "$addr" > "$addr.server.log" 2>&1 &
   sp=$!
   for _ in $(seq 600); do [ -s "$addr" ] && break; kill -0 $sp 2> /dev/null || break; sleep 0.1; done
   res=$(PT_HG=$hg PT_MB=$MB PT_STEPS=$STEPS PT_RATIO=$RATIO PT_KERNEL=$k \
         PT_BLOCKING=$blk PT_TIMEOUT_MS=$to PT_SLEEP_US=$sl \
-        timeout 900 srun --overlap -N 1 -n "$NP" -w "$cnode" -c $((256 / NP)) \
+        timeout 900 srun --overlap ${SRUN_EXTRA:-} -N 1 -n "$NP" -w "$cnode" -c $((256 / NP)) \
         --cpu-bind=mask_cpu:"$(python3 "$PM_HERE/cpumask.py" client "$place" "$NP")" \
         "$PM_HERE/hsn_host.sh" "$PM_HERE/cxi_env.sh" "$PM_BIN/progress_test" client "$addr" 2> "$addr.client.log") || res=""
   kill -TERM $sp 2> /dev/null

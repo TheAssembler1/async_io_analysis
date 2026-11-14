@@ -23,6 +23,8 @@ export PDC_SERVER_CACHE_MAX_SIZE=${PDC_SERVER_CACHE_MAX_SIZE:-96}
 [ "${NOFLUSH:-0}" = 1 ] && export PDC_SERVER_CACHE_NO_FLUSH=1
 
 SRV_MASK=$(python3 "$PM_HERE/cpumask.py" server "$SPN")
+# Extra options for every srun (unquoted on purpose), e.g. SRUN_EXTRA="--network=def_tles=0".
+SRUN_EXTRA=${SRUN_EXTRA:-}
 
 log() { echo "$(date '+%F %T') [$PM_NAME n$NODES] $*" | tee -a "$LOG" >&2; }
 
@@ -41,7 +43,7 @@ start_servers() {
   local run=$1
   export PDC_TMPDIR=$run/tmp PDC_DATA_LOC=$run/data
   mkdir -p "$PDC_TMPDIR" "$PDC_DATA_LOC"
-  srun --overlap -N "$NODES" --ntasks-per-node="$SPN" -c $((256 / SPN)) \
+  srun --overlap ${SRUN_EXTRA:-} -N "$NODES" --ntasks-per-node="$SPN" -c $((256 / SPN)) \
     --cpu-bind=mask_cpu:"$SRV_MASK" "${WRAP[@]}" stdbuf -oL -eL "$PDC_DIR/bin/pdc_server" > "$run/server.log" 2>&1 &
   SRV_PID=$!
   # Rank 0 writes server.cfg (atomically) once it has looked up every server;
@@ -68,7 +70,7 @@ kill_step() {
 
 stop_servers() {
   local run=$1
-  timeout 120 srun --overlap -N 1 -n 1 "${WRAP[@]}" "$PDC_DIR/bin/close_server" > "$run/close.log" 2>&1
+  timeout 120 srun --overlap ${SRUN_EXTRA:-} -N 1 -n 1 "${WRAP[@]}" "$PDC_DIR/bin/close_server" > "$run/close.log" 2>&1
   for _ in $(seq 120); do kill -0 "$SRV_PID" 2> /dev/null || break; sleep 0.5; done
   kill_step "$SRV_PID"
   wait "$SRV_PID" 2> /dev/null || true
@@ -88,7 +90,7 @@ pdc_case() {
   start_servers "$run" || { log "FAIL $tag $mode $kernel (servers)"; return 1; }
   cmask=$(python3 "$PM_HERE/cpumask.py" client "$PLACEMENT" "$CPN")
   AIO_PDC_SHIFT=$shift timeout "$CASE_TIMEOUT" \
-    srun --overlap -N "$NODES" --ntasks-per-node="$CPN" -c $((256 / CPN)) --cpu-bind=mask_cpu:"$cmask" \
+    srun --overlap ${SRUN_EXTRA:-} -N "$NODES" --ntasks-per-node="$CPN" -c $((256 / CPN)) --cpu-bind=mask_cpu:"$cmask" \
     "${WRAP[@]}" "$PM_BIN/aio_bench_pdc" --io pdc --mode "$mode" --kernel "$kernel" --tcomp "$tcomp" \
     --mb "$MB" --steps "$STEPS" --dir "$run" --tag "$tag" --csv "$CSV" > "$run/client.log" 2>&1
   rc=$?

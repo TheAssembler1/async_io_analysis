@@ -50,5 +50,5 @@ GRID=0 REPS=1 KERNELS=spin NP=8 MB=32 HGS="ofi+cxi" LOCATIONS="remote local" \
   CSV=$PM_RESULTS/knobs_smoke.csv bash "$PM_HERE/jobs/knobs.sbatch"
 
 echo "== results"
-column -s, -t < "$CSV" | cut -c1-200
+[ -f "$CSV" ] && column -s, -t < "$CSV" | cut -c1-200
 column -s, -t < "$PM_RESULTS/knobs_smoke.csv" | cut -c1-200
