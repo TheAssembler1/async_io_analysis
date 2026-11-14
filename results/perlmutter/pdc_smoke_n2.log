@@ -39,3 +39,11 @@
 2026-11-14 05:40:35 [pdc_smoke n2] FAIL cxi.shared.remote async net rc=1, kept /pscratch/sd/n/nlewi26/aio_runs/61275438/6
 2026-11-14 05:40:39 [pdc_smoke n2] FAIL cxi.smt.remote async spin rc=1, kept /pscratch/sd/n/nlewi26/aio_runs/61275438/7
 2026-11-14 05:40:42 [pdc_smoke n2] FAIL cxi.reserved.remote async spin rc=1, kept /pscratch/sd/n/nlewi26/aio_runs/61275438/8
+2026-11-14 05:57:01 [pdc_smoke n2] ok   cxi.shared.local sync none: pdc/sync/none[cxi.shared.local] P=64 alone=0.000 comp=0.000 (x0.00) io/step=0.265 final=0.010 total=0.539
+2026-11-14 05:58:15 [pdc_smoke n2] ok   cxi.shared.local async spin: pdc/async/spin[cxi.shared.local] P=64 alone=0.500 comp=0.749 (x1.50) io/step=0.141 final=0.147 total=1.884
+2026-11-14 05:59:27 [pdc_smoke n2] ok   cxi.shared.local async net: pdc/async/net[cxi.shared.local] P=64 alone=0.467 comp=0.459 (x0.98) io/step=0.144 final=0.191 total=1.327
+2026-11-14 06:00:34 [pdc_smoke n2] ok   cxi.shared.remote sync none: pdc/sync/none[cxi.shared.remote] P=64 alone=0.000 comp=0.000 (x0.00) io/step=0.222 final=0.010 total=0.454
+2026-11-14 06:01:46 [pdc_smoke n2] ok   cxi.shared.remote async spin: pdc/async/spin[cxi.shared.remote] P=64 alone=0.500 comp=0.751 (x1.50) io/step=0.175 final=0.155 total=1.954
+2026-11-14 06:02:59 [pdc_smoke n2] ok   cxi.shared.remote async net: pdc/async/net[cxi.shared.remote] P=64 alone=0.484 comp=0.473 (x0.98) io/step=0.165 final=0.191 total=1.367
+2026-11-14 06:04:10 [pdc_smoke n2] ok   cxi.smt.remote async spin: pdc/async/spin[cxi.smt.remote] P=64 alone=0.500 comp=0.501 (x1.00) io/step=0.091 final=0.112 total=1.292
+2026-11-14 06:05:20 [pdc_smoke n2] ok   cxi.reserved.remote async spin: pdc/async/spin[cxi.reserved.remote] P=64 alone=0.500 comp=0.500 (x1.00) io/step=0.091 final=0.115 total=1.295
