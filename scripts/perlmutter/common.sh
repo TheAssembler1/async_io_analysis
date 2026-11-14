@@ -22,7 +22,14 @@ mkdir -p "$PM_RESULTS" "$RUNS"
 export PDC_SERVER_CACHE_MAX_SIZE=${PDC_SERVER_CACHE_MAX_SIZE:-96}
 [ "${NOFLUSH:-0}" = 1 ] && export PDC_SERVER_CACHE_NO_FLUSH=1
 
-SRV_MASK=$(python3 "$PM_HERE/cpumask.py" server "$SPN")
+# Steps that share a node must not ask for more than about one node of CPUs
+# in total: the Slingshot plugin sizes each step's NIC reservation by its CPUs
+# and fails the second step with "Error configuring interconnect". So the
+# server step asks for one core (2 CPUs) per server and lets block:cyclic place
+# server j on the first core of NUMA domain j (core 0, 16, ...); CPU masks
+# would have to lie inside the step's own allocation. Clients keep -c 8 so
+# their masks (cpumask.py) are inside theirs.
+SRV_BIND=(-c 2 -m block:cyclic --cpu-bind=cores)
 # Extra options for every srun (unquoted on purpose), e.g. SRUN_EXTRA="--network=def_tles=0".
 SRUN_EXTRA=${SRUN_EXTRA:-}
 
@@ -43,8 +50,8 @@ start_servers() {
   local run=$1
   export PDC_TMPDIR=$run/tmp PDC_DATA_LOC=$run/data
   mkdir -p "$PDC_TMPDIR" "$PDC_DATA_LOC"
-  srun --overlap ${SRUN_EXTRA:-} -N "$NODES" --ntasks-per-node="$SPN" -c $((256 / SPN)) \
-    --cpu-bind=mask_cpu:"$SRV_MASK" "${WRAP[@]}" stdbuf -oL -eL "$PDC_DIR/bin/pdc_server" > "$run/server.log" 2>&1 &
+  srun --overlap ${SRUN_EXTRA:-} -N "$NODES" --ntasks-per-node="$SPN" "${SRV_BIND[@]}" \
+    "${WRAP[@]}" stdbuf -oL -eL "$PDC_DIR/bin/pdc_server" > "$run/server.log" 2>&1 &
   SRV_PID=$!
   # Rank 0 writes server.cfg (atomically) once it has looked up every server;
   # clients read the same file. The "Server ready" log line is not a reliable

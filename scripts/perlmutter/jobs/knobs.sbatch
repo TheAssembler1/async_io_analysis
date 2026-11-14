@@ -31,7 +31,6 @@ out=${CSV:-$PM_RESULTS/knobs.csv}
 RUNS=$PM_RUNDIR/${SLURM_JOB_ID:-$$}
 mkdir -p "$PM_RESULTS" "$RUNS"
 mapfile -t nodes < <(scontrol show hostnames "$SLURM_JOB_NODELIST")
-smask=$(python3 "$PM_HERE/cpumask.py" server 1)
 
 # placement blocking timeout_ms sleep_us
 configs=("shared 0 100 1000" "shared 1 100 1000" "smt 0 100 1000" "smt 0 0 1000" "reserved 0 100 1000")
@@ -48,7 +47,7 @@ run() {
   local rep=$1 loc=$2 hg=$3 place=$4 blk=$5 to=$6 sl=$7 k=$8 addr res sp cnode=${nodes[0]}
   addr=$RUNS/addr.$((++seq))
   [ "$loc" = remote ] && cnode=${nodes[1]}
-  PT_HG=$hg srun --overlap ${SRUN_EXTRA:-} -N 1 -n 1 -w "${nodes[0]}" -c 256 --cpu-bind=mask_cpu:"$smask" \
+  PT_HG=$hg srun --overlap ${SRUN_EXTRA:-} -N 1 -n 1 -w "${nodes[0]}" -c 2 --cpu-bind=cores \
     "$PM_HERE/hsn_host.sh" "$PM_HERE/cxi_env.sh" "$PM_BIN/progress_test" server "$addr" > "$addr.server.log" 2>&1 &
   sp=$!
   for _ in $(seq 600); do [ -s "$addr" ] && break; kill -0 $sp 2> /dev/null || break; sleep 0.1; done

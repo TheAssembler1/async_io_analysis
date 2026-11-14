@@ -12,10 +12,17 @@ servers, from 1 to 8 nodes. Every run starts its own set of servers.
 
 ## Node layout
 
-`cpumask.py` gives each srun step explicit CPU masks. Servers go on core 0
-and core 64 (one per socket, with their SMT siblings). Each NUMA domain gets 4
-clients on its cores 2, 4, 6 and 8. Local ranks 0-15 sit on socket 0 with server 0,
-which owns their regions under PDC's static partition. Client placements:
+Each NUMA domain gets 4 clients on its cores 2, 4, 6 and 8 (`cpumask.py`
+masks). The server step asks for one core per server and Slurm's
+`block:cyclic` puts them on core 0 and core 16 (the first cores of NUMA
+domains 0 and 1, with their SMT siblings), which no client uses. So both
+servers are on socket 0, and clients 16-31 reach theirs across sockets.
+
+Steps sharing a node must not ask for much more than one node's CPUs in
+total: the Slingshot plugin sizes each step's NIC reservation by its CPUs, and
+a second step fails with "Error configuring interconnect" otherwise (see
+`netcheck.sh`). CPU masks also have to lie inside the step's own allocation,
+which is why the server step is placed rather than masked. Client placements:
 
 | placement | client CPUs | PDC progress thread |
 |---|---|---|
