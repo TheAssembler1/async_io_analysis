@@ -42,14 +42,17 @@ start_servers() {
   export PDC_TMPDIR=$run/tmp PDC_DATA_LOC=$run/data
   mkdir -p "$PDC_TMPDIR" "$PDC_DATA_LOC"
   srun --overlap -N "$NODES" --ntasks-per-node="$SPN" -c $((256 / SPN)) \
-    --cpu-bind=mask_cpu:"$SRV_MASK" "${WRAP[@]}" "$PDC_DIR/bin/pdc_server" > "$run/server.log" 2>&1 &
+    --cpu-bind=mask_cpu:"$SRV_MASK" "${WRAP[@]}" stdbuf -oL -eL "$PDC_DIR/bin/pdc_server" > "$run/server.log" 2>&1 &
   SRV_PID=$!
+  # Rank 0 writes server.cfg (atomically) once it has looked up every server;
+  # clients read the same file. The "Server ready" log line is not a reliable
+  # signal: PDC logs to stdout, which is block-buffered under srun.
   for _ in $(seq 360); do
-    grep -qi "server ready" "$run/server.log" 2> /dev/null && return 0
+    [ -s "$PDC_TMPDIR/server.cfg" ] && { sleep 1; return 0; }
     kill -0 "$SRV_PID" 2> /dev/null || break
     sleep 0.5
   done
-  log "servers did not come up, see $run/server.log"
+  log "servers did not come up (exited: $(kill -0 "$SRV_PID" 2> /dev/null && echo no || echo yes)), see $run/server.log"
   stop_servers "$run"
   return 1
 }
