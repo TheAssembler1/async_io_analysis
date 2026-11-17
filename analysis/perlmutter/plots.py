@@ -19,6 +19,8 @@ os.makedirs(out, exist_ok=True)
 
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 PCOL = {"shared": "#2a78d6", "smt": "#eb6834", "reserved": "#1baf7a"}
+HL, BEST = "#e34948", "#008300"  # same as the laptop grid figures
+DEFAULT = (100, 1000)  # PDC's HG_Progress timeout (ms) and sleep (us)
 KERNELS = ["sleep", "net", "stream", "spin", "dgemm", "halo"]
 KCOL = {"sleep": "#8a8984", "net": "#7a5cc8", "stream": "#1baf7a", "spin": "#2a78d6",
         "dgemm": "#eb6834", "halo": "#c2337a"}
@@ -164,6 +166,10 @@ if os.path.exists(kpath):
             for j, v in enumerate(row):
                 ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=9,
                         color="white" if v > 1.6 else INK)
+        cells = [(i, j) for i in range(4) for j in range(4) if m[i][j] == m[i][j]]
+        best = min(cells, key=lambda c: m[c[0]][c[1]])
+        for (i, j), col in ((best, BEST), ((timeouts.index(DEFAULT[0]), sleeps.index(DEFAULT[1])), HL)):
+            ax.add_patch(plt.Rectangle((j - 0.45, i - 0.45), 0.9, 0.9, fill=False, lw=3, ec=col))
         ax.set_xticks(range(4), ["0", "100us", "1ms", "10ms"])
         ax.set_yticks(range(4), [f"{t} ms" for t in timeouts])
         ax.set_xlabel("sleep between progress calls")
@@ -177,4 +183,6 @@ if os.path.exists(kpath):
     fig.suptitle("Mercury only over ofi+cxi: compute slowdown with the progress thread on the same CPU",
                  x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
+    fig.text(0.01, -0.04, "Red: PDC default (timeout 100 ms, sleep 1 ms). Green: lowest slowdown.",
+             ha="left", fontsize=9, color=INK2)
     save(fig, "5_knobs_grid.png")
