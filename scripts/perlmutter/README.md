@@ -9,6 +9,7 @@ servers, from 1 to 8 nodes. Every run starts its own set of servers.
     sbatch jobs/smoke.sbatch            # check the output before the rest
     ./submit_all.sh
     ./summary.py > ../../results/perlmutter/summary.md
+    ./plots.py                          # PNGs in results/perlmutter/figures (needs matplotlib)
 
 ## Node layout
 

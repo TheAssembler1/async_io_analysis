@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+"""PNG figures from the Perlmutter runs.
+   plots.py [results/perlmutter] [outdir=<results>/figures]     (needs matplotlib)"""
+import csv
+import glob
+import os
+import sys
+from collections import defaultdict
+from statistics import median
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "../../results/perlmutter")
+out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(src, "figures")
+os.makedirs(out, exist_ok=True)
+
+SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
+PCOL = {"shared": "#2a78d6", "smt": "#eb6834", "reserved": "#1baf7a"}
+KERNELS = ["sleep", "net", "stream", "spin", "dgemm", "halo"]
+KCOL = {"sleep": "#8a8984", "net": "#7a5cc8", "stream": "#1baf7a", "spin": "#2a78d6",
+        "dgemm": "#eb6834", "halo": "#c2337a"}
+plt.rcParams.update({
+    "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "savefig.facecolor": SURFACE,
+    "axes.edgecolor": GRID, "axes.labelcolor": INK2, "xtick.color": INK2, "ytick.color": INK2,
+    "text.color": INK, "font.size": 10, "axes.spines.top": False, "axes.spines.right": False,
+    "axes.spines.left": False, "axes.grid": True, "axes.grid.axis": "y", "grid.color": GRID,
+    "grid.linewidth": 0.8, "axes.axisbelow": True, "legend.frameon": False,
+})
+
+# Rows from every PDC job, keyed by (nodes, placement, target, kernel, mode).
+rows = defaultdict(list)
+for f in glob.glob(os.path.join(src, "pdc_*.csv")):
+    if "smoke" in f:
+        continue
+    for r in csv.DictReader(open(f)):
+        _, place, target = r["tag"].split(".")
+        rows[(int(r["nranks"]) // 32, place, target, r["kernel"], r["mode"])].append(r)
+
+
+def med(key, field):
+    v = [float(r[field]) for r in rows.get(key, [])]
+    return median(v) if v else None
+
+
+def save(fig, name):
+    fig.savefig(os.path.join(out, name), dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(os.path.join(out, name))
+
+
+def slowdown_ticks(ax):
+    ax.set_yscale("log")
+    ticks = [1, 1.5, 2, 5, 10, 20, 50]
+    ax.set_yticks(ticks, [f"{t:g}x" for t in ticks])
+    ax.minorticks_off()
+    ax.axhline(1, color=INK2, lw=0.8)
+
+
+# 1: slowdown by kernel and placement, 2 nodes, remote servers
+fig, ax = plt.subplots(figsize=(7.5, 3.8))
+w = 0.26
+for j, p in enumerate(PCOL):
+    for i, k in enumerate(KERNELS):
+        s = med((2, p, "remote", k, "async"), "slowdown")
+        if s is None:
+            continue
+        x = i + (j - 1) * w
+        ax.bar(x, s - 1 if s > 1 else 0.004, bottom=1, width=w - 0.03, color=PCOL[p],
+               label=p if i == 0 else None)
+        if s >= 1.1:
+            ax.text(x, s * 1.04, f"{s:.2f}" if s < 10 else f"{s:.0f}", ha="center",
+                    va="bottom", fontsize=7.5, color=INK2)
+ax.set_xticks(range(len(KERNELS)), KERNELS)
+ax.tick_params(axis="x", length=0)
+slowdown_ticks(ax)
+ax.set_ylabel("compute slowdown, async vs alone")
+ax.set_title("PDC async, 2 nodes, 64 clients writing to the other node's servers", loc="left", fontsize=10)
+ax.legend(title="client CPUs", loc="upper left", fontsize=9, title_fontsize=9)
+save(fig, "1_slowdown_placement.png")
+
+# 2: slowdown against node count, shared placement
+fig, ax = plt.subplots(figsize=(6.5, 3.8))
+nodes = [1, 2, 4, 8]
+for k in KERNELS:
+    ys = [med((n, "shared", "local" if n == 1 else "remote", k, "async"), "slowdown") for n in nodes]
+    pts = [(n, y) for n, y in zip(nodes, ys) if y is not None]
+    ax.plot(*zip(*pts), color=KCOL[k], lw=2, marker="o", ms=5)
+    # spin and dgemm overlap exactly, as do net and sleep at the right edge
+    label, dy = {"spin": ("spin, dgemm", 0), "dgemm": (None, 0), "net": ("net", 5), "sleep": ("sleep", -5)}.get(k, (k, 0))
+    if label:
+        ax.annotate(label, pts[-1], xytext=(6, dy), textcoords="offset points", va="center",
+                    fontsize=9, color=INK)
+ax.set_xscale("log", base=2)
+ax.set_xticks(nodes, [str(n) for n in nodes])
+ax.set_xlim(0.85, 11)
+ax.set_xlabel("nodes (32 clients + 2 servers each; 1 node writes locally)")
+slowdown_ticks(ax)
+ax.set_ylabel("compute slowdown, async vs alone")
+ax.set_title("PDC async with the progress thread on the client's core", loc="left", fontsize=10)
+save(fig, "2_slowdown_nodes.png")
+
+# 3: whole-run speedup of async over sync, 2 nodes remote
+fig, ax = plt.subplots(figsize=(7.5, 3.6))
+for j, p in enumerate(PCOL):
+    for i, k in enumerate(KERNELS):
+        a = med((2, p, "remote", k, "async"), "t_total")
+        s = med((2, p, "remote", k, "sync"), "t_total")
+        if a is None or s is None:
+            continue
+        x = i + (j - 1) * w
+        ax.bar(x, s / a - 1, bottom=1, width=w - 0.03, color=PCOL[p], label=p if i == 0 else None)
+        if p == "shared" and s / a < 0.9:
+            ax.text(x, s / a - 0.02, f"{s / a:.2f}", ha="center", va="top", fontsize=7.5, color=INK2)
+ax.axhline(1, color=INK2, lw=0.8)
+ax.set_xticks(range(len(KERNELS)), KERNELS)
+ax.tick_params(axis="x", length=0)
+ax.set_ylim(0, 1.25)
+ax.set_ylabel("sync run time / async run time")
+ax.set_title("Above 1, async finishes first (2 nodes, remote servers)", loc="left", fontsize=10, pad=28)
+ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), fontsize=9, ncol=3)
+save(fig, "3_speedup_placement.png")
+
+# 4: sync I/O bandwidth against node count
+fig, ax = plt.subplots(figsize=(5.5, 3.6))
+for target, col in (("local", "#8a8984"), ("remote", "#2a78d6")):
+    pts = []
+    for n in nodes:
+        v = [float(r["gb"]) / float(r["t_io_obs"]) for r in rows.get((n, "shared", target, "none", "sync"), [])]
+        if v:
+            pts.append((n, median(v)))
+    if pts:
+        ax.plot(*zip(*pts), color=col, lw=2, marker="o", ms=5, label=f"{target} servers")
+for n, y in pts:
+    ax.annotate(f"{y:.0f}", (n, y), xytext=(-4, 7), textcoords="offset points", ha="right", fontsize=8, color=INK2)
+ax.set_xscale("log", base=2)
+ax.set_yscale("log", base=2)
+ax.set_xticks(nodes, [str(n) for n in nodes])
+yt = [4, 8, 16, 32, 64]
+ax.set_yticks(yt, [str(t) for t in yt])
+ax.minorticks_off()
+ax.set_xlabel("nodes")
+ax.set_ylabel("GB/s, I/O only, sync")
+ax.set_title("PDC write bandwidth, 256 MiB per client per step", loc="left", fontsize=10)
+ax.legend(loc="upper left", fontsize=9)
+save(fig, "4_bandwidth_nodes.png")
+
+# 5: Mercury-only knobs grid, spin slowdown (knobs.csv)
+kpath = os.path.join(src, "knobs.csv")
+if os.path.exists(kpath):
+    g = defaultdict(list)
+    for r in csv.DictReader(open(kpath)):
+        g[(r["placement"], r["kernel"], int(r["blocking"]), int(r["timeout_ms"]), int(r["sleep_us"]))].append(r)
+    timeouts, sleeps = [0, 1, 10, 100], [0, 100, 1000, 10000]
+    kerns = [k for k in ("spin", "fma", "stream") if any(key[1] == k for key in g)]
+    fig, axs = plt.subplots(1, len(kerns), figsize=(3.3 * len(kerns), 3.4), squeeze=False)
+    for ax, k in zip(axs[0], kerns):
+        m = [[median(float(r["slowdown"]) for r in g[("shared", k, 0, t, s)]) if ("shared", k, 0, t, s) in g else float("nan")
+              for s in sleeps] for t in timeouts]
+        ax.imshow(m, cmap="Blues", vmin=0.9, vmax=2.2, aspect="auto")
+        for i, row in enumerate(m):
+            for j, v in enumerate(row):
+                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=9,
+                        color="white" if v > 1.6 else INK)
+        ax.set_xticks(range(4), ["0", "100us", "1ms", "10ms"])
+        ax.set_yticks(range(4), [f"{t} ms" for t in timeouts])
+        ax.set_xlabel("sleep between progress calls")
+        ax.grid(False)
+        for s in ax.spines.values():
+            s.set_visible(False)
+        b = g.get(("shared", k, 1, 100, 1000))
+        tag = f"; blocking {median(float(r['slowdown']) for r in b):.2f}x" if b else ""
+        ax.set_title(f"{k}{tag}", loc="left", fontsize=10)
+    axs[0][0].set_ylabel("HG_Progress timeout")
+    fig.suptitle("Mercury only over ofi+cxi: compute slowdown with the progress thread on the same CPU",
+                 x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    save(fig, "5_knobs_grid.png")
