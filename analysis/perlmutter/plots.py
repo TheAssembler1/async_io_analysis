@@ -156,16 +156,25 @@ if os.path.exists(kpath):
     for r in csv.DictReader(open(kpath)):
         g[(r["placement"], r["kernel"], int(r["blocking"]), int(r["timeout_ms"]), int(r["sleep_us"]))].append(r)
     timeouts, sleeps = [0, 1, 10, 100], [0, 100, 1000, 10000]
+
+    def knob_rate(rs):
+        """GB/s while the kernel runs: all ranks' bytes per step / forward-to-callback time."""
+        v = [float(r["nranks"]) * float(r["mib"]) * (1 << 20) / 1e9 / float(r["t_xfer"]) for r in rs]
+        return median(v) if v else None
+
     kerns = [k for k in ("spin", "fma", "stream") if any(key[1] == k for key in g)]
-    fig, axs = plt.subplots(1, len(kerns), figsize=(3.3 * len(kerns), 3.4), squeeze=False)
+    fig, axs = plt.subplots(1, len(kerns), figsize=(3.6 * len(kerns), 3.8), squeeze=False)
     for ax, k in zip(axs[0], kerns):
         m = [[median(float(r["slowdown"]) for r in g[("shared", k, 0, t, s)]) if ("shared", k, 0, t, s) in g else float("nan")
               for s in sleeps] for t in timeouts]
         ax.imshow(m, cmap="Blues", vmin=0.9, vmax=2.2, aspect="auto")
         for i, row in enumerate(m):
             for j, v in enumerate(row):
-                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=9,
-                        color="white" if v > 1.6 else INK)
+                ink = "white" if v > 1.6 else INK
+                ax.text(j, i - 0.12, f"{v:.2f}x", ha="center", va="center", fontsize=9.5, color=ink)
+                r = knob_rate(g.get(("shared", k, 0, timeouts[i], sleeps[j]), []))
+                if r is not None:
+                    ax.text(j, i + 0.2, f"{r:.1f} GB/s", ha="center", va="center", fontsize=7.5, color=ink)
         cells = [(i, j) for i in range(4) for j in range(4) if m[i][j] == m[i][j]]
         best = min(cells, key=lambda c: m[c[0]][c[1]])
         for (i, j), col in ((best, BEST), ((timeouts.index(DEFAULT[0]), sleeps.index(DEFAULT[1])), HL)):
@@ -177,12 +186,13 @@ if os.path.exists(kpath):
         for s in ax.spines.values():
             s.set_visible(False)
         b = g.get(("shared", k, 1, 100, 1000))
-        tag = f"; blocking {median(float(r['slowdown']) for r in b):.2f}x" if b else ""
+        tag = f"; blocking {median(float(r['slowdown']) for r in b):.2f}x, {knob_rate(b):.1f} GB/s" if b else ""
         ax.set_title(f"{k}{tag}", loc="left", fontsize=10)
     axs[0][0].set_ylabel("HG_Progress timeout")
     fig.suptitle("Mercury only over ofi+cxi: compute slowdown with the progress thread on the same CPU",
                  x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
-    fig.text(0.01, -0.04, "Red: PDC default (timeout 100 ms, sleep 1 ms). Green: lowest slowdown.",
+    fig.text(0.01, -0.04, "Large number: compute slowdown. Small: transfer rate while the kernel runs, all 32 clients. "
+             "Red: PDC default (timeout 100 ms, sleep 1 ms). Green: lowest slowdown.",
              ha="left", fontsize=9, color=INK2)
     save(fig, "5_knobs_grid.png")
