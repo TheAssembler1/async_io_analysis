@@ -1,4 +1,4 @@
-# third-party sources and builds (rebuild with src/scripts/build_deps.sh)
+# third-party sources and builds (rebuild with scripts/local/build_deps.sh)
 deps/
 # build products
 *.o
@@ -12,9 +12,8 @@ __pycache__/
 *.bbl
 *.blg
 *.toc
-!results/*.log
-!results/*.out
-experiments/progress_knobs/progress_test
+!results/*/*.log
+!results/*/*.out
+src/progress_test/progress_test
 # Office lock files
 ~$*
-!results/perlmutter/*.log

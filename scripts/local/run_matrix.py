@@ -4,7 +4,7 @@
     run_matrix.py [phase ...]      phases: io0 main size tera sweep bind gpu
                                     (default: all; breadth-first over repetitions)
 
-Each phase appends to results/<phase>.csv and skips configurations already
+Each phase appends to results/local/<phase>.csv and skips configurations already
 present there, so the script can be interrupted and restarted.  The compute
 length t_comp of a configuration is derived from the synchronous I/O-only
 time measured in phase io0 (t_comp = ratio * t_io_sync per step).
@@ -16,8 +16,8 @@ import sys
 import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-RES = os.path.join(ROOT, "results")
-RUN = os.path.join(ROOT, "src", "scripts", "run_one.sh")
+RES = os.path.join(ROOT, "results", "local")
+RUN = os.path.join(ROOT, "scripts", "local", "run_one.sh")
 LOG = os.path.join(RES, "run_matrix.log")
 
 BACKENDS = ["posix", "mpiio", "hdf5", "adios2"]
@@ -206,7 +206,7 @@ def phase_recheck(rep):
             run("recheck", "full", NP, io, "sync", k, 256, 10, tc, rep=rep)
 
 
-RUN_PDC = os.path.join(ROOT, "src", "scripts", "run_pdc.sh")
+RUN_PDC = os.path.join(ROOT, "scripts", "local", "run_pdc.sh")
 
 
 def run_pdc(phase, ns, nc, mode, kernel, mb, steps, tcomp, rep=0, smt=False):

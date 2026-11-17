@@ -52,7 +52,7 @@ this explanation.
 \label{sec:rq1}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/m_excess.pdf}
+\includegraphics[width=\columnwidth]{../figures/local/m_excess.pdf}
 \caption{Observed run time of the asynchronous run with each compute
 surrogate, divided by the run time that the \texttt{sleep} run predicts for
 the same compute length (120\,GiB per run, 48 ranks; PDC: 47 clients and 1
@@ -64,7 +64,7 @@ its asynchronous halo run did not complete.}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/m_speedup.pdf}
+\includegraphics[width=\columnwidth]{../figures/local/m_speedup.pdf}
 \caption{End-to-end speedup of asynchronous over synchronous I/O for each
 compute surrogate (same runs as Fig.~\ref{fig:excess}). The dashed line is
 the ideal $(t_{comp}+t_{io})/\max(t_{comp},t_{io})$ for
@@ -112,7 +112,7 @@ asynchronous run times in Fig.~\ref{fig:excess}.
 \label{sec:rq2}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_decomp.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_decomp.pdf}
 \caption{Breakdown of the time of an asynchronous run, relative to the
 synchronous run with the same surrogate. The dashed line marks the
 synchronous run time, and values below 1 mean that asynchronous I/O helps. Gray: compute time as in the synchronous run.
@@ -123,7 +123,7 @@ has no halo result.}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_breakdown.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_breakdown.pdf}
 \caption{(a)~Slowdown of the compute phase of the asynchronous run relative
 to the synchronous run. (b)~I/O still exposed per step in the asynchronous
 run, relative to the synchronous I/O time per step (dashed line: no hiding
@@ -218,7 +218,7 @@ observed in Flash-X~\cite{jain2022flashx}.
 \label{sec:sweep}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_sweep.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_sweep.pdf}
 \caption{End-to-end speedup as a function of $t_{comp}/t_{io}$ (12\,GiB per
 step, 10 steps), where $t_{io}$ is the synchronous I/O time per step of the
 same configuration. The dashed line is the ideal $(r+1)/\max(r,1)$. PDC
@@ -268,7 +268,7 @@ the run time.
 \label{sec:size}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_size.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_size.pdf}
 \caption{End-to-end speedup as a function of the output size per step (48
 ranks, 10 steps, and $t_{comp}=1.25\,t_{io}$ for each size). The 48\,GiB
 point (480\,GiB per run) is measured for POSIX and ADIOS2 only. PDC uses
@@ -327,7 +327,7 @@ is long enough to cover the I/O, which is the regime that
 \label{sec:rq4}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_bind.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_bind.pdf}
 \caption{End-to-end speedup under three process placements (12\,GiB per
 step): one hardware thread per rank shared with the background engine (fully
 subscribed), both hardware threads of the core (SMT sibling), and two
@@ -390,7 +390,7 @@ trade-off is worthwhile.
 \label{sec:gpu}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/m_gpu.pdf}
+\includegraphics[width=\textwidth]{../figures/local/m_gpu.pdf}
 \caption{GPU-resident computation (4 ranks sharing one GPU, 4\,GiB per step,
 10 steps). ``Host blocks'' uses blocking synchronization, and ``host spins''
 uses the spin-wait of CUDA. DGEMM runs on the CPU with the same 4 ranks.

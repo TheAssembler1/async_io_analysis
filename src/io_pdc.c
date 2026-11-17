@@ -2,7 +2,7 @@
  * nranks*bytes; every rank transfers its region with the region-transfer
  * API.  Asynchronous mode starts the transfer and waits for it before the
  * next step; blocking mode waits immediately.  Data movement to storage is
- * performed by the PDC servers (launched separately, see scripts/run_pdc.sh).
+ * performed by the PDC servers (launched separately, see scripts/local/run_pdc.sh).
  *
  * AIO_PDC_SHIFT=k makes rank r write the region of rank (r+k) mod nranks.
  * With the static partition each server owns a contiguous range of ranks'

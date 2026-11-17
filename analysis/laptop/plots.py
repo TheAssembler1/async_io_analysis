@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """PNG figures from run_sweep.sh output.
-   plots.py [results.csv] [outdir]     (needs matplotlib)"""
+   plots.py [results/laptop/knobs.csv] [outdir]     (needs matplotlib)"""
 import csv
 import os
 import sys
@@ -12,8 +12,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-src = sys.argv[1] if len(sys.argv) > 1 else "results.csv"
-out = sys.argv[2] if len(sys.argv) > 2 else "figures"
+src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "results", "laptop", "knobs.csv")
+out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "figures", "laptop")
 os.makedirs(out, exist_ok=True)
 
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"

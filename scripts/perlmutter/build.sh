@@ -95,7 +95,7 @@ EOF
     -L"$PDC_DIR/lib" -Wl,-rpath,"$PDC_DIR/lib" -L"$MERCURY_DIR/lib" -Wl,-rpath,"$MERCURY_DIR/lib" \
     -lpdc -lpdc_commons -lmercury -lrt -lpthread -lm
   cc -O2 -march=znver3 -Wall -I"$MERCURY_DIR/include" -o "$PM_BIN/progress_test" \
-    "$AIO_ROOT/experiments/progress_knobs/progress_test.c" \
+    "$AIO_ROOT/src/progress_test/progress_test.c" \
     -L"$MERCURY_DIR/lib" -Wl,-rpath,"$MERCURY_DIR/lib" -lmercury -lna -lmercury_util -lpthread -lm
   check_mercury "$PM_BIN/aio_bench_pdc"
   check_mercury "$PM_BIN/progress_test"

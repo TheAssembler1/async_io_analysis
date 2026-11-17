@@ -7,7 +7,9 @@
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
 source "${PDC_ENV:-$HOME/src/workspace/pdc_env.sh}" # Mercury/libfabric paths only
-out=${1:-$here/results.csv}
+root=$(cd "$here/../.." && pwd)
+bin=$root/src/progress_test/progress_test
+out=${1:-$root/results/laptop/knobs.csv}
 REPS=${REPS:-3} MB=${MB:-256} STEPS=${STEPS:-5} RATIO=${RATIO:-1.25} NP=${NP:-4}
 KERNELS=${KERNELS:-"sleep spin fma stream"}
 SERVER_CPUS=${SERVER_CPUS:-0,1}
@@ -47,13 +49,13 @@ run() {
   local rep=$1 place=$2 hg=$3 blk=$4 to=$5 sl=$6 k=$7 cpus=$CLIENT_CPUS
   [ "$place" = smt ] && cpus=$SMT_CPUS
   rm -f "$addr"
-  PT_HG=$hg taskset -c "$SERVER_CPUS" "$here/progress_test" server "$addr" 2> /dev/null &
+  PT_HG=$hg taskset -c "$SERVER_CPUS" "$bin" server "$addr" 2> /dev/null &
   local sp=$!
   for _ in $(seq 100); do [ -s "$addr" ] && break; sleep 0.1; done
   local res
   res=$(PT_HG=$hg PT_CPUS="$cpus" PT_MB=$MB PT_STEPS=$STEPS PT_RATIO=$RATIO PT_KERNEL=$k \
         PT_BLOCKING=$blk PT_TIMEOUT_MS=$to PT_SLEEP_US=$sl \
-        timeout 600 mpiexec -n "$NP" --bind-to none "$here/progress_test" client "$addr") || res=""
+        timeout 600 mpiexec -n "$NP" --bind-to none "$bin" client "$addr") || res=""
   kill "$sp" 2> /dev/null; wait "$sp" 2> /dev/null || true
   if [ -z "$res" ]; then echo "FAILED: $*" >&2; return; fi
   if [ "$header_done" = 0 ]; then echo "rep,placement,$(head -1 <<< "$res")" > "$out"; header_done=1; fi

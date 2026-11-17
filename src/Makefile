@@ -1,4 +1,4 @@
-# Build aio_bench against the stack installed by scripts/build_deps.sh.
+# Build aio_bench against the stack installed by scripts/local/build_deps.sh.
 #   make            CPU + GPU (needs nvcc)
 #   make CUDA=0     CPU only
 #   make PDC=1      also build the PDC backend (needs PDC in $(DEPS))

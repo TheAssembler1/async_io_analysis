@@ -8,8 +8,8 @@ servers, from 1 to 8 nodes. Every run starts its own set of servers.
     ./build.sh                          # Mercury, PDC, aio_bench_pdc, progress_test
     sbatch jobs/smoke.sbatch            # check the output before the rest
     ./submit_all.sh
-    ./summary.py > ../../results/perlmutter/summary.md
-    ./plots.py                          # PNGs in results/perlmutter/figures (needs matplotlib)
+    ../../analysis/perlmutter/summary.py > ../../results/perlmutter/summary.md
+    ../../analysis/perlmutter/plots.py  # PNGs in figures/perlmutter (needs matplotlib)
 
 ## Node layout
 

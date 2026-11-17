@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Markdown tables from run_sweep.sh output (medians over reps).
-   table.py [results.csv] > results.md"""
+   table.py [results/laptop/knobs.csv] > results/laptop/knobs.md"""
 import csv
+import os
 import sys
 from collections import defaultdict
 from statistics import median
 
-rows = list(csv.DictReader(open(sys.argv[1] if len(sys.argv) > 1 else "results.csv")))
+rows = list(csv.DictReader(open(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "results", "laptop", "knobs.csv"))))
 groups = defaultdict(list)
 for r in rows:
     cfg = (r["placement"], r["hg"].replace("ofi+", ""), int(r["blocking"]), int(r["timeout_ms"]),

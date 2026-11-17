@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate the paper's figures.
 
-    python3 src/analysis/plots.py --placeholder      # expected-trend dummy data
-    python3 src/analysis/plots.py --csv results.csv  # measured data (TODO)
+    python3 analysis/placeholder_plots.py --placeholder      # expected-trend dummy data
+    python3 analysis/placeholder_plots.py --csv results.csv  # measured data (TODO)
 
 Placeholder figures carry a "PLACEHOLDER - NOT MEASURED" watermark so they can
 never be mistaken for real results.
@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "..", "paper", "figures")
+OUT = os.path.join(HERE, "..", "figures", "placeholder")
 
 # Validated categorical palette (dataviz reference palette, light mode), in
 # fixed order; gray is reserved for baselines/models, not for a series.

@@ -7,7 +7,7 @@
 #SBATCH -N 2
 #SBATCH --exclusive
 #SBATCH --network=job_vni
-# Progress-loop knobs (experiments/progress_knobs, Mercury only) on Slingshot.
+# Progress-loop knobs (src/progress_test, Mercury only) on Slingshot.
 # One busy-polling server pulls from NP clients. remote: server on the first
 # node, clients on the second, so every pull crosses the network; local: all
 # on the first node. Same columns as the laptop results.csv plus location.

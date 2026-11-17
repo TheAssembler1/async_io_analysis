@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """PNG figures from the Perlmutter runs.
-   plots.py [results/perlmutter] [outdir=<results>/figures]     (needs matplotlib)"""
+   plots.py [results/perlmutter] [outdir=figures/perlmutter]     (needs matplotlib)"""
 import csv
 import glob
 import os
@@ -14,7 +14,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "../../results/perlmutter")
-out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(src, "figures")
+out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(__file__), "../../figures/perlmutter")
 os.makedirs(out, exist_ok=True)
 
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"

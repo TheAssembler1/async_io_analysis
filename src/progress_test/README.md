@@ -26,8 +26,9 @@ When the transfer is done, the progress thread is still inside
 this as `t_join`, separate from `t_wait`.
 
     make                      # needs Mercury (default: ~/src/workspace/install/mercury)
-    ./run_sweep.sh results.csv
-    ./table.py results.csv > results.md
+    ../../scripts/laptop/run_sweep.sh                 # -> results/laptop/knobs.csv
+    ../../analysis/laptop/table.py > ../../results/laptop/knobs.md
+    ../../analysis/laptop/plots.py                    # -> figures/laptop
 
 Each run reports, per rank: compute time alone and with a transfer in flight,
 wait and join time, transfer time (forward to callback), and CPU time of the

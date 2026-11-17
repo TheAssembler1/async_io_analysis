@@ -11,7 +11,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-out = sys.argv[1] if len(sys.argv) > 1 else "figures"
+out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "figures", "diagrams")
 os.makedirs(out, exist_ok=True)
 
 SURFACE, INK, INK2, LANE = "#fcfcfb", "#0b0b0b", "#52514e", "#f1f0ec"

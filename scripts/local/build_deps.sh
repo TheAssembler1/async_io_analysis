@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds the I/O software stack used by the benchmarks into deps/install.
-# Usage: src/scripts/build_deps.sh [component...]
+# Usage: scripts/local/build_deps.sh [component...]
 #   components: argobots hdf5 volasync adios2 openblas mercury pdc tectonic (default: all)
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
@@ -32,8 +32,8 @@ build_hdf5() {   # parallel + thread-safe, required by the async VOL
 build_volasync() {
   [ -d vol-async ] || git clone -q https://github.com/hpc-io/vol-async.git
   # 1 s / 100 ms back-offs in H5VL_async_request_wait -> 1 ms (see paper)
-  git -C vol-async apply --check "$ROOT/src/scripts/vol-async-wait.patch" 2>/dev/null &&
-    git -C vol-async apply "$ROOT/src/scripts/vol-async-wait.patch"
+  git -C vol-async apply --check "$ROOT/scripts/local/vol-async-wait.patch" 2>/dev/null &&
+    git -C vol-async apply "$ROOT/scripts/local/vol-async-wait.patch"
   rm -rf volasync-build
   cmake -S vol-async -B volasync-build -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_PREFIX_PATH="$PREFIX" -DHDF5_DIR="$PREFIX/cmake" -DABT_DIR="$PREFIX" -DENABLE_WRITE_MEMCPY=ON
@@ -44,7 +44,7 @@ build_adios2() {
   fetch https://github.com/ornladios/ADIOS2/archive/refs/tags/v2.12.1.tar.gz adios2-2.12.1.tar.gz
   rm -rf ADIOS2-2.12.1 adios2-build && tar xf adios2-2.12.1.tar.gz
   # opt-in per-step fdatasync (ADIOS2_FSYNC=1), see adios2-fsync.patch
-  (cd ADIOS2-2.12.1/.. && patch -p1 -d ADIOS2-2.12.1 < "$ROOT/src/scripts/adios2-fsync.patch")
+  (cd ADIOS2-2.12.1/.. && patch -p1 -d ADIOS2-2.12.1 < "$ROOT/scripts/local/adios2-fsync.patch")
   cmake -S ADIOS2-2.12.1 -B adios2-build -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release \
     -DADIOS2_USE_MPI=ON -DADIOS2_USE_Fortran=OFF -DADIOS2_USE_Python=OFF -DADIOS2_USE_HDF5=OFF \
     -DADIOS2_USE_SST=OFF -DADIOS2_USE_CUDA=OFF -DADIOS2_USE_Kokkos=OFF -DADIOS2_USE_Campaign=OFF \
