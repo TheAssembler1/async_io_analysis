@@ -37,3 +37,5 @@
 2026-11-14 09:35:21 [pdc_scale n8] ok   rep 3/3 cxi.shared.remote sync halo: pdc/sync/halo[cxi.shared.remote] P=256 alone=1.717 comp=1.717 (x1.00) io/step=1.356 final=0.011 total=15.378
 2026-11-14 09:39:21 [pdc_scale n8] ok   rep 3/3 cxi.shared.remote async halo: pdc/async/halo[cxi.shared.remote] P=256 alone=1.716 comp=29.879 (x17.42) io/step=0.861 final=0.658 total=154.123
 2026-11-14 09:41:01 [pdc_scale n8] ok   rep 3/3 cxi.shared.remote sync net: pdc/sync/net[cxi.shared.remote] P=256 alone=1.684 comp=1.654 (x0.98) io/step=1.393 final=0.012 total=15.055
+2026-11-14 09:42:40 [pdc_scale n8] ok   rep 3/3 cxi.shared.remote async net: pdc/async/net[cxi.shared.remote] P=256 alone=1.680 comp=1.762 (x1.05) io/step=1.000 final=0.595 total=13.541
+2026-11-14 09:42:50 [pdc_scale n8] done

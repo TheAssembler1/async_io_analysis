@@ -52,3 +52,17 @@
 2026-11-14 09:35:15 [pdc_locality n4] ok   rep 3/3 cxi.shared.local sync stream: pdc/sync/stream[cxi.shared.local] P=128 alone=1.682 comp=1.682 (x1.00) io/step=2.207 final=0.011 total=15.082
 2026-11-14 09:36:56 [pdc_locality n4] ok   rep 3/3 cxi.shared.local async stream: pdc/async/stream[cxi.shared.local] P=128 alone=1.688 comp=2.308 (x1.37) io/step=1.852 final=0.545 total=15.969
 2026-11-14 09:38:37 [pdc_locality n4] ok   rep 3/3 cxi.shared.local sync halo: pdc/sync/halo[cxi.shared.local] P=128 alone=1.677 comp=1.686 (x1.01) io/step=1.341 final=0.011 total=15.147
+2026-11-14 09:46:12 [pdc_locality n4] ok   rep 3/3 cxi.shared.local async halo: pdc/async/halo[cxi.shared.local] P=128 alone=1.679 comp=72.994 (x43.47) io/step=0.774 final=0.686 total=369.334
+2026-11-14 09:47:50 [pdc_locality n4] ok   rep 3/3 cxi.shared.local sync net: pdc/sync/net[cxi.shared.local] P=128 alone=1.672 comp=1.666 (x1.00) io/step=1.345 final=0.011 total=14.972
+2026-11-14 09:49:27 [pdc_locality n4] ok   rep 3/3 cxi.shared.local async net: pdc/async/net[cxi.shared.local] P=128 alone=1.677 comp=1.754 (x1.05) io/step=0.862 final=0.506 total=12.981
+2026-11-14 09:51:05 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote sync sleep: pdc/sync/sleep[cxi.shared.remote] P=128 alone=1.698 comp=1.698 (x1.00) io/step=1.358 final=0.013 total=15.288
+2026-11-14 09:52:40 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote async sleep: pdc/async/sleep[cxi.shared.remote] P=128 alone=1.698 comp=1.697 (x1.00) io/step=0.887 final=0.545 total=13.347
+2026-11-14 09:54:22 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote sync spin: pdc/sync/spin[cxi.shared.remote] P=128 alone=1.697 comp=1.697 (x1.00) io/step=1.354 final=0.011 total=15.256
+2026-11-14 09:55:29 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote async spin: pdc/async/spin[cxi.shared.remote] P=128 alone=1.697 comp=3.068 (x1.81) io/step=1.759 final=4.523 total=28.367
+2026-11-14 09:57:09 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote sync stream: pdc/sync/stream[cxi.shared.remote] P=128 alone=1.700 comp=1.711 (x1.01) io/step=2.228 final=0.011 total=15.266
+2026-11-14 09:58:51 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote async stream: pdc/async/stream[cxi.shared.remote] P=128 alone=1.700 comp=2.318 (x1.36) io/step=1.917 final=0.542 total=16.298
+2026-11-14 10:00:33 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote sync halo: pdc/sync/halo[cxi.shared.remote] P=128 alone=2.287 comp=1.695 (x0.74) io/step=1.353 final=0.011 total=15.249
+2026-11-14 10:08:09 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote async halo: pdc/async/halo[cxi.shared.remote] P=128 alone=1.690 comp=72.431 (x42.86) io/step=0.888 final=0.603 total=367.015
+2026-11-14 10:09:51 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote sync net: pdc/sync/net[cxi.shared.remote] P=128 alone=1.677 comp=1.668 (x0.99) io/step=1.366 final=0.011 total=15.096
+2026-11-14 10:11:31 [pdc_locality n4] ok   rep 3/3 cxi.shared.remote async net: pdc/async/net[cxi.shared.remote] P=128 alone=1.695 comp=1.759 (x1.04) io/step=1.003 final=0.642 total=13.840
+2026-11-14 10:11:40 [pdc_locality n4] done
