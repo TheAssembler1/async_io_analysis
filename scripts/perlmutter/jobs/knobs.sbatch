@@ -13,7 +13,9 @@
 # on the first node. Same columns as the laptop results.csv plus location.
 #   sbatch jobs/knobs.sbatch
 # NP (32), MB (256), STEPS (5), RATIO (1.25), REPS (3), KERNELS, HGS (ofi+cxi),
-# LOCATIONS (remote), GRID (1: timeout {0,1,10,100} x sleep {0,100,1000,10000} us)
+# LOCATIONS (remote), GRID (1: timeout {0,1,10,100} x sleep {0,100,1000,10000} us),
+# GRID_PLACEMENTS (shared), BASE (1: also the fixed placement/blocking configs)
+#   GRID_PLACEMENTS="smt reserved" BASE=0 CSV=results/perlmutter/knobs_grid_placement.csv sbatch jobs/knobs.sbatch
 set -u
 # sbatch runs a copy of this file; find scripts/perlmutter from where it was submitted.
 for PM_HERE in "${PM_SCRIPTS:-}" "$SLURM_SUBMIT_DIR" "$SLURM_SUBMIT_DIR/scripts/perlmutter" "$SLURM_SUBMIT_DIR/.."; do
@@ -33,11 +35,14 @@ mkdir -p "$PM_RESULTS" "$RUNS"
 mapfile -t nodes < <(scontrol show hostnames "$SLURM_JOB_NODELIST")
 
 # placement blocking timeout_ms sleep_us
-configs=("shared 0 100 1000" "shared 1 100 1000" "smt 0 100 1000" "smt 0 0 1000" "reserved 0 100 1000")
+configs=()
+[ "${BASE:-1}" = 1 ] && configs=("shared 0 100 1000" "shared 1 100 1000" "smt 0 100 1000" "smt 0 0 1000" "reserved 0 100 1000")
 if [ "${GRID:-1}" = 1 ]; then
-  for to in 0 1 10 100; do
-    for sl in 0 100 1000 10000; do
-      [ "$to/$sl" = 100/1000 ] || configs+=("shared 0 $to $sl")
+  for place in ${GRID_PLACEMENTS:-shared}; do
+    for to in 0 1 10 100; do
+      for sl in 0 100 1000 10000; do
+        [[ " ${configs[*]/%/,} " == *" $place 0 $to $sl,"* ]] || configs+=("$place 0 $to $sl")
+      done
     done
   done
 fi

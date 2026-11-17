@@ -149,50 +149,108 @@ ax.set_title("PDC write bandwidth, 256 MiB per client per step", loc="left", fon
 ax.legend(loc="upper left", fontsize=9)
 save(fig, "4_bandwidth_nodes.png")
 
-# 5: Mercury-only knobs grid, spin slowdown (knobs.csv)
-kpath = os.path.join(src, "knobs.csv")
-if os.path.exists(kpath):
-    g = defaultdict(list)
-    for r in csv.DictReader(open(kpath)):
+# 5, 6: Mercury-only knobs (knobs*.csv from jobs/knobs.sbatch)
+g = defaultdict(list)
+for f in sorted(glob.glob(os.path.join(src, "knobs*.csv"))):
+    if "smoke" in f:
+        continue
+    for r in csv.DictReader(open(f)):
         g[(r["placement"], r["kernel"], int(r["blocking"]), int(r["timeout_ms"]), int(r["sleep_us"]))].append(r)
-    timeouts, sleeps = [0, 1, 10, 100], [0, 100, 1000, 10000]
+timeouts, sleeps = [0, 1, 10, 100], [0, 100, 1000, 10000]
+kerns = [k for k in ("spin", "fma", "stream") if any(key[1] == k for key in g)]
+PLACE_DESC = {"shared": "on the same hardware thread as the compute",
+              "smt": "free to use the core's second hardware thread",
+              "reserved": "free to use a second core"}
 
-    def knob_rate(rs):
-        """GB/s while the kernel runs: all ranks' bytes per step / forward-to-callback time."""
-        v = [float(r["nranks"]) * float(r["mib"]) * (1 << 20) / 1e9 / float(r["t_xfer"]) for r in rs]
-        return median(v) if v else None
 
-    kerns = [k for k in ("spin", "fma", "stream") if any(key[1] == k for key in g)]
+def knob_rate(rs):
+    """GB/s while the kernel runs: all ranks' bytes per step / forward-to-callback time."""
+    v = [float(r["nranks"]) * float(r["mib"]) * (1 << 20) / 1e9 / float(r["t_xfer"]) for r in rs]
+    return median(v) if v else None
+
+
+def knob_slow(rs):
+    return median(float(r["slowdown"]) for r in rs) if rs else None
+
+
+def knobs_grid(place, fname):
     fig, axs = plt.subplots(1, len(kerns), figsize=(3.6 * len(kerns), 3.8), squeeze=False)
     for ax, k in zip(axs[0], kerns):
-        m = [[median(float(r["slowdown"]) for r in g[("shared", k, 0, t, s)]) if ("shared", k, 0, t, s) in g else float("nan")
-              for s in sleeps] for t in timeouts]
-        ax.imshow(m, cmap="Blues", vmin=0.9, vmax=2.2, aspect="auto")
+        m = [[knob_slow(g.get((place, k, 0, t, s))) for s in sleeps] for t in timeouts]
+        ax.imshow([[float("nan") if v is None else v for v in row] for row in m],
+                  cmap="Blues", vmin=0.9, vmax=2.2, aspect="auto")
         for i, row in enumerate(m):
             for j, v in enumerate(row):
+                if v is None:
+                    ax.text(j, i, "not run", ha="center", va="center", fontsize=8, color=INK2)
+                    continue
                 ink = "white" if v > 1.6 else INK
                 ax.text(j, i - 0.12, f"{v:.2f}x", ha="center", va="center", fontsize=9.5, color=ink)
-                r = knob_rate(g.get(("shared", k, 0, timeouts[i], sleeps[j]), []))
-                if r is not None:
-                    ax.text(j, i + 0.2, f"{r:.1f} GB/s", ha="center", va="center", fontsize=7.5, color=ink)
-        cells = [(i, j) for i in range(4) for j in range(4) if m[i][j] == m[i][j]]
+                r = knob_rate(g[(place, k, 0, timeouts[i], sleeps[j])])
+                ax.text(j, i + 0.2, f"{r:.1f} GB/s", ha="center", va="center", fontsize=7.5, color=ink)
+        cells = [(i, j) for i in range(4) for j in range(4) if m[i][j] is not None]
         best = min(cells, key=lambda c: m[c[0]][c[1]])
-        for (i, j), col in ((best, BEST), ((timeouts.index(DEFAULT[0]), sleeps.index(DEFAULT[1])), HL)):
-            ax.add_patch(plt.Rectangle((j - 0.45, i - 0.45), 0.9, 0.9, fill=False, lw=3, ec=col))
+        di = (timeouts.index(DEFAULT[0]), sleeps.index(DEFAULT[1]))
+        for c, col in ((best, BEST), (di, HL)):
+            if m[c[0]][c[1]] is not None:
+                ax.add_patch(plt.Rectangle((c[1] - 0.45, c[0] - 0.45), 0.9, 0.9, fill=False, lw=3, ec=col))
         ax.set_xticks(range(4), ["0", "100us", "1ms", "10ms"])
         ax.set_yticks(range(4), [f"{t} ms" for t in timeouts])
         ax.set_xlabel("sleep between progress calls")
         ax.grid(False)
-        for s in ax.spines.values():
-            s.set_visible(False)
-        b = g.get(("shared", k, 1, 100, 1000))
-        tag = f"; blocking {median(float(r['slowdown']) for r in b):.2f}x, {knob_rate(b):.1f} GB/s" if b else ""
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        b = g.get((place, k, 1, 100, 1000))
+        tag = f"; blocking {knob_slow(b):.2f}x, {knob_rate(b):.1f} GB/s" if b else ""
         ax.set_title(f"{k}{tag}", loc="left", fontsize=10)
     axs[0][0].set_ylabel("HG_Progress timeout")
-    fig.suptitle("Mercury only over ofi+cxi: compute slowdown with the progress thread on the same CPU",
+    fig.suptitle(f"Mercury only over ofi+cxi, {place}: progress thread {PLACE_DESC.get(place, place)}",
                  x=0.01, ha="left", fontsize=10)
     fig.tight_layout()
     fig.text(0.01, -0.04, "Large number: compute slowdown. Small: transfer rate while the kernel runs, all 32 clients. "
              "Red: PDC default (timeout 100 ms, sleep 1 ms). Green: lowest slowdown.",
              ha="left", fontsize=9, color=INK2)
-    save(fig, "5_knobs_grid.png")
+    save(fig, fname)
+
+
+if kerns:
+    for place in PCOL:
+        if sum((place, k, 0, t, s) in g for k in kerns for t in timeouts for s in sleeps) >= 8:
+            knobs_grid(place, "5_knobs_grid.png" if place == "shared" else f"5_knobs_grid_{place}.png")
+
+    # 6: every placement at the same two settings: PDC's default and timeout 0 / sleep 1 ms
+    settings = [((0, 100, 1000), "PDC default: timeout 100 ms, sleep 1 ms"),
+                ((0, 0, 1000), "timeout 0, sleep 1 ms")]
+    bkerns = [k for k in ("sleep", "spin", "fma", "stream") if any(key[1] == k for key in g)]
+    fig, axs = plt.subplots(2, 2, figsize=(10, 6), sharey="row", sharex=True)
+    for c, (cfg, title) in enumerate(settings):
+        for j, p in enumerate(PCOL):
+            for i, k in enumerate(bkerns):
+                rs = g.get((p, k) + cfg)
+                x = i + (j - 1) * w
+                if not rs:
+                    for ax in axs[:, c]:
+                        ax.text(x, 0.5, "not run", rotation=90, ha="center", va="bottom", fontsize=7,
+                                color=INK2, transform=ax.get_xaxis_transform())
+                    continue
+                v, r = knob_slow(rs), knob_rate(rs)
+                axs[0, c].bar(x, max(v - 1, 0.004), bottom=1, width=w - 0.03, color=PCOL[p],
+                              label=p if i == 0 else None)
+                if v >= 1.1:
+                    axs[0, c].text(x, v + 0.02, f"{v:.2f}", ha="center", va="bottom", fontsize=7.5, color=INK2)
+                axs[1, c].bar(x, r, width=w - 0.03, color=PCOL[p])
+                axs[1, c].text(x, r + 0.5, f"{r:.0f}", ha="center", va="bottom", fontsize=7.5, color=INK2)
+        axs[0, c].axhline(1, color=INK2, lw=0.8)
+        axs[0, c].set_title(title, loc="left", fontsize=10)
+    axs[0, 0].set_ylim(0.95, 2.1)
+    axs[1, 0].set_ylim(0, 40)
+    axs[0, 0].set_ylabel("compute slowdown")
+    axs[1, 0].set_ylabel("GB/s while computing")
+    for ax in axs[1]:
+        ax.set_xticks(range(len(bkerns)), bkerns)
+        ax.tick_params(axis="x", length=0)
+    axs[0, 0].legend(title="client CPUs", loc="upper left", fontsize=9, title_fontsize=9)
+    fig.suptitle("Mercury only over ofi+cxi: progress-thread placement (32 clients, server on the other node)",
+                 x=0.01, ha="left", fontsize=10)
+    fig.tight_layout()
+    save(fig, "6_knobs_placement.png")

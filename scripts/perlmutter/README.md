@@ -56,7 +56,7 @@ The scripts make clients network-bound in two ways:
 | `placement` | 2 | shared / smt / reserved |
 | `transport` | 2 | ofi+cxi against ofi+tcp over hsn0 (the paper's transport); not submitted by default |
 | `locality` | 2, 4, 8 | local vs. remote servers |
-| `knobs` | 2 | `progress_test` (Mercury only): HG_Progress timeout x sleep grid, blocking, placement; server on one node, 32 clients on the other |
+| `knobs` | 2 | `progress_test` (Mercury only): HG_Progress timeout x sleep grid, blocking, placement; server on one node, 32 clients on the other (`GRID_PLACEMENTS="smt reserved" BASE=0` runs the grid for the other placements) |
 
 The PDC jobs share one driver, `matrix.sh`. It first runs `BASE_REPS` sync,
 I/O-only runs for each transport and target. Compute per step is then set to
