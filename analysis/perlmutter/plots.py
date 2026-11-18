@@ -255,10 +255,10 @@ if kerns:
     fig.tight_layout()
     save(fig, "6_knobs_placement.png")
 
-# 7: per-step client time, compute stacked under observed I/O; sync and async, 2 nodes, remote servers
+# 7: client time over the whole run, compute stacked under observed I/O; sync and async, 2 nodes, remote servers
 COL = {("sync", "comp"): "#d3d2ce", ("sync", "io"): "#9ec3ef",
        ("async", "comp"): "#8a8984", ("async", "io"): "#2a78d6"}
-cap = 6.0
+cap = 30.0
 PLAB = {"shared": "shared", "smt": "SMT", "reserved": "2 cores"}
 MW, GAP = 3.4, 7.6  # x offset of async within a kernel group, and between kernels
 fig, ax = plt.subplots(figsize=(14, 4.8))
@@ -275,27 +275,27 @@ for i, k in enumerate(KERNELS):
             rs = rows.get(key)
             if not rs:
                 continue
-            comp = med(key, "t_comp")
-            io = median(float(r["t_io_obs"]) / int(r["steps"]) for r in rs)
+            comp = median(float(r["t_comp"]) * int(r["steps"]) for r in rs)
+            io = med(key, "t_io_obs")
             c, t = min(comp, cap), min(comp + io, cap)
             first = (i, j) == (0, 0)
             ax.bar(x, c, width=0.8, color=COL[(m, "comp")], label=f"{m} compute" if first else None)
             ax.bar(x, t - c, bottom=c, width=0.8, color=COL[(m, "io")], label=f"{m} I/O" if first else None)
             if comp + io > cap:
-                for dy in (-0.25, -0.1):
-                    ax.plot([x - 0.45, x + 0.45], [cap + dy - 0.06, cap + dy + 0.06], color=SURFACE, lw=3,
+                for dy in (-1.25, -0.5):
+                    ax.plot([x - 0.45, x + 0.45], [cap + dy - 0.3, cap + dy + 0.3], color=SURFACE, lw=3,
                             solid_capstyle="butt", clip_on=False)
-                ax.text(x, cap + 0.08, f"{comp + io:.0f} s", ha="center", va="bottom", fontsize=8,
+                ax.text(x, cap + 0.4, f"{comp + io:.0f} s", ha="center", va="bottom", fontsize=8,
                         color=INK, fontweight="bold")
             else:
-                ax.text(x, t + 0.08, f"{comp + io:.1f}", ha="center", va="bottom", fontsize=7, color=INK2)
+                ax.text(x, t + 0.4, f"{comp + io:.0f}", ha="center", va="bottom", fontsize=7, color=INK2)
 # separators on both sides of every kernel group, running down through the labels
 for i in range(len(KERNELS) + 1):
     ax.plot([i * GAP - 1.0] * 2, [-0.27, 1.0], color=INK2, lw=1.2, clip_on=False,
             transform=matplotlib.transforms.blended_transform_factory(ax.transData, ax.transAxes))
-ax.set_ylim(0, cap + 0.5)
-ax.set_yticks(range(0, int(cap) + 1))
-ax.set_ylabel("time per step (s)")
+ax.set_ylim(0, cap + 2.5)
+ax.set_yticks(range(0, int(cap) + 1, 5))
+ax.set_ylabel("total time, 5 steps (s)")
 ax.set_xlim(-1.2, len(KERNELS) * GAP - 0.8)
 ax.set_xticks(xt, xl, fontsize=7.5, color=INK2, rotation=90)
 ax.tick_params(axis="x", length=0)
@@ -306,11 +306,11 @@ for labels, pos, pad, size, weight in ((ml, mt, 42, 9, "normal"),
     sec.tick_params(axis="x", length=0, pad=pad)
     sec.spines["bottom"].set_visible(False)
 ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), fontsize=9, ncol=4, handlelength=1.2)
-ax.set_title("PDC time per step on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
+ax.set_title("PDC run time on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
              loc="center", fontsize=11, pad=26)
 fig.tight_layout()
 fig.text(0.5, -0.01,
-         "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
+         "Median of runs; each bar is the total over a 5-step run. Number above a bar: compute + I/O. "
          "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.\n"
          "Kernels: sleep: the rank sleeps, CPU idle.  net: each rank exchanges 8 MiB with the same rank on the "
          "next and previous node.  stream: STREAM triad on 3 x 32 MiB arrays (memory bandwidth).\n"
