@@ -305,9 +305,9 @@ for labels, pos, pad, size, weight in ((ml, mt, 42, 9, "normal"),
     sec.spines["bottom"].set_visible(False)
 ax.legend(loc="upper left", fontsize=9, ncol=4, handlelength=1.2)
 ax.set_title("PDC time per step on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
-             loc="left", fontsize=11)
+             loc="center", fontsize=11)
 fig.tight_layout()
-fig.text(0.01, -0.01, "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
+fig.text(0.5, -0.01, "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
          "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.",
-         ha="left", va="top", fontsize=8.5, color=INK2)
+         ha="center", va="top", fontsize=8.5, color=INK2)
 save(fig, "7_step_breakdown.png")
