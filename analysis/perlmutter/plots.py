@@ -256,47 +256,55 @@ if kerns:
     save(fig, "6_knobs_placement.png")
 
 # 7: per-step client time, compute stacked under observed I/O; sync and async, 2 nodes, remote servers
-IOC, CPC = "#2a78d6", "#8a8984"
+IOC, CPC = "#2a78d6", "#a3a29d"
 cap = 6.0
-fig, axs = plt.subplots(2, 1, figsize=(11, 7.5), sharex=True, sharey=True)
+PLAB = {"shared": "shared", "smt": "SMT", "reserved": "2 cores"}
+GAP = 3.6
+fig, axs = plt.subplots(2, 1, figsize=(10, 7), sharex=True, sharey=True)
 for ax, m in zip(axs, ["sync", "async"]):
     xt, xl = [], []
     for i, k in enumerate(KERNELS):
+        if i:
+            ax.axvline(i * GAP - 0.8, color=GRID, lw=0.8)
         for j, p in enumerate(PCOL):
-            x = i * 3.6 + j * 1.0
+            x = i * GAP + j
             xt.append(x)
-            xl.append(p)
+            xl.append(PLAB[p])
             key = (2, p, "remote", k, m)
             rs = rows.get(key)
             if not rs:
-                ax.text(x, 0.1, "not run", rotation=90, ha="center", va="bottom", fontsize=7, color=INK2)
                 continue
             comp = med(key, "t_comp")
             io = median(float(r["t_io_obs"]) / int(r["steps"]) for r in rs)
             c, t = min(comp, cap), min(comp + io, cap)
-            ax.bar(x, c, width=0.8, color=CPC, label="compute" if (i, j) == (0, 0) else None)
-            ax.bar(x, t - c, bottom=c, width=0.8, color=IOC, edgecolor=SURFACE, linewidth=1,
-                   label="I/O seen by the client" if (i, j) == (0, 0) else None)
-            over = comp + io > cap
-            ax.text(x, t + 0.08, f"{comp + io:.0f}" if over else f"{comp + io:.1f}", ha="center", va="bottom",
-                    fontsize=7.5, color=INK if over else INK2, fontweight="bold" if over else "normal")
-            if not over and io > 0.45:
-                ax.text(x, c + (t - c) / 2, f"{io:.1f}", ha="center", va="center", fontsize=7, color="white")
-            if comp > 0.45 and comp < cap:
-                ax.text(x, c / 2, f"{comp:.1f}", ha="center", va="center", fontsize=7, color="white")
-    ax.set_ylim(0, cap + 0.6)
-    ax.set_ylabel("s per step")
-    ax.set_title(m, loc="left", fontsize=11)
-axs[-1].set_xticks(xt, xl, fontsize=8)
-axs[-1].tick_params(axis="x", length=0)
-for i, k in enumerate(KERNELS):
-    axs[-1].annotate(k, (i * 3.6 + 1.0, 0), xytext=(0, -24), textcoords="offset points",
-                     xycoords=("data", "axes fraction"), ha="center", fontsize=10)
-axs[0].legend(loc="upper left", fontsize=9, ncol=2)
-fig.suptitle("PDC, 2 nodes, 64 clients writing to the other node's servers: mean per step, median of runs",
-             x=0.01, ha="left", fontsize=10)
+            ax.bar(x, c, width=0.78, color=CPC, label="compute" if (i, j) == (0, 0) else None)
+            ax.bar(x, t - c, bottom=c, width=0.78, color=IOC, label="I/O" if (i, j) == (0, 0) else None)
+            if comp + io > cap:
+                # break mark on a bar that runs off the axis
+                for dy in (-0.25, -0.1):
+                    ax.plot([x - 0.45, x + 0.45], [cap + dy - 0.06, cap + dy + 0.06], color=SURFACE, lw=3,
+                            solid_capstyle="butt", clip_on=False)
+                ax.text(x, cap + 0.08, f"{comp + io:.0f} s", ha="center", va="bottom", fontsize=8,
+                        color=INK, fontweight="bold")
+            else:
+                ax.text(x, t + 0.08, f"{comp + io:.1f}", ha="center", va="bottom", fontsize=7.5, color=INK2)
+    ax.set_ylim(0, cap + 0.5)
+    ax.set_yticks(range(0, int(cap) + 1))
+    ax.set_ylabel("time per step (s)")
+    ax.set_title("Synchronous I/O" if m == "sync" else "Asynchronous I/O", loc="left", fontsize=11,
+                 fontweight="bold")
+    ax.tick_params(axis="x", length=0)
+    ax.set_xlim(-0.8, (len(KERNELS) - 1) * GAP + 2.8)
+axs[-1].set_xticks(xt, xl, fontsize=8, color=INK2)
+sec = axs[-1].secondary_xaxis("bottom")
+sec.set_xticks([i * GAP + 1 for i in range(len(KERNELS))], KERNELS, fontsize=10, color=INK)
+sec.tick_params(axis="x", length=0, pad=18)
+sec.spines["bottom"].set_visible(False)
+axs[0].legend(loc="upper left", fontsize=9, ncol=2, handlelength=1.2)
+fig.suptitle("PDC time per step on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
+             x=0.01, ha="left", fontsize=11)
 fig.tight_layout()
-fig.text(0.01, -0.02, "Compute excludes I/O. I/O: write call to the end of the step's barrier, plus the final wait, "
-         f"divided by the steps. Number on top: compute + I/O. Bars stop at {cap:.0f} s; a bold number is the real value.",
-         ha="left", fontsize=9, color=INK2)
+fig.text(0.01, -0.01, "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O.\n"
+         "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.",
+         ha="left", va="top", fontsize=8.5, color=INK2)
 save(fig, "7_step_breakdown.png")
