@@ -264,8 +264,6 @@ MW, GAP = 3.4, 7.6  # x offset of async within a kernel group, and between kerne
 fig, ax = plt.subplots(figsize=(14, 4.8))
 xt, xl, mt, ml = [], [], [], []
 for i, k in enumerate(KERNELS):
-    if i:
-        ax.axvline(i * GAP - 1.0, color=GRID, lw=0.8)
     for mi, m in enumerate(["sync", "async"]):
         mt.append(i * GAP + mi * MW + 1)
         ml.append(m)
@@ -291,10 +289,14 @@ for i, k in enumerate(KERNELS):
                         color=INK, fontweight="bold")
             else:
                 ax.text(x, t + 0.08, f"{comp + io:.1f}", ha="center", va="bottom", fontsize=7, color=INK2)
+# separators on both sides of every kernel group, running down through the labels
+for i in range(len(KERNELS) + 1):
+    ax.plot([i * GAP - 1.0] * 2, [-0.27, 1.0], color=INK2, lw=1.2, clip_on=False,
+            transform=matplotlib.transforms.blended_transform_factory(ax.transData, ax.transAxes))
 ax.set_ylim(0, cap + 0.5)
 ax.set_yticks(range(0, int(cap) + 1))
 ax.set_ylabel("time per step (s)")
-ax.set_xlim(-1.0, (len(KERNELS) - 1) * GAP + MW + 3)
+ax.set_xlim(-1.2, len(KERNELS) * GAP - 0.8)
 ax.set_xticks(xt, xl, fontsize=7.5, color=INK2, rotation=90)
 ax.tick_params(axis="x", length=0)
 for labels, pos, pad, size, weight in ((ml, mt, 42, 9, "normal"),
@@ -303,9 +305,9 @@ for labels, pos, pad, size, weight in ((ml, mt, 42, 9, "normal"),
     sec.set_xticks(pos, labels, fontsize=size, fontweight=weight, color=INK)
     sec.tick_params(axis="x", length=0, pad=pad)
     sec.spines["bottom"].set_visible(False)
-ax.legend(loc="upper left", fontsize=9, ncol=4, handlelength=1.2)
+ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), fontsize=9, ncol=4, handlelength=1.2)
 ax.set_title("PDC time per step on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
-             loc="center", fontsize=11)
+             loc="center", fontsize=11, pad=26)
 fig.tight_layout()
 fig.text(0.5, -0.01, "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
          "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.",
