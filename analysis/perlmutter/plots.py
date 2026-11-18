@@ -309,7 +309,16 @@ ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), fontsize=9, ncol=4, han
 ax.set_title("PDC time per step on 2 Perlmutter nodes (64 clients writing to the other node's servers)",
              loc="center", fontsize=11, pad=26)
 fig.tight_layout()
-fig.text(0.5, -0.01, "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
-         "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.",
-         ha="center", va="top", fontsize=8.5, color=INK2)
+fig.text(0.5, -0.01,
+         "Median of runs; each value is the mean over 5 steps. Number above a bar: compute + I/O. "
+         "I/O is the time the client spends in the write call and the step's barrier, plus the final wait.\n"
+         "Kernels: sleep: the rank sleeps, CPU idle.  net: each rank exchanges 8 MiB with the same rank on the "
+         "next and previous node.  stream: STREAM triad on 3 x 32 MiB arrays (memory bandwidth).\n"
+         "spin: xorshift loop in registers (ALU only, no memory traffic).  dgemm: 256 x 256 matrix multiply that "
+         "stays in L2 (floating point).  halo: 3-D halo exchange, 6 x 512 KiB faces, then an allreduce.\n"
+         "Placement of each client and its PDC progress thread: shared: one hardware thread, so the thread "
+         "competes with the compute.  SMT: both hardware threads of the client's core,\n"
+         "so the thread runs beside the compute on the same core.  2 cores: a second, otherwise idle core, "
+         "so the thread shares nothing with the compute.",
+         ha="center", va="top", fontsize=8.5, color=INK2, linespacing=1.5)
 save(fig, "7_step_breakdown.png")
