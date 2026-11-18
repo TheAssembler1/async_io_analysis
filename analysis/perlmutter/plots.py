@@ -255,43 +255,48 @@ if kerns:
     fig.tight_layout()
     save(fig, "6_knobs_placement.png")
 
-# 7: per-step client time split into compute and observed I/O, 2 nodes, remote servers
+# 7: per-step client time, compute stacked under observed I/O; sync and async, 2 nodes, remote servers
 IOC, CPC = "#2a78d6", "#8a8984"
-modes = ["sync", "async"]
-cap = 4.0
-fig, axs = plt.subplots(len(PCOL), 1, figsize=(11, 2.9 * len(PCOL)), sharex=True, sharey=True)
-for ax, p in zip(axs, PCOL):
+cap = 6.0
+fig, axs = plt.subplots(2, 1, figsize=(11, 7.5), sharex=True, sharey=True)
+for ax, m in zip(axs, ["sync", "async"]):
     xt, xl = [], []
     for i, k in enumerate(KERNELS):
-        for m_i, m in enumerate(modes):
-            key = (2, p, "remote", k, m)
-            x = i * 2.6 + m_i * 1.05
+        for j, p in enumerate(PCOL):
+            x = i * 3.6 + j * 1.0
             xt.append(x)
-            xl.append(m)
+            xl.append(p)
+            key = (2, p, "remote", k, m)
             rs = rows.get(key)
             if not rs:
                 ax.text(x, 0.1, "not run", rotation=90, ha="center", va="bottom", fontsize=7, color=INK2)
                 continue
-            io = median(float(r["t_io_obs"]) / int(r["steps"]) for r in rs)
             comp = med(key, "t_comp")
-            for dx, v, col, lab in ((-0.22, io, IOC, "I/O seen by the client"), (0.22, comp, CPC, "compute")):
-                ax.bar(x + dx, min(v, cap), width=0.42, color=col, label=lab if (i, m_i) == (0, 0) else None)
-                ax.text(x + dx, min(v, cap) + 0.05, f"{v:.1f}" if v < 10 else f"{v:.0f}", ha="center",
-                        va="bottom", fontsize=7, color=INK if v > cap else INK2,
-                        fontweight="bold" if v > cap else "normal")
-    ax.set_ylim(0, cap + 0.5)
+            io = median(float(r["t_io_obs"]) / int(r["steps"]) for r in rs)
+            c, t = min(comp, cap), min(comp + io, cap)
+            ax.bar(x, c, width=0.8, color=CPC, label="compute" if (i, j) == (0, 0) else None)
+            ax.bar(x, t - c, bottom=c, width=0.8, color=IOC, edgecolor=SURFACE, linewidth=1,
+                   label="I/O seen by the client" if (i, j) == (0, 0) else None)
+            over = comp + io > cap
+            ax.text(x, t + 0.08, f"{comp + io:.0f}" if over else f"{comp + io:.1f}", ha="center", va="bottom",
+                    fontsize=7.5, color=INK if over else INK2, fontweight="bold" if over else "normal")
+            if not over and io > 0.45:
+                ax.text(x, c + (t - c) / 2, f"{io:.1f}", ha="center", va="center", fontsize=7, color="white")
+            if comp > 0.45 and comp < cap:
+                ax.text(x, c / 2, f"{comp:.1f}", ha="center", va="center", fontsize=7, color="white")
+    ax.set_ylim(0, cap + 0.6)
     ax.set_ylabel("s per step")
-    ax.set_title(f"{p}: progress thread {PLACE_DESC[p]}", loc="left", fontsize=10)
+    ax.set_title(m, loc="left", fontsize=11)
 axs[-1].set_xticks(xt, xl, fontsize=8)
 axs[-1].tick_params(axis="x", length=0)
 for i, k in enumerate(KERNELS):
-    axs[-1].annotate(k, (i * 2.6 + 0.525, 0), xytext=(0, -24), textcoords="offset points",
+    axs[-1].annotate(k, (i * 3.6 + 1.0, 0), xytext=(0, -24), textcoords="offset points",
                      xycoords=("data", "axes fraction"), ha="center", fontsize=10)
 axs[0].legend(loc="upper left", fontsize=9, ncol=2)
 fig.suptitle("PDC, 2 nodes, 64 clients writing to the other node's servers: mean per step, median of runs",
              x=0.01, ha="left", fontsize=10)
 fig.tight_layout()
-fig.text(0.01, -0.02, f"I/O: write call to the end of the step's barrier, plus the final wait, divided by the steps. "
-         f"Compute excludes I/O. Bars stop at {cap:.0f} s; the bold number is the real value.",
+fig.text(0.01, -0.02, "Compute excludes I/O. I/O: write call to the end of the step's barrier, plus the final wait, "
+         f"divided by the steps. Number on top: compute + I/O. Bars stop at {cap:.0f} s; a bold number is the real value.",
          ha="left", fontsize=9, color=INK2)
 save(fig, "7_step_breakdown.png")
