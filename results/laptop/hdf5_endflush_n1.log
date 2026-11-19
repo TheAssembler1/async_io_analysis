@@ -1,0 +1,52 @@
+2026-11-18 14:35:40 [hdf5_endflush n1] start: flushes=[endflush] placements=[shared iocore] kernels=[sleep dgemm] modes=[sync async] reps=2 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 14:35:40 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 14:37:15 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.trace sync sleep: hdf5/sync/sleep[shared.endflush.trace] P=6 alone=12.000 comp=12.001 (x1.00) io/step=5.117 final=0.203 total=85.790
+2026-11-18 14:38:52 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.trace async sleep: hdf5/async/sleep[shared.endflush.trace] P=6 alone=12.000 comp=12.001 (x1.00) io/step=4.802 final=0.381 total=84.376
+2026-11-18 14:40:26 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.trace sync dgemm: hdf5/sync/dgemm[shared.endflush.trace] P=6 alone=11.017 comp=10.932 (x0.99) io/step=5.649 final=0.192 total=81.303
+2026-11-18 14:42:09 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.trace async dgemm: hdf5/async/dgemm[shared.endflush.trace] P=6 alone=11.674 comp=13.808 (x1.18) io/step=3.652 final=4.362 total=87.394
+2026-11-18 14:43:59 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.trace sync sleep: hdf5/sync/sleep[iocore.endflush.trace] P=6 alone=12.000 comp=12.031 (x1.00) io/step=8.671 final=0.203 total=103.566
+2026-11-18 14:45:42 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.trace async sleep: hdf5/async/sleep[iocore.endflush.trace] P=6 alone=12.000 comp=12.078 (x1.01) io/step=4.951 final=4.487 total=89.260
+2026-11-18 14:47:11 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.trace sync dgemm: hdf5/sync/dgemm[iocore.endflush.trace] P=6 alone=11.135 comp=9.733 (x0.87) io/step=5.938 final=0.201 total=76.960
+2026-11-18 14:50:29 [hdf5_endflush n1] FAIL rep 1/2 iocore.endflush.trace async dgemm rc=1, kept /tmp/claude-1000/-home-ta1-src-async-io-analysis/6d0b90fe-99f0-47e6-8fa9-4c2d3c6e24a6/scratchpad/aio_runs/48113/8
+2026-11-18 14:52:02 [hdf5_endflush n1] ok   rep 2/2 shared.endflush sync sleep: hdf5/sync/sleep[shared.endflush] P=6 alone=12.048 comp=12.058 (x1.00) io/step=4.888 final=0.205 total=84.678
+2026-11-18 14:53:35 [hdf5_endflush n1] ok   rep 2/2 shared.endflush async sleep: hdf5/async/sleep[shared.endflush] P=6 alone=12.043 comp=12.003 (x1.00) io/step=3.996 final=4.010 total=83.982
+2026-11-18 14:55:12 [hdf5_endflush n1] ok   rep 2/2 shared.endflush sync dgemm: hdf5/sync/dgemm[shared.endflush] P=6 alone=12.428 comp=10.694 (x0.86) io/step=6.476 final=0.214 total=83.690
+2026-11-18 14:56:43 [hdf5_endflush n1] ok   rep 2/2 shared.endflush async dgemm: hdf5/async/dgemm[shared.endflush] P=6 alone=10.418 comp=11.975 (x1.15) io/step=3.550 final=3.932 total=78.084
+2026-11-18 14:58:15 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush sync sleep: hdf5/sync/sleep[iocore.endflush] P=6 alone=12.117 comp=12.062 (x1.00) io/step=4.690 final=0.214 total=83.676
+2026-11-18 14:59:40 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush async sleep: hdf5/async/sleep[iocore.endflush] P=6 alone=12.002 comp=12.026 (x1.00) io/step=2.497 final=3.753 total=76.245
+2026-11-18 15:01:06 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush sync dgemm: hdf5/sync/dgemm[iocore.endflush] P=6 alone=11.827 comp=10.366 (x0.88) io/step=4.653 final=0.214 total=73.092
+2026-11-18 15:02:30 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush async dgemm: hdf5/async/dgemm[iocore.endflush] P=6 alone=11.389 comp=11.039 (x0.97) io/step=4.108 final=3.710 total=71.290
+2026-11-18 15:02:30 [hdf5_endflush n1] done
+2026-11-18 15:02:45 [hdf5_endflush n1] start: flushes=[endflush] placements=[iocore] kernels=[dgemm] modes=[async] reps=1 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 15:02:45 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 15:07:30 [hdf5_endflush n1] HANG rep 1/1 iocore.endflush.trace async dgemm (killed after 300 s), kept /tmp/claude-1000/-home-ta1-src-async-io-analysis/6d0b90fe-99f0-47e6-8fa9-4c2d3c6e24a6/scratchpad/aio_runs/51427/1
+2026-11-18 15:07:30 [hdf5_endflush n1] done
+2026-11-18 15:09:41 [hdf5_endflush n1] start: flushes=[endflush] placements=[iocore] kernels=[dgemm] modes=[async] reps=1 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 15:09:41 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 15:13:30 [hdf5_endflush n1] HANG rep 1/1 iocore.endflush.trace async dgemm (killed after 240 s), kept /tmp/claude-1000/-home-ta1-src-async-io-analysis/6d0b90fe-99f0-47e6-8fa9-4c2d3c6e24a6/scratchpad/aio_runs/51707/1
+2026-11-18 15:13:30 [hdf5_endflush n1] retrying after the hang
+2026-11-18 15:17:18 [hdf5_endflush n1] HANG rep 1/1 iocore.endflush.trace async dgemm (killed after 240 s), kept /tmp/claude-1000/-home-ta1-src-async-io-analysis/6d0b90fe-99f0-47e6-8fa9-4c2d3c6e24a6/scratchpad/aio_runs/51707/2
+2026-11-18 15:17:18 [hdf5_endflush n1] retrying after the hang
+2026-11-18 15:21:08 [hdf5_endflush n1] HANG rep 1/1 iocore.endflush.trace async dgemm (killed after 240 s), kept /tmp/claude-1000/-home-ta1-src-async-io-analysis/6d0b90fe-99f0-47e6-8fa9-4c2d3c6e24a6/scratchpad/aio_runs/51707/3
+2026-11-18 15:21:08 [hdf5_endflush n1] done
+2026-11-18 15:55:38 [hdf5_endflush n1] start: flushes=[endflush] placements=[shared iocore] kernels=[sleep dgemm] modes=[async] reps=2 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 15:55:38 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 16:00:44 [hdf5_endflush n1] start: flushes=[endflush] placements=[shared iocore] kernels=[sleep dgemm] modes=[async] reps=2 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 16:00:44 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 16:02:22 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.start.trace async sleep: hdf5/async/sleep[shared.endflush.start.trace] P=6 alone=12.001 comp=12.001 (x1.00) io/step=5.920 final=0.201 total=89.800
+2026-11-18 16:03:56 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.start.trace async dgemm: hdf5/async/dgemm[shared.endflush.start.trace] P=6 alone=11.583 comp=14.391 (x1.24) io/step=1.791 final=3.974 total=80.549
+2026-11-18 16:05:15 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.start.trace async sleep: hdf5/async/sleep[iocore.endflush.start.trace] P=6 alone=12.000 comp=12.043 (x1.00) io/step=1.029 final=3.722 total=68.883
+2026-11-18 16:06:44 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.start.trace async dgemm: hdf5/async/dgemm[iocore.endflush.start.trace] P=6 alone=12.368 comp=13.599 (x1.10) io/step=2.057 final=3.485 total=76.391
+2026-11-18 16:08:03 [hdf5_endflush n1] ok   rep 2/2 shared.endflush.start async sleep: hdf5/async/sleep[shared.endflush.start] P=6 alone=12.024 comp=12.004 (x1.00) io/step=1.201 final=4.229 total=70.215
+2026-11-18 16:09:47 [hdf5_endflush n1] ok   rep 2/2 shared.endflush.start async dgemm: hdf5/async/dgemm[shared.endflush.start] P=6 alone=11.786 comp=16.217 (x1.38) io/step=1.899 final=4.490 total=91.224
+2026-11-18 16:10:52 [hdf5_endflush n1] start: flushes=[endflush] placements=[shared iocore] kernels=[sleep dgemm] modes=[async] reps=2 (traced 1), 6 ranks per node, 1024 MiB x 5 steps, stripe 16, traces in /home/ta1/src/async_io_analysis/results/laptop/hdf5_traces/hdf5_endflush_n1
+2026-11-18 16:10:52 [hdf5_endflush n1] endflush: compute 12 s/step (COMPUTE_S)
+2026-11-18 16:12:09 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.start.trace async sleep: hdf5/async/sleep[shared.endflush.start.trace] P=6 alone=12.005 comp=12.009 (x1.00) io/step=1.105 final=3.874 total=69.371
+2026-11-18 16:13:42 [hdf5_endflush n1] ok   rep 1/2 shared.endflush.start.trace async dgemm: hdf5/async/dgemm[shared.endflush.start.trace] P=6 alone=11.627 comp=13.340 (x1.15) io/step=2.644 final=3.796 total=79.828
+2026-11-18 16:14:59 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.start.trace async sleep: hdf5/async/sleep[iocore.endflush.start.trace] P=6 alone=12.000 comp=12.042 (x1.00) io/step=1.023 final=3.830 total=68.948
+2026-11-18 16:16:30 [hdf5_endflush n1] ok   rep 1/2 iocore.endflush.start.trace async dgemm: hdf5/async/dgemm[iocore.endflush.start.trace] P=6 alone=11.826 comp=12.540 (x1.06) io/step=2.604 final=3.894 total=75.887
+2026-11-18 16:17:48 [hdf5_endflush n1] ok   rep 2/2 shared.endflush.start async sleep: hdf5/async/sleep[shared.endflush.start] P=6 alone=12.142 comp=12.024 (x0.99) io/step=1.171 final=4.224 total=70.066
+2026-11-18 16:19:29 [hdf5_endflush n1] ok   rep 2/2 shared.endflush.start async dgemm: hdf5/async/dgemm[shared.endflush.start] P=6 alone=12.340 comp=15.722 (x1.27) io/step=2.079 final=3.979 total=87.857
+2026-11-18 16:20:46 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush.start async sleep: hdf5/async/sleep[iocore.endflush.start] P=6 alone=12.022 comp=12.038 (x1.00) io/step=0.973 final=3.456 total=68.345
+2026-11-18 16:22:14 [hdf5_endflush n1] ok   rep 2/2 iocore.endflush.start async dgemm: hdf5/async/dgemm[iocore.endflush.start] P=6 alone=12.484 comp=13.143 (x1.05) io/step=1.543 final=3.743 total=74.310
+2026-11-18 16:22:14 [hdf5_endflush n1] done
