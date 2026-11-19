@@ -11,6 +11,12 @@ double now(void);
 /* MPI_Info with ROMIO hints from AIO_ROMIO_HINTS="key=val,key=val" (or MPI_INFO_NULL). */
 MPI_Info romio_hints(void);
 
+/* trace.c: phase log, thread sampler and AIO_PIN placement (see there). */
+void trace_init(int rank);
+void trace_phase(const char *name, int step, double t0, double t1);
+void trace_fini(void);
+void pin_threads(void);
+
 /* ------------------------------------------------------------------ I/O -- */
 typedef struct io_ctx {
     MPI_Comm comm;
@@ -20,6 +26,7 @@ typedef struct io_ctx {
     int durable;       /* 1 = a step completes only when its data is on the device */
     const char *dir;   /* output directory */
     void *priv;        /* backend state */
+    int flush_end;     /* 1 = one flush of the whole file after the last step (HDF5 only) */
 } io_ctx;
 
 typedef struct io_backend {

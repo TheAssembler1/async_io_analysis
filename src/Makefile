@@ -9,9 +9,9 @@ NVCC   ?= /usr/local/cuda/bin/nvcc
 CC      = mpicc
 CFLAGS  = -O2 -march=native -Wall -Wextra -Wno-unused-parameter -I$(DEPS)/include
 LDFLAGS = -L$(DEPS)/lib -Wl,-rpath,$(DEPS)/lib
-LIBS    = -lhdf5 -ladios2_c_mpi -ladios2_c -lopenblas -lrt -lpthread -lm
+LIBS    = -lhdf5 -ladios2_c_mpi -ladios2_c -lopenblas -ldl -lrt -lpthread -lm
 
-OBJS = aio_bench.o kernels.o io_posix.o io_mpiio.o io_hdf5.o io_adios2.o io_pdc.o
+OBJS = aio_bench.o trace.o kernels.o io_posix.o io_mpiio.o io_hdf5.o io_adios2.o io_pdc.o
 ifeq ($(CUDA),1)
   OBJS += gpu_kernels.o
   LIBS += -L/usr/local/cuda/lib64 -Wl,-rpath,/usr/local/cuda/lib64 -lcudart -lstdc++

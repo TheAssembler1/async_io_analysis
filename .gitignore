@@ -17,3 +17,5 @@ __pycache__/
 src/progress_test/progress_test
 # Office lock files
 ~$*
+# traces from the HDF5 trace runs (large)
+results/*/hdf5_traces/

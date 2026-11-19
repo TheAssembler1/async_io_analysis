@@ -94,3 +94,77 @@ this writing): it sets `rx_ctx_bits` on its address vector, which the cxi
 provider rejects. The docs' libfabric 1.18.0 has no cxi provider at all.
 `build.sh` adds the `mercury_list.h` header PDC still includes. Also Cray MPICH
 with `MPICH_MAX_THREAD_SAFETY=multiple`, and PDC data on Lustre (`$PSCRATCH`).
+
+# Traced HDF5 runs
+
+`hdf5.sh` (job `jobs/hdf5_trace.sbatch`, 2 nodes) runs `aio_bench` with the
+HDF5 backend on Lustre, sync (native VOL) and async (async VOL), and traces
+the first repetition of each case. No PDC here.
+
+    source hdf5_env.sh
+    ./build_hdf5.sh                     # Argobots, HDF5, vol-async, DFTracer, aio_bench_h5
+    sbatch -q debug -t 00:30:00 --export=ALL,KERNELS=dgemm,REPS=1,MB=16,STEPS=3 jobs/hdf5_trace.sbatch
+    sbatch jobs/hdf5_trace.sbatch
+    ../../analysis/perlmutter/hdf5_summary.py      # timings of the untraced runs
+    ../../analysis/perlmutter/hdf5_traces.py ../../results/perlmutter/hdf5_traces/hdf5_trace_n2
+
+`build_hdf5.sh` builds HDF5 1.14.6 parallel and thread-safe (the async VOL
+needs both; cray-hdf5-parallel is not thread-safe), Argobots 1.2, vol-async
+with the paper's 1 ms wait patch, and DFTracer with MPI and HDF5 interception
+against that HDF5 and Cray MPICH. `hdf5_env.sh` unloads darshan, which would
+intercept the same calls.
+
+Each job runs `FLUSHES x PLACEMENTS x KERNELS x MODES`, `REPS` (3) times, `STEPS`
+(10) steps of `MB` (256) MiB per rank, with the compute length per step set
+to `RATIO` (1.25) times the sync I/O time per step, as in `matrix.sh`
+(`COMPUTE_S` sets it directly):
+
+| setting | values (default first) |
+|---|---|
+| `FLUSHES` | `endflush`: no flush per step, every rank fsyncs the file after closing it. `flush`: H5Fflush (fsync) every step, as in the paper. `noflush`: none |
+| `PLACEMENTS` | `shared`: one hardware thread per rank. `iocore`: two cores per rank, main thread pinned to the first and every other thread (the async VOL's execution stream) to the second. `reserved` (not by default): two cores, placed by the OS |
+| `KERNELS` | sleep dgemm stream spin; also halo net |
+
+The async VOL always runs H5Fflush as a blocking task, so with `flush` the
+main thread waits for each step's write inside H5Fflush_async and the write
+does not overlap the next compute phase. With `endflush` and `noflush` it
+does, which is where interference with the compute shows up.
+
+Two async VOL settings are needed for the writes to overlap at all:
+
+- `ASYNC_START=1` (default) calls `H5VL_async_start()` after opening the file.
+  Without it the async VOL hands a queued write to its thread only when the
+  application next blocks (the next step's H5ESwait), and now and then one
+  rank's collective task never starts and the job hangs. Runs with
+  `ASYNC_START=0` get tag `.nostart`.
+- `HDF5_ASYNC_MAX_MEM_MB` (`ASYNC_MAX_MEM_MB`, default `MB`+256). Past this
+  much copied buffer data the async VOL writes synchronously, without saying
+  so. Unset, it is the free RAM when the process starts, which on a node with
+  a full page cache can be less than one step.
+
+`hdf5_summary.py` gives the medians of the untraced runs, with the async
+compute time against both the sync compute time on the same placement and the
+standalone run. Use the first: the standalone run is a few seconds measured
+once per case and can be off by 10% (on the laptop sync dgemm came out at
+0.86x of it).
+
+Traced runs (tag `<placement>.trace` in the CSV; the untraced repetitions give
+the timings) write to `results/perlmutter/hdf5_traces/hdf5_trace_n2/<placement>.<kernel>.<mode>.<flush>/` (git-ignored, a few GB per job):
+
+- `dft-*.pfw.gz`: DFTracer, one file per rank. POSIX calls on the output
+  file, MPI and MPI-IO calls, and HDF5 API calls, from every thread.
+  Calls shorter than 100 us are aggregated into counts.
+- `aio.<rank>.phases.csv`: the main thread's compute, HDF5 calls and barriers.
+- `aio.<rank>.threads.csv`: every thread sampled each `SAMPLE_MS` (5) ms, with
+  the CPU it is on, its run time and its run-queue wait from
+  `/proc/self/task/<tid>/schedstat`.
+
+`hdf5_traces.py` combines them. For each compute phase it reports the
+stretch over the standalone run, the main thread's run-queue wait, the I/O
+thread's CPU time (and how much of it was on the main thread's CPU), and how
+much of the phase overlapped I/O calls. It writes
+`results/perlmutter/hdf5_trace_n2_summary.csv`, a `perfetto.json` per case
+(open in ui.perfetto.dev) and `figures/perlmutter/hdf5_trace_n2/hdf5_trace_<kernel>_<flush>.png`.
+
+A case that does not finish in `CASE_TIMEOUT` (600 s) is logged as HANG, its
+run directory kept, and it is run again up to `HANG_RETRIES` (1) times.

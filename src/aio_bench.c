@@ -50,7 +50,8 @@ static const io_backend *find_backend(const char *s)
     return NULL;
 }
 
-static double timed_max(kernel_t k, double units, MPI_Comm comm, void *buf, size_t bytes)
+/* label: phase name for the trace, or NULL (calibration bursts) */
+static double timed_max(kernel_t k, double units, MPI_Comm comm, void *buf, size_t bytes, const char *label)
 {
     double t0, t, tmax;
     MPI_Barrier(comm);
@@ -58,6 +59,7 @@ static double timed_max(kernel_t k, double units, MPI_Comm comm, void *buf, size
     kernel_run(k, units);
     kernel_output(k, buf, bytes);
     t = now() - t0;
+    if (label) trace_phase(label, -1, t0, t0 + t);
     MPI_Allreduce(&t, &tmax, 1, MPI_DOUBLE, MPI_MAX, comm);
     return tmax;
 }
@@ -77,13 +79,13 @@ static double calibrate(kernel_t k, double tcomp, MPI_Comm comm, void *buf, size
     int gpu = (k == K_GPU_SPIN || k == K_GPU_BLOCK);
     double target = (gpu || tcomp < CAL_TARGET) ? tcomp : CAL_TARGET;
     double u = 1, t;
-    timed_max(k, u, comm, buf, bytes); /* warm up */
+    timed_max(k, u, comm, buf, bytes, NULL); /* warm up */
     if (gpu)
-        for (double w = 0; w < GPU_WARMUP; u *= 2) w += timed_max(k, u, comm, buf, bytes);
-    while ((t = timed_max(k, u, comm, buf, bytes)) < 0.1 * target) u *= 4;
+        for (double w = 0; w < GPU_WARMUP; u *= 2) w += timed_max(k, u, comm, buf, bytes, NULL);
+    while ((t = timed_max(k, u, comm, buf, bytes, NULL)) < 0.1 * target) u *= 4;
     for (int it = 0; it < 2; it++) {
         u = u * target / t;
-        t = timed_max(k, u, comm, buf, bytes);
+        t = timed_max(k, u, comm, buf, bytes, NULL);
     }
     return u * target / t * (tcomp / target);
 }
@@ -94,7 +96,7 @@ static void usage(void)
             "usage: aio_bench --io {posix|mpiio|hdf5|adios2|pdc|none} --mode {sync|async}\n"
             "                 --kernel {none|sleep|spin|dgemm|stream|halo|heat|net|gpu-spin|gpu-block}\n"
             "                 [--tcomp s=2] [--mb MiB/rank=64] [--steps n=5] [--dir path=.]\n"
-            "                 [--units u] [--tag label] [--csv file] [--no-fsync]\n"
+            "                 [--units u] [--tag label] [--csv file] [--no-fsync] [--fsync-end]\n"
             "                 [--alone-reps n=3]\n");
 }
 
@@ -107,15 +109,17 @@ int main(int argc, char **argv)
     /* MPI file errors return silently by default; make them abort instead
      * (also covers the MPI-IO calls HDF5 makes underneath). */
     MPI_File_set_errhandler(MPI_FILE_NULL, MPI_ERRORS_ARE_FATAL);
+    pin_threads();
+    trace_init(rank);
 
     const char *io_name = "none", *mode = "sync", *kname = "sleep", *dir = ".", *tag = "", *csv = NULL;
     double tcomp = 2.0, units = -1, mb = 64;
-    int steps = 5, durable = 1, alone_reps = 3;
+    int steps = 5, durable = 1, alone_reps = 3, flush_end = 0;
     static struct option opts[] = {
         {"io", 1, 0, 'i'}, {"mode", 1, 0, 'm'}, {"kernel", 1, 0, 'k'}, {"tcomp", 1, 0, 't'},
         {"mb", 1, 0, 'b'}, {"steps", 1, 0, 's'}, {"dir", 1, 0, 'd'}, {"units", 1, 0, 'u'},
         {"tag", 1, 0, 'g'}, {"csv", 1, 0, 'c'}, {"no-fsync", 0, 0, 'n'},
-        {"alone-reps", 1, 0, 'a'}, {0, 0, 0, 0}};
+        {"alone-reps", 1, 0, 'a'}, {"fsync-end", 0, 0, 'e'}, {0, 0, 0, 0}};
     for (int o; (o = getopt_long(argc, argv, "", opts, NULL)) != -1;) {
         switch (o) {
         case 'i': io_name = optarg; break;
@@ -130,6 +134,7 @@ int main(int argc, char **argv)
         case 'c': csv = optarg; break;
         case 'n': durable = 0; break;
         case 'a': alone_reps = atoi(optarg); break;
+        case 'e': durable = 0; flush_end = 1; break; /* no per-step flush, one at the end */
         default: if (!rank) usage(); MPI_Abort(MPI_COMM_WORLD, 1);
         }
     }
@@ -139,7 +144,7 @@ int main(int argc, char **argv)
     if (provided < MPI_THREAD_MULTIPLE && !rank) fprintf(stderr, "warning: MPI_THREAD_MULTIPLE not provided\n");
 
     io_ctx ctx = {MPI_COMM_WORLD, rank, nranks, (size_t)(mb * 1048576.0) / 8 * 8,
-                  !strcmp(mode, "async"), durable, dir, NULL};
+                  !strcmp(mode, "async"), durable, dir, NULL, flush_end};
     void *buf;
     if (posix_memalign(&buf, 4096, ctx.bytes)) MPI_Abort(MPI_COMM_WORLD, 1);
     for (size_t i = 0; i < ctx.bytes / sizeof(double); i++) ((double *)buf)[i] = rank + 1e-6 * i;
@@ -152,7 +157,7 @@ int main(int argc, char **argv)
         if (units < 0) units = calibrate(k, tcomp, MPI_COMM_WORLD, buf, ctx.bytes);
         MPI_Bcast(&units, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         for (int r = 0; r < alone_reps; r++)
-            t_alone += timed_max(k, units, MPI_COMM_WORLD, buf, ctx.bytes) / alone_reps;
+            t_alone += timed_max(k, units, MPI_COMM_WORLD, buf, ctx.bytes, "alone") / alone_reps;
     }
 
     /* ---- timed epoch loop ---- */
@@ -162,6 +167,7 @@ int main(int argc, char **argv)
         MPI_Abort(MPI_COMM_WORLD, 6);
     }
     t_init = now() - t_init;
+    pin_threads(); /* again: HDF5 init starts the async VOL's thread */
 
     double *tc = calloc(steps, sizeof *tc), *ti = calloc(steps, sizeof *ti);
     MPI_Barrier(MPI_COMM_WORLD);
@@ -173,16 +179,21 @@ int main(int argc, char **argv)
         if (be && be->compute_end) be->compute_end(&ctx);
         double b = now();
         if (be) be->issue(&ctx, s, buf);
+        double c = now();
         /* The I/O phase ends when every rank has finished it; without this
          * barrier, ranks that finish early would charge the imbalance to the
          * next compute phase (e.g., waiting in a halo exchange). */
         MPI_Barrier(MPI_COMM_WORLD);
         tc[s] = b - a;
         ti[s] = now() - b;
+        trace_phase("compute", s, a, b);
+        trace_phase("issue", s, b, c);
+        trace_phase("barrier", s, c, b + ti[s]);
     }
     double tf = now();
     if (be) { be->wait(&ctx); be->fini(&ctx); }
     double t_end = now();
+    trace_phase("drain", steps, tf, t_end);
     tf = t_end - tf;
     double total = t_end - t0;
 
@@ -213,6 +224,7 @@ int main(int argc, char **argv)
                 tf_max, total_max);
     }
     kernel_teardown(k);
+    trace_fini();
     free(buf);
     MPI_Finalize();
     return 0;

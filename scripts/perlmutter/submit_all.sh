@@ -2,6 +2,7 @@
 # Submit the Perlmutter jobs. Run jobs/smoke.sbatch first and check its output.
 #   ./submit_all.sh [job ...]        (account m2621 is set in the jobs; ACCOUNT=... overrides)
 # jobs: scale placement locality knobs (default), transport (ofi+cxi vs ofi+tcp, on request)
+#   hdf5 (traced HDF5 runs, on request; build with build_hdf5.sh first)
 #   scale      NODE_COUNTS (1 2 4 8) nodes each
 #   locality   NODE_COUNTS without 1
 #   placement, transport  PAIR_NODES (2) nodes;  knobs  2 nodes
@@ -29,6 +30,7 @@ for job in ${@:-scale placement locality knobs}; do
     placement | transport) sub "$PAIR_NODES" "$job" ;;
     knobs)     sub 2 knobs ;;
     smoke)     sub 2 smoke ;;
+    hdf5)      sub 2 hdf5_trace ;;
     *) echo "unknown job $job" >&2; exit 1 ;;
   esac
 done

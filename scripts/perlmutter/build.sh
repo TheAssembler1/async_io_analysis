@@ -90,7 +90,7 @@ const io_backend io_adios2 = {"adios2", absent, nop_issue, nop, nop, NULL, NULL}
 EOF
   grep -rqs PDCobj_create_coll "$PDC_DIR/include" && api=-DPDC_COLL_API
   cc -O2 -march=znver3 -Wall -I"$s" -DHAVE_PDC $api -I"$PDC_DIR/include" -I"$MERCURY_DIR/include" \
-    -o "$PM_BIN/aio_bench_pdc" "$s"/aio_bench.c "$s"/kernels.c "$s"/io_posix.c "$s"/io_mpiio.c \
+    -o "$PM_BIN/aio_bench_pdc" "$s"/aio_bench.c "$s"/trace.c "$s"/kernels.c "$s"/io_posix.c "$s"/io_mpiio.c \
     "$s"/io_pdc.c "$s"/gpu_stub.c "$b/io_absent.c" \
     -L"$PDC_DIR/lib" -Wl,-rpath,"$PDC_DIR/lib" -L"$MERCURY_DIR/lib" -Wl,-rpath,"$MERCURY_DIR/lib" \
     -lpdc -lpdc_commons -lmercury -lrt -lpthread -lm
