@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 
 src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "results", "laptop", "knobs_grid.csv")
-out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "figures", "laptop")
+out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "figures", "laptop", "progress_test")
 os.makedirs(out, exist_ok=True)
 
 SURFACE, INK, INK2 = "#fcfcfb", "#0b0b0b", "#52514e"
