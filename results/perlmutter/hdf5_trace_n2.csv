@@ -1,0 +1,7 @@
+io,mode,kernel,tag,durable,nranks,mib_per_rank,steps,tcomp_target,units,t_alone,t_comp,slowdown,t_io_step,t_final,t_io_obs,t_total,t_init,gb
+hdf5,sync,none,shared.endflush,0,64,16.0,3,0.000,-1,0.0000,0.0000,0.0000,0.6137,0.0197,1.8609,1.8609,0.0449,3.221
+hdf5,sync,none,shared.endflush,0,64,16.0,3,0.000,-1,0.0000,0.0000,0.0000,0.4431,0.0235,1.3527,1.3527,0.0377,3.221
+hdf5,sync,dgemm,shared.endflush.trace,0,64,16.0,3,0.660,820.473,0.6557,0.6543,0.9978,0.3719,0.0163,1.1318,3.0296,0.0406,3.221
+hdf5,async,dgemm,shared.endflush.trace,0,64,16.0,3,0.660,838.813,0.6595,0.6888,1.0445,0.5625,0.5566,2.2377,4.2615,0.0673,3.221
+hdf5,sync,dgemm,iocore.endflush.trace,0,64,16.0,3,0.660,836.112,0.6586,0.6485,0.9846,0.4418,0.0207,1.3461,3.2418,0.0450,3.221
+hdf5,async,dgemm,iocore.endflush.trace,0,64,16.0,3,0.660,831.87,0.6584,0.6588,1.0007,0.1829,0.4599,1.0065,2.8946,0.0566,3.221

@@ -1,0 +1,9 @@
+2026-11-20 07:47:10 [hdf5_trace n2] start: flushes=[endflush] placements=[shared iocore] kernels=[dgemm] modes=[sync async] reps=1 (traced 1), 32 ranks per node, 16 MiB x 3 steps, stripe 16, traces in /pscratch/sd/n/nlewi26/src/async_io_analysis/results/perlmutter/hdf5_traces/hdf5_trace_n2
+2026-11-20 07:47:21 [hdf5_trace n2] ok   shared.endflush sync none: hdf5/sync/none[shared.endflush] P=64 alone=0.000 comp=0.000 (x0.00) io/step=0.614 final=0.020 total=1.861
+2026-11-20 07:47:26 [hdf5_trace n2] ok   shared.endflush sync none: hdf5/sync/none[shared.endflush] P=64 alone=0.000 comp=0.000 (x0.00) io/step=0.443 final=0.024 total=1.353
+2026-11-20 07:47:26 [hdf5_trace n2] endflush: sync I/O 0.5284 s/step -> compute 0.660 s/step
+2026-11-20 07:47:35 [hdf5_trace n2] ok   rep 1/1 shared.endflush.trace sync dgemm: hdf5/sync/dgemm[shared.endflush.trace] P=64 alone=0.656 comp=0.654 (x1.00) io/step=0.372 final=0.016 total=3.030
+2026-11-20 07:47:47 [hdf5_trace n2] ok   rep 1/1 shared.endflush.trace async dgemm: hdf5/async/dgemm[shared.endflush.trace] P=64 alone=0.660 comp=0.689 (x1.04) io/step=0.562 final=0.557 total=4.262
+2026-11-20 07:47:57 [hdf5_trace n2] ok   rep 1/1 iocore.endflush.trace sync dgemm: hdf5/sync/dgemm[iocore.endflush.trace] P=64 alone=0.659 comp=0.648 (x0.98) io/step=0.442 final=0.021 total=3.242
+2026-11-20 07:48:07 [hdf5_trace n2] ok   rep 1/1 iocore.endflush.trace async dgemm: hdf5/async/dgemm[iocore.endflush.trace] P=64 alone=0.658 comp=0.659 (x1.00) io/step=0.183 final=0.460 total=2.895
+2026-11-20 07:48:08 [hdf5_trace n2] done
