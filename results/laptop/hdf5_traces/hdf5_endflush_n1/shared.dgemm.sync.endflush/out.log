@@ -1,0 +1,2 @@
+[hdf5] VOL connector: native (async=0)
+hdf5/sync/dgemm[shared.endflush.trace] P=6 alone=11.017 comp=10.932 (x0.99) io/step=5.649 final=0.192 total=81.303

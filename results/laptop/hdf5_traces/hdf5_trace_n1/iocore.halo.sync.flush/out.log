@@ -1,0 +1,2 @@
+[hdf5] VOL connector: native (async=0)
+hdf5/sync/halo[iocore.trace] P=6 alone=0.479 comp=0.446 (x0.93) io/step=0.561 final=0.001 total=5.037

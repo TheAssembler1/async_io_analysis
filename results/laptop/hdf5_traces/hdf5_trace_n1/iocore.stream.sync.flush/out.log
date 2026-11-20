@@ -1,0 +1,2 @@
+[hdf5] VOL connector: native (async=0)
+hdf5/sync/stream[iocore.trace] P=6 alone=0.557 comp=0.533 (x0.96) io/step=0.595 final=0.001 total=5.467

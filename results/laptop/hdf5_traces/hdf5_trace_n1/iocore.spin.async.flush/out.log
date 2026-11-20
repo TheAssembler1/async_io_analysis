@@ -1,0 +1,2 @@
+[hdf5] VOL connector: async (async=1)
+hdf5/async/spin[iocore.trace] P=6 alone=0.524 comp=0.517 (x0.99) io/step=1.026 final=0.002 total=7.590
