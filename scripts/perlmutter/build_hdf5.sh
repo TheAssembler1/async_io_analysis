@@ -92,9 +92,13 @@ print(sys.prefix if os.path.exists(os.path.join(sysconfig.get_paths()["include"]
   cmake --install "$bd"
   # A build can succeed with an interception missing; check for the calls we
   # need (gotcha wrappers, exported as C++ <call>_wrapper symbols).
+  # The symbol list is read in full first: piped straight into grep -q, nm can
+  # die of SIGPIPE after the match, which pipefail reports as a failure.
   lib=$(ls "$PM_H5_DIR"/lib*/libdftracer_core.so | head -1)
+  local syms
+  syms=$(nm -D --defined-only "$lib")
   for f in MPI_File_write_at_all H5Dwrite pwrite; do
-    nm -D --defined-only "$lib" | grep -q "${f}_wrapper" || { echo "$lib does not intercept $f" >&2; exit 1; }
+    grep -q "${f}_wrapper" <<< "$syms" || { echo "$lib does not intercept $f" >&2; exit 1; }
   done
   ldd "$lib" | grep -E 'libmpi|libhdf5'
 }
