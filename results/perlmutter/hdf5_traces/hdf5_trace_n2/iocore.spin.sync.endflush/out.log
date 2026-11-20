@@ -1,0 +1,2 @@
+[hdf5] VOL connector: native (async=0)
+hdf5/sync/spin[iocore.endflush.trace] P=64 alone=8.907 comp=8.707 (x0.98) io/step=5.519 final=0.044 total=142.220
