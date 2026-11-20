@@ -66,6 +66,15 @@ build_dftracer() {
   [ -d "$SRC/dftracer" ] || git clone -q "$DFT_REPO" "$SRC/dftracer"
   git -C "$SRC/dftracer" fetch -q origin && git -C "$SRC/dftracer" checkout -q "$DFT_REF"
   local bd=$SRC/build-dftracer lib a b c
+  # The dependency pass builds pybind11 even with the bindings off, and its
+  # configure needs a Python with headers; Perlmutter's /usr/bin/python3 has
+  # none, the python module does. The module is loaded only in the subshell
+  # that finds it, so the rest of the build keeps the system Python.
+  local py
+  py=$(module load python > /dev/null 2>&1; python3 -c 'import os, sys, sysconfig
+print(sys.prefix if os.path.exists(os.path.join(sysconfig.get_paths()["include"], "Python.h")) else "")')
+  [ -n "$py" ] || { echo "no python3 with Python.h found (tried module load python)" >&2; exit 1; }
+  echo "pybind11 uses the Python in $py"
   local opts=(-DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX="$PM_H5_DIR" -DCMAKE_PREFIX_PATH="$PM_H5_DIR"
     -DDFTRACER_BUILD_PYTHON_BINDINGS=OFF -DDFTRACER_ENABLE_MPI=ON -DDFTRACER_ENABLE_HDF5=ON
@@ -75,8 +84,9 @@ build_dftracer() {
     opts+=(-DDFTRACER_MPI_IMPL=CRAYMPICH -DBRAHMA_MPI_VERSION=$((a * 100000 + b * 100 + ${c:-0})))
   fi
   rm -rf "$bd"
-  cmake -S "$SRC/dftracer" -B "$bd" "${opts[@]}" -DDFTRACER_INSTALL_DEPENDENCIES=ON
-  cmake --build "$bd" -j"$J"
+  # Python_ROOT_DIR reaches pybind11's own configure through the environment.
+  Python_ROOT_DIR=$py PATH=$py/bin:$PATH cmake -S "$SRC/dftracer" -B "$bd" "${opts[@]}" -DDFTRACER_INSTALL_DEPENDENCIES=ON
+  Python_ROOT_DIR=$py PATH=$py/bin:$PATH cmake --build "$bd" -j"$J"
   cmake -S "$SRC/dftracer" -B "$bd" "${opts[@]}" -DDFTRACER_INSTALL_DEPENDENCIES=OFF
   cmake --build "$bd" -j"$J"
   cmake --install "$bd"
