@@ -64,7 +64,7 @@ ASYNC_START=${ASYNC_START:-1}
 NAME=${PM_NAME:-${SLURM_JOB_NAME:-hdf5_trace}}
 CSV=${CSV:-$PM_RESULTS/${NAME}_n${NODES}.csv}
 LOG=${LOG:-$PM_RESULTS/${NAME}_n${NODES}.log}
-TRACE_ROOT=${TRACE_ROOT:-$PM_RESULTS/hdf5_traces}   # git-ignored; a few GB per Perlmutter job
+TRACE_ROOT=${TRACE_ROOT:-$PM_RESULTS/hdf5_traces}   # committed, except the perfetto.json made from them
 TRACES=$TRACE_ROOT/${NAME}_n${NODES}
 RUNS=$PM_RUNDIR/${SLURM_JOB_ID:-$$}
 SEQ=0
@@ -130,7 +130,12 @@ h5_case() {
     --mb "$MB" --steps "$STEPS" --dir "$run" --tag "$tag" --csv "$CSV" --alone-reps "$ALONE_REPS" $fopt \
     > "$run/out.log" 2>&1
   rc=$?
-  [ -n "$tdir" ] && cp "$run/out.log" "$tdir/out.log"
+  if [ -n "$tdir" ]; then
+    cp "$run/out.log" "$tdir/out.log"
+    # The traces are committed (perfetto.json, made from them, is not); the
+    # thread samples are most of their size and shrink about 7x.
+    gzip -f "$tdir"/aio.*.csv 2> /dev/null
+  fi
   if [ $rc = 0 ] && [ "$mode" = async ] && grep -q "async VOL not active" "$run/out.log"; then
     log "async VOL did not load, see $run/out.log"
     rc=1

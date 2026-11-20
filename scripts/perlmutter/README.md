@@ -149,13 +149,15 @@ once per case and can be off by 10% (on the laptop sync dgemm came out at
 0.86x of it).
 
 Traced runs (tag `<placement>.trace` in the CSV; the untraced repetitions give
-the timings) write to `results/perlmutter/hdf5_traces/hdf5_trace_n2/<placement>.<kernel>.<mode>.<flush>/` (git-ignored, a few GB per job):
+the timings) write to `results/perlmutter/hdf5_traces/hdf5_trace_n2/<placement>.<kernel>.<mode>.<flush>/`,
+which is committed with the results. The `perfetto.json` that `hdf5_traces.py`
+makes in each case directory is git-ignored; run it again to get them back.
 
 - `dft-*.pfw.gz`: DFTracer, one file per rank. POSIX calls on the output
   file, MPI and MPI-IO calls, and HDF5 API calls, from every thread.
   Calls shorter than 100 us are aggregated into counts.
-- `aio.<rank>.phases.csv`: the main thread's compute, HDF5 calls and barriers.
-- `aio.<rank>.threads.csv`: every thread sampled each `SAMPLE_MS` (5) ms, with
+- `aio.<rank>.phases.csv.gz`: the main thread's compute, HDF5 calls and barriers.
+- `aio.<rank>.threads.csv.gz`: every thread sampled each `SAMPLE_MS` (5) ms, with
   the CPU it is on, its run time and its run-queue wait from
   `/proc/self/task/<tid>/schedstat`.
 

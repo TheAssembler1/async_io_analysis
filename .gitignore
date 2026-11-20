@@ -14,8 +14,9 @@ __pycache__/
 *.toc
 !results/*/*.log
 !results/*/*.out
+!results/*/hdf5_traces/**/out.log
 src/progress_test/progress_test
 # Office lock files
 ~$*
-# traces from the HDF5 trace runs (large)
-results/*/hdf5_traces/
+# made from the HDF5 traces by analysis/perlmutter/hdf5_traces.py (large)
+results/*/hdf5_traces/**/perfetto.json

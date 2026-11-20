@@ -9,7 +9,7 @@ machine's results/ and figures/ directories.
 
 Each case directory (<placement>.<kernel>.<mode>.<flush|noflush>) holds DFTracer traces
 (dft-*.pfw.gz, one per rank) and aio_bench's phase log and thread samples
-(aio.<rank>.phases.csv, aio.<rank>.threads.csv). Writes:
+(aio.<rank>.phases.csv.gz, aio.<rank>.threads.csv.gz; plain .csv is read too). Writes:
 
   results/<machine>/<TRACES name>_summary.csv
       one row per case, the columns below (--out)
@@ -55,10 +55,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 IO_CATS = re.compile(r"^(POSIX|STDIO|MPIIO|h5.*|collective|comm|datatype|p2p)$")
 
 
+def opentext(path):
+    return (gzip.open if path.endswith(".gz") else open)(path, "rt")
+
+
 def load_dft(path):
     """Complete events and the rank of one DFTracer trace."""
     rank, events = None, []
-    with (gzip.open if path.endswith(".gz") else open)(path, "rt") as f:
+    with opentext(path) as f:
         for line in f:
             line = line.strip().rstrip(",")
             if not line.startswith("{"):
@@ -74,7 +78,7 @@ def load_dft(path):
 def load_threads(path):
     """Samples per tid as sorted (ts_us, cpu, run_ns, wait_ns), and the sampler's tid."""
     samples, sampler = defaultdict(list), None
-    with open(path) as f:
+    with opentext(path) as f:
         rows = []
         for line in f:
             if line.startswith("#"):
@@ -153,13 +157,13 @@ def cpu_on(series, t0, t1, cpu_of_main):
 
 def analyze_case(d):
     phases = defaultdict(list)  # rank -> rows
-    for f in glob.glob(os.path.join(d, "aio.*.phases.csv")):
-        for r in csv.DictReader(open(f)):
+    for f in glob.glob(os.path.join(d, "aio.*.phases.csv*")):
+        for r in csv.DictReader(opentext(f)):
             phases[int(r["rank"])].append(
                 (r["name"], int(r["step"]), float(r["ts_us"]), float(r["ts_us"]) + float(r["dur_us"]), int(r["pid"])))
     threads = {}
-    for f in glob.glob(os.path.join(d, "aio.*.threads.csv")):
-        threads[int(f.split(".")[-3])] = load_threads(f)
+    for f in glob.glob(os.path.join(d, "aio.*.threads.csv*")):
+        threads[int(re.search(r"aio\.(\d+)\.threads", os.path.basename(f)).group(1))] = load_threads(f)
     dft = {}
     for f in glob.glob(os.path.join(d, "dft-*.pfw*")):
         rank, ev = load_dft(f)
