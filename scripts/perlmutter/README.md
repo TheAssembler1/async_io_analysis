@@ -146,10 +146,15 @@ Two async VOL settings are needed for the writes to overlap at all:
 compute time against both the sync compute time on the same placement and the
 standalone run. Use the first: the standalone run is a few seconds measured
 once per case and can be off by 10% (on the laptop sync dgemm came out at
-0.86x of it).
+0.86x of it). It also gives observed I/O, and the speedup that five models
+predict (naive overlap, Ravi et al., the sleep run, serial, blend; see its
+docstring). `../../analysis/models.py` checks those models, and models that use
+the first steps of a run or its traces, against every machine's runs.
 
 Traced runs (tag `<placement>.trace` in the CSV; the untraced repetitions give
-the timings) write to `results/perlmutter/hdf5_traces/hdf5_trace_n2/<placement>.<kernel>.<mode>.<flush>/`,
+the timings, since tracing changes the shared async runs: DFTracer and the
+sampler share the one hardware thread, and the async writes stop overlapping,
+110 s against 177 s for sleep) write to `results/perlmutter/hdf5_traces/hdf5_trace_n2/<placement>.<kernel>.<mode>.<flush>/`,
 which is committed with the results. The `perfetto.json` that `hdf5_traces.py`
 makes in each case directory is git-ignored; run it again to get them back.
 
