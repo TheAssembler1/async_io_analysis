@@ -94,9 +94,9 @@ def load_threads(path):
     return samples, sampler
 
 
-def at(series, t, i):
-    """Cumulative counter i of a thread's samples, linearly interpolated at t."""
-    ts = [s[0] for s in series]
+def at(series, t, i, ts):
+    """Cumulative counter i of a thread's samples, linearly interpolated at t
+    (ts: the samples' timestamps)."""
     j = bisect.bisect_left(ts, t)
     if j == 0:
         return series[0][i] if series and t >= series[0][0] else 0.0
@@ -145,9 +145,9 @@ def busy(intervals, lo, hi):
     return total
 
 
-def cpu_on(series, t0, t1, cpu_of_main):
+def cpu_on(series, t0, t1, cpu_of_main, ts):
     """CPU time (ns) a thread used in [t0, t1] while on the main thread's CPU."""
-    pts = [s for s in series if t0 <= s[0] <= t1]
+    pts = series[bisect.bisect_left(ts, t0):bisect.bisect_right(ts, t1)]
     total = 0.0
     for (ta, _, ra, _), (tb, cb, rb, _) in zip(pts, pts[1:]):
         if cb == cpu_of_main(tb):
@@ -181,9 +181,11 @@ def analyze_case(d):
         alone = [b - a for n, _, a, b, _ in ph if n == "alone"]
         alone = mean(alone) if alone else None
         main = samples.get(pid, [])
+        ts = {tid: [x[0] for x in ser] for tid, ser in samples.items()}
+        main_ts = ts.get(pid, [])
 
         def main_cpu(t):
-            j = bisect.bisect_left([s[0] for s in main], t)
+            j = bisect.bisect_left(main_ts, t)
             return main[min(j, len(main) - 1)][1] if main else -1
 
         for name, step, a, b, _ in ph:
@@ -193,9 +195,10 @@ def analyze_case(d):
             barrier = [(x, y) for n, s, x, y, _ in ph if s == step and n == "barrier"]
             r = {"rank": rank, "step": step, "comp_ms": (b - a) / 1e3,
                  "stretch": (b - a) / alone if alone else float("nan"),
-                 "wait_ms": (at(main, b, 3) - at(main, a, 3)) / 1e6 if main else 0.0,
-                 "iocpu_ms": sum(at(samples[t], b, 2) - at(samples[t], a, 2) for t in io_tids if t in samples) / 1e6,
-                 "same_ms": sum(cpu_on(samples[t], a, b, main_cpu) for t in io_tids if t in samples) / 1e6,
+                 "wait_ms": (at(main, b, 3, main_ts) - at(main, a, 3, main_ts)) / 1e6 if main else 0.0,
+                 "iocpu_ms": sum(at(samples[t], b, 2, ts[t]) - at(samples[t], a, 2, ts[t])
+                                 for t in io_tids if t in samples) / 1e6,
+                 "same_ms": sum(cpu_on(samples[t], a, b, main_cpu, ts[t]) for t in io_tids if t in samples) / 1e6,
                  "overlap": busy(io_iv, a, b) / (b - a) if b > a else 0.0,
                  "issue_ms": sum(y - x for x, y in issue) / 1e3,
                  "barrier_ms": sum(y - x for x, y in barrier) / 1e3}
@@ -430,9 +433,13 @@ def main(argv):
         rows, calls = res[0], res[1]
         if not rows:
             continue
-        cases[(place, kernel, mode, flush)] = res
         nranks = len(res[2])
         perfetto(d, ranks or sorted({0, 32 if nranks > 32 else nranks // 2}), *res[2:])
+        # the figure draws only the lowest rank; keeping every rank's DFTracer
+        # events for all cases takes more memory than a laptop has
+        r0 = min(res[2])
+        cases[(place, kernel, mode, flush)] = (rows, calls, {r0: res[2][r0]}, {r0: res[3].get(r0, [])},
+                                               None, res[5])
         top = sorted(calls.items(), key=lambda kv: -kv[1])[:3]
         summary.append({"flush": flush, "placement": place, "kernel": kernel, "mode": mode, "ranks": nranks,
                         **{k: mean(r[k] for r in rows) for k in
