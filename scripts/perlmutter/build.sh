@@ -1,10 +1,11 @@
 #!/bin/bash
 # Build Mercury, PDC, aio_bench_pdc and progress_test on Perlmutter (run on a login node).
 #   build.sh [mercury] [pdc] [bench]       default: all three
-# MERCURY_REF (v2.4.1; PDC's docs and the paper use 2.2.0, see below),
-# PDC_REPO, PDC_REF: which sources to build. The default PDC
-# branch is the one that sets up ofi+cxi on Perlmutter (cxi0:<pid> endpoints and
-# the CXI service/VNI lookup); stock PDC builds ofi+cxi://<hostname>:<port>.
+# MERCURY_REF (v2.4.1; PDC's docs and the paper use 2.2.0, see below).
+# PDC is cloned into deps/src/pdc and rebuilt from there, edits included
+# (scripts/common/pdc.sh). The branch needs the ofi+cxi setup (cxi0:<pid>
+# endpoints and the CXI service/VNI lookup): stock develop builds
+# ofi+cxi://<hostname>:<port>, which the cxi provider rejects.
 # libfabric is the system one (cray-libfabric, with the cxi and tcp providers):
 # the docs' libfabric 1.18.0 has no cxi provider (upstream added it in 1.21).
 # Mercury 2.2.0 builds against libfabric 2.x but cannot use cxi: it always sets
@@ -14,8 +15,7 @@
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 MERCURY_REF=${MERCURY_REF:-v2.4.1}
-PDC_REPO=${PDC_REPO:-https://github.com/hpc-io/pdc.git}
-PDC_REF=${PDC_REF:-fix/perlmutter-cxi-defaults}
+source "$AIO_ROOT/scripts/common/pdc.sh"
 J=${J:-16}
 SRC=$PM_PREFIX/src
 mkdir -p "$SRC" "$PM_BIN"
@@ -54,44 +54,23 @@ build_mercury() {
 }
 
 build_pdc() {
-  [ -d "$SRC/pdc" ] || git clone -q "$PDC_REPO" "$SRC/pdc"
-  git -C "$SRC/pdc" fetch -q origin && git -C "$SRC/pdc" checkout -q "$PDC_REF"
-  git -C "$SRC/pdc" pull -q --ff-only 2> /dev/null || true
-  rm -rf "$SRC/build-pdc"
-  # PDC_ENABLE_MULTITHREAD stays OFF (the default): busy-polling progress, as in the paper.
-  cmake -S "$SRC/pdc" -B "$SRC/build-pdc" -DCMAKE_C_COMPILER=cc -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX="$PDC_DIR" -DBUILD_SHARED_LIBS=ON \
-    -DBUILD_TESTING=OFF -DPDC_ENABLE_MPI=ON -DPDC_SERVER_CACHE=ON \
+  pdc_build "$SRC/build-pdc" "$PDC_DIR" -DCMAKE_C_COMPILER=cc \
     -DMERCURY_DIR="$MERCURY_DIR/share/cmake/mercury" -DCMAKE_PREFIX_PATH="$MERCURY_DIR"
-  cmake --build "$SRC/build-pdc" -j"$J"
-  rm -rf "$PDC_DIR" && cmake --install "$SRC/build-pdc"
   grep -q "^MERCURY_DIR:[A-Z]*=$MERCURY_DIR/" "$SRC/build-pdc/CMakeCache.txt" ||
     { echo "PDC configured against $(grep '^MERCURY_DIR:' "$SRC/build-pdc/CMakeCache.txt")" >&2; exit 1; }
   check_mercury "$PDC_DIR/bin/pdc_server"
-  echo "PDC $(git -C "$SRC/pdc" describe --always --tags) -> $PDC_DIR"
+  grep -qs PDC_get_default_cxi_endpoint "$PDC_SRC/src/server/pdc_server.c" || [ "$HG_TRANSPORT" != ofi+cxi ] ||
+    echo "warning: this PDC's server has no cxi0:<pid> endpoint setup; ofi+cxi runs will fail (see top of build.sh)" >&2
+  echo "PDC -> $PDC_DIR"
 }
 
 build_bench() {
-  local b=$PM_PREFIX/build-aio s=$AIO_ROOT/src api=
-  mkdir -p "$b"
-  # HDF5 and ADIOS2 are not needed for the PDC runs; leave their backends out.
-  cat > "$b/io_absent.c" << 'EOF'
-#include "aio_bench.h"
-#include <stdio.h>
-static int absent(io_ctx *c)
-{
-    if (c->rank == 0) fprintf(stderr, "backend not built on this system\n");
-    return -1;
-}
-static void nop_issue(io_ctx *c, int step, const void *buf) { (void)c; (void)step; (void)buf; }
-static void nop(io_ctx *c) { (void)c; }
-const io_backend io_hdf5 = {"hdf5", absent, nop_issue, nop, nop, NULL, NULL};
-const io_backend io_adios2 = {"adios2", absent, nop_issue, nop, nop, NULL, NULL};
-EOF
+  local s=$AIO_ROOT/src api=
+  # HDF5 and ADIOS2 are not needed for the PDC runs; io_absent.c stands in for them.
   grep -rqs PDCobj_create_coll "$PDC_DIR/include" && api=-DPDC_COLL_API
   cc -O2 -march=znver3 -Wall -I"$s" -DHAVE_PDC $api -I"$PDC_DIR/include" -I"$MERCURY_DIR/include" \
     -o "$PM_BIN/aio_bench_pdc" "$s"/aio_bench.c "$s"/trace.c "$s"/kernels.c "$s"/io_posix.c "$s"/io_mpiio.c \
-    "$s"/io_pdc.c "$s"/gpu_stub.c "$b/io_absent.c" \
+    "$s"/io_pdc.c "$s"/gpu_stub.c "$s"/io_absent.c \
     -L"$PDC_DIR/lib" -Wl,-rpath,"$PDC_DIR/lib" -L"$MERCURY_DIR/lib" -Wl,-rpath,"$MERCURY_DIR/lib" \
     -lpdc -lpdc_commons -lmercury -lrt -lpthread -lm
   cc -O2 -march=znver3 -Wall -I"$MERCURY_DIR/include" -o "$PM_BIN/progress_test" \

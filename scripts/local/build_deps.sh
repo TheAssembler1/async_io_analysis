@@ -9,6 +9,8 @@ PREFIX=$ROOT/deps/install
 J=${J:-48}
 export CC=mpicc CXX=mpicxx
 mkdir -p "$SRC" "$PREFIX/bin"
+AIO_ROOT=$ROOT
+source "$ROOT/scripts/common/pdc.sh"
 cd "$SRC"
 
 fetch() { [ -e "$2" ] || curl -sL -o "$2" "$1"; }
@@ -71,14 +73,10 @@ build_mercury() {  # shared-memory NA plugin only (single node)
   cmake --build mercury-build -j$J && cmake --install mercury-build
 }
 
-build_pdc() {
-  [ -d pdc ] || git clone -q https://github.com/hpc-io/pdc.git
-  rm -rf pdc-build
-  cmake -S pdc -B pdc-build -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release \
+build_pdc() {   # from deps/src/pdc (scripts/common/pdc.sh)
+  pdc_build "$SRC/pdc-build" "$PREFIX" \
     -DCMAKE_PREFIX_PATH="$PREFIX" -DMERCURY_DIR="$PREFIX/share/cmake/mercury" \
-    -DPDC_ENABLE_MPI=ON -DBUILD_TESTING=OFF -DPDC_ENABLE_FASTBIT=OFF -DBUILD_MPI_TESTING=OFF \
-    -DPDC_SERVER_CACHE=ON -DCMAKE_C_FLAGS="-Wno-error" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-  cmake --build pdc-build -j$J && cmake --install pdc-build
+    -DPDC_ENABLE_FASTBIT=OFF -DCMAKE_C_FLAGS="-Wno-error" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 }
 
 build_tectonic() {
